@@ -44,7 +44,10 @@ namespace Presentation.Configurations
 
             if (result == string.Empty)
             {
-                result = JsonConvert.SerializeObject(new { error = e.Message });
+                result = JsonConvert.SerializeObject(new { 
+                    error = e.Message,
+                    stackTrace = e.StackTrace
+                });
             }
 
             return context.Response.WriteAsync(result);

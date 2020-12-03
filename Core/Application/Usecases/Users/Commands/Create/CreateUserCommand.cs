@@ -24,12 +24,9 @@ namespace Core.Application.Usecases.Users.Commands.Create
         {
             private readonly IMisDbContext _context;
 
-            private readonly IMediator _mediator;
-
-            public Handler(IMisDbContext context, IMediator mediator)
+            public Handler(IMisDbContext context)
             {
                 _context = context;
-                _mediator = mediator;
             }
 
             public async Task<Unit> Handle(CreateUserCommand request, CancellationToken cancellationToken)

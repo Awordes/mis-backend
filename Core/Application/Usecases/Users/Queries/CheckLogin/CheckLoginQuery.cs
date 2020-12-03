@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -24,12 +25,9 @@ namespace Core.Application.Usecases.Users.Queries.CheckLogin
         {
             private readonly IMisDbContext _context;
 
-            private readonly IMediator _mediator;
-
-            public Handler(IMisDbContext context, IMediator mediator)
+            public Handler(IMisDbContext context)
             {
                 _context = context;
-                _mediator = mediator;
             }
 
             public async Task<bool> Handle(CheckLoginQuery request, CancellationToken cancellationToken)
@@ -37,7 +35,7 @@ namespace Core.Application.Usecases.Users.Queries.CheckLogin
                 try
                 {
                     var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Login == request.Login)
-                        ?? throw new Exception($"User with login {request.Login} not found");
+                        ?? throw new Exception($"User with login '{request.Login}' not found");
 
                     string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                         password: Encoding.UTF8.GetString(Convert.FromBase64String(request.HashedPass)),

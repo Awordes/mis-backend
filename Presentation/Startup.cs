@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Presentation.Configurations;
 using System;
 using System.IO;
 
@@ -87,6 +88,8 @@ namespace Presentation
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCustomExceptionHandler();
 
             app.UseSwagger();
 

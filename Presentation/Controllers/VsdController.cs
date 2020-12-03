@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Core.Application.Usecases.MercuryIntegration;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -11,9 +12,10 @@ namespace Presentation.Controllers
         [HttpPost("/[controller]")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> GetVsdList()
+        public async Task<IActionResult> GetVsdList(SendRequestCommand command)
         {
-            return Content("All is good");
+            await Mediator.Send(command);
+            return NoContent();
         }
     }
 }

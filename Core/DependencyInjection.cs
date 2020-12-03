@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Core.Application.Common;
+using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -11,8 +12,9 @@ namespace Core
         {
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
+            services.Configure<MercuryConstants>(configuration.GetSection(nameof(MercuryConstants)));
+
             return services;
         }
-
     }
 }
