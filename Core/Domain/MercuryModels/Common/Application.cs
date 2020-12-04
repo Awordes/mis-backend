@@ -1,8 +1,8 @@
-﻿using Core.Application.Usecases.MercuryIntegration.SendModels.Data;
+﻿using Core.Domain.MercuryModels.Data;
 using System;
 using System.Xml.Serialization;
 
-namespace Core.Application.Usecases.MercuryIntegration.SendModels
+namespace Core.Domain.MercuryModels.Common
 {
     [XmlType(Namespace = "http://api.vetrf.ru/schema/cdm/application")]
     public class Application
@@ -17,6 +17,6 @@ namespace Core.Application.Usecases.MercuryIntegration.SendModels
         public DateTime issueDate { get; set; }
 
         [XmlElement(Namespace = "http://api.vetrf.ru/schema/cdm/application", Order = 3, ElementName = "data")]
-        public IData data { get; set; }
+        public DataAbstract data { get; set; }
     }
 }

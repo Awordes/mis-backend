@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace Core.Application.Usecases.MercuryIntegration.SendModels.CommonModels
+namespace Core.Domain.MercuryModels.Common
 {
     [XmlType(Namespace = "http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2")]
     public enum VetDocumentStatus

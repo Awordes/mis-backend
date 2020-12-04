@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace Core.Application.Usecases.MercuryIntegration.SendModels
+namespace Core.Domain.MercuryModels.Requests
 {
     [XmlType(Namespace = "http://api.vetrf.ru/schema/cdm/application/ws-definitions")]
     public class SubmitApplicationRequest
@@ -9,6 +9,6 @@ namespace Core.Application.Usecases.MercuryIntegration.SendModels
         public string apiKey { get; set; }
 
         [XmlElement(Namespace = "http://api.vetrf.ru/schema/cdm/application", Order = 1, ElementName = "application")]
-        public Application application { get; set; }
+        public Common.Application application { get; set; }
     }
 }

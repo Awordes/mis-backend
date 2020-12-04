@@ -1,4 +1,4 @@
-﻿using Core.Application.Usecases.MercuryIntegration;
+﻿using Core.Application.Usecases.MercuryIntegration.Queries.Methods;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +12,9 @@ namespace Presentation.Controllers
         [HttpPost("/[controller]")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> GetVsdList(SendRequestCommand command)
+        public async Task<ActionResult<object>> GetVsdList(GetVetDocumentListQuery query)
         {
-            await Mediator.Send(command);
-            return NoContent();
+            return await Mediator.Send(query);
         }
     }
 }

@@ -1,6 +1,7 @@
-﻿using System.Xml.Serialization;
+﻿using Core.Domain.MercuryModels.Bodies;
+using System.Xml.Serialization;
 
-namespace Core.Application.Usecases.MercuryIntegration.SendModels
+namespace Core.Domain.MercuryModels
 {
     [XmlType(Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
     public class Envelope
@@ -9,6 +10,6 @@ namespace Core.Application.Usecases.MercuryIntegration.SendModels
         public string Header { get; set; }
 
         [XmlElement(Namespace = "http://schemas.xmlsoap.org/soap/envelope/", Order = 1, ElementName = "Body")]
-        public Body Body { get; set; }
+        public BodyAbstract Body { get; set; }
     }
 }
