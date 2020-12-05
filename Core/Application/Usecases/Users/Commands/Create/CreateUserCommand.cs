@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace Core.Application.Usecases.Users.Commands.Create
 
         [Required(ErrorMessage = "Не указан пароль")]
         [DataType(DataType.Password)]
-        public string Password { get; set; }
+        public string HashedPassword { get; set; }
 
         public class Handler : IRequestHandler<CreateUserCommand>
         {
@@ -40,7 +41,7 @@ namespace Core.Application.Usecases.Users.Commands.Create
                     }
 
                     string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                        password: request.Password,
+                        password: Encoding.UTF8.GetString(Convert.FromBase64String(request.HashedPassword)),
                         salt: salt,
                         prf: KeyDerivationPrf.HMACSHA1,
                         iterationCount: 9998,

@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -19,7 +18,7 @@ namespace Core.Application.Usecases.Users.Queries.CheckLogin
 
         [Required(ErrorMessage = "Не указан пароль")]
         [DataType(DataType.Password)]
-        public string HashedPass { get; set; }
+        public string HashedPassword { get; set; }
 
         public class Handler : IRequestHandler<CheckLoginQuery, bool>
         {
@@ -35,10 +34,10 @@ namespace Core.Application.Usecases.Users.Queries.CheckLogin
                 try
                 {
                     var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Login == request.Login)
-                        ?? throw new Exception($"User with login '{request.Login}' not found");
+                        ?? throw new Exception($"Пользователь с логином '{request.Login}' не найден");
 
                     string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                        password: Encoding.UTF8.GetString(Convert.FromBase64String(request.HashedPass)),
+                        password: Encoding.UTF8.GetString(Convert.FromBase64String(request.HashedPassword)),
                         salt: Convert.FromBase64String(user.Salt),
                         prf: KeyDerivationPrf.HMACSHA1,
                         iterationCount: 9998,
