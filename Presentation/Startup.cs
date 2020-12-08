@@ -98,6 +98,13 @@ namespace Presentation
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mercury Integration Service V1");
             });
 
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyOrigin();
+                builder.AllowAnyHeader();
+                builder.AllowAnyMethod();
+            });
+
             app.UseRouting();
 
             app.UseAuthentication();

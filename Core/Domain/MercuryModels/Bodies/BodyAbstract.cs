@@ -2,9 +2,11 @@
 
 namespace Core.Domain.MercuryModels.Bodies
 {
+    [XmlType(Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
     [XmlInclude(typeof(SubmitRequestBody))]
+    [XmlInclude(typeof(SubmitResponseBody))]
     [XmlInclude(typeof(RecieveResponseBody))]
-    public abstract class BodyAbstract
+    public class BodyAbstract
     {
 
     }

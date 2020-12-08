@@ -50,11 +50,29 @@ namespace Core.Application.Usecases.MercuryIntegration.Queries
 
                         request.Namespaces.Add("SOAP-ENV", "http://schemas.xmlsoap.org/soap/envelope/");
 
-                        new XmlSerializer(envelope.GetType(), root)
+                        new XmlSerializer(typeof(Envelope), root)
                             .Serialize(writer, envelope, request.Namespaces);
                     }
 
-                    return await _mediator.Send(new SendApplicationRequestQuery { RequestBody = requestBody });
+                    XmlDocument xmlResponse =  await _mediator.Send(new SendApplicationRequestQuery { RequestBody = requestBody });
+
+                    var attr1 = xmlResponse.CreateAttribute("xmlns:p8");
+                    attr1.Value = "http://www.w3.org/2001/XMLSchema-instance";
+                    xmlResponse.FirstChild.Attributes.Append(attr1);
+
+                    var attr2 = xmlResponse.CreateAttribute("p8", "type", "http://www.w3.org/2001/XMLSchema-instance");
+                    attr2.Value = "soap:SubmitResponseBody";
+                    xmlResponse.FirstChild.FirstChild.Attributes.Append(attr2);
+
+                    var rooot = new XmlRootAttribute
+                    {
+                        ElementName = "Envelope",
+                        Namespace = "http://schemas.xmlsoap.org/soap/envelope/"
+                    };
+
+                    var response = new XmlSerializer(typeof(Envelope), rooot).Deserialize(new XmlNodeReader(xmlResponse));
+
+                    return response;
                 }
                 catch
                 {
