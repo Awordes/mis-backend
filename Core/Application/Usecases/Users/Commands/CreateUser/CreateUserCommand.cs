@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,7 +16,7 @@ namespace Core.Application.Usecases.Users.Commands.CreateUser
     {
         public string Login { get; set; }
 
-        public string Password { get; set; }
+        public string HashedPassword { get; set; }
 
         public void Mapping(Profile profile)
         {
@@ -46,7 +47,8 @@ namespace Core.Application.Usecases.Users.Commands.CreateUser
                 {
                     var user = _mapper.Map<User>(request);
 
-                    var result = await _userManager.CreateAsync(user, request.Password);
+                    var result = await _userManager.CreateAsync(user,
+                        Encoding.UTF8.GetString(Convert.FromBase64String(request.HashedPassword)));
 
                     if (!result.Succeeded)
                     {
