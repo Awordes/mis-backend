@@ -11,7 +11,7 @@ using System.Xml;
 
 namespace Core.Application.Usecases.MercuryIntegration.Queries
 {
-    public class SendApplicationRequestQuery: IQuery, IRequest<XmlDocument>
+    public class SendApplicationRequestQuery: IRequest<XmlDocument>
     {
         public XmlDocument RequestBody { get; set; }
 

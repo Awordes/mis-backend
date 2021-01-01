@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 
 namespace Core.Application.Usecases.MercuryIntegration.Queries
 {
-    public class EnvelopeWrappingQuery : IQuery, IRequest<object>
+    public class EnvelopeWrappingQuery : IRequest<object>
     {
         public BodyAbstract Body { get; set; }
 
