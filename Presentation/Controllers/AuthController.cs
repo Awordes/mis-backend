@@ -1,11 +1,7 @@
-﻿using Core.Application.Usecases.Users.Queries.CheckLogin;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
+﻿using Core.Application.Usecases.Auth.Commands.Login;
+using Core.Application.Usecases.Auth.Commands.Logout;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Presentation.Controllers
@@ -15,58 +11,18 @@ namespace Presentation.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Login(CheckLoginQuery query)
+        public async Task<IActionResult> Login([FromBody] LoginCommand command)
         {
-            if (!await Mediator.Send(query))
-                throw new System.Exception("Неверный логин или пароль");
-
-            var claims = new List<Claim>
-                {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, query.Login)
-                };
-
-            ClaimsIdentity id = new ClaimsIdentity(
-                claims,
-                "ApplicationCookie",
-                ClaimsIdentity.DefaultNameClaimType,
-                ClaimsIdentity.DefaultRoleClaimType);
-
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(id));
+            await Mediator.Send(command);
             return NoContent();
         }
 
-        [Authorize]
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Logout([FromBody] LogoutCommand command)
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return NoContent();
-        }
-
-        //TODO: delete
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesDefaultResponseType]
-        public async Task<IActionResult> NotSecureLogin()
-        {
-            var claims = new List<Claim>
-                {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, "anonimus")
-                };
-
-            ClaimsIdentity id = new ClaimsIdentity(
-                claims,
-                "ApplicationCookie",
-                ClaimsIdentity.DefaultNameClaimType,
-                ClaimsIdentity.DefaultRoleClaimType);
-
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(id));
+            await Mediator.Send(command);
             return NoContent();
         }
     }

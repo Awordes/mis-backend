@@ -1,4 +1,4 @@
-﻿using Core.Application.Usecases.Users.Commands.Create;
+﻿using Core.Application.Usecases.Users.Commands.CreateUser;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,14 +8,16 @@ namespace Presentation.Controllers
 {
     public class UserController: BaseController
     {
+        [HttpPost]
         [Authorize]
-        [HttpPost("/[controller]")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Create(CreateUserCommand command)
+        public async Task<IActionResult> CreateUser(CreateUserCommand command)
         {
             await Mediator.Send(command);
             return NoContent();
         }
+
     }
 }

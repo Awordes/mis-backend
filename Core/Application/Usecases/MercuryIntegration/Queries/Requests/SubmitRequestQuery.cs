@@ -11,7 +11,7 @@ using System.Xml.Serialization;
 
 namespace Core.Application.Usecases.MercuryIntegration.Queries.Requests
 {
-    public class SubmitRequestQuery: IQuery, IRequest<object>
+    public class SubmitRequestQuery: IRequest<object>
     {
         public DataAbstract Data { get; set; }
 

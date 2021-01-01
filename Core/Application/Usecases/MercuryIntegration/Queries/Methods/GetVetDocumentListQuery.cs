@@ -11,7 +11,7 @@ using System.Xml.Serialization;
 
 namespace Core.Application.Usecases.MercuryIntegration.Queries.Methods
 {
-    public class GetVetDocumentListQuery: IQuery, IRequest<object>
+    public class GetVetDocumentListQuery: IRequest<object>
     {
         public int Count { get; set; }
 
