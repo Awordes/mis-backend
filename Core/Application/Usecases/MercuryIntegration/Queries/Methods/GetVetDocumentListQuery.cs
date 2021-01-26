@@ -11,11 +11,29 @@ using System.Xml.Serialization;
 
 namespace Core.Application.Usecases.MercuryIntegration.Queries.Methods
 {
-    public class GetVetDocumentListQuery: IRequest<object>
+    public class GetVetDocumentListQuery : IRequest<object>
     {
+        /// <summary>
+        /// Количество ВСД
+        /// </summary>
         public int Count { get; set; }
 
-        public class Handler : IRequestHandler<GetVetDocumentListQuery, object>
+        /// <summary>
+        /// Номер первого ВСД
+        /// </summary>
+        public int Offset { get; set; }
+
+        /// <summary>
+        /// Статус ВСД
+        /// </summary>
+        public VetDocumentStatus Status { get; set; }
+
+        /// <summary>
+        /// Тип ВСД
+        /// </summary>
+        public VetDocumentType Type { get; set; }
+
+        private class Handler : IRequestHandler<GetVetDocumentListQuery, object>
         {
             private readonly MercuryConstants _mercuryConstantsOption;
 
@@ -42,10 +60,11 @@ namespace Core.Application.Usecases.MercuryIntegration.Queries.Methods
                             },
                             listOptions = new ListOptions
                             {
-                                count = request.Count
+                                count = request.Count,
+                                offset = request.Offset
                             },
-                            vetDocumentStatus = VetDocumentStatus.WITHDRAWN,
-                            vetDocumentType = VetDocumentType.INCOMING,
+                            vetDocumentStatus = request.Status,
+                            vetDocumentType = request.Type,
                             enterpriseGuid = _mercuryConstantsOption.EnterpriseId
                         }
                     };
@@ -56,10 +75,13 @@ namespace Core.Application.Usecases.MercuryIntegration.Queries.Methods
                     namespaces.Add("vd", "http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2");
                     namespaces.Add("merc", "http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2");
 
-                    return await _mediator.Send(new SubmitRequestQuery { 
+                    var result = await _mediator.Send(new SubmitRequestQuery
+                    {
                         Data = data,
                         Namespaces = namespaces
                     });
+
+                    return result;
                 }
                 catch
                 {

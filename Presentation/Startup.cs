@@ -15,12 +15,24 @@ namespace Presentation
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
 
-        public Startup(IConfiguration configuration)
+        public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            Environment = env;
+
+            var builder = new ConfigurationBuilder()
+                         .SetBasePath(env.ContentRootPath)
+                         .AddJsonFile("appsettings.json", false, true)
+                         .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true)
+                         .AddEnvironmentVariables();
+
+            Configuration = builder.Build();
         }
+
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -66,8 +78,8 @@ namespace Presentation
                     }
                 });
 
-                var xmlFileApiUI = Path.Combine(AppContext.BaseDirectory, "Presentation.xml");
-                config.IncludeXmlComments(xmlFileApiUI);
+                config.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Presentation.xml"));
+                config.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Core.xml"));
             });
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

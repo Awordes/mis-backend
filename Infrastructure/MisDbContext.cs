@@ -1,5 +1,5 @@
 ﻿using Core.Application.Common;
-using Core.Domain.Users;
+using Core.Domain.Auth;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;

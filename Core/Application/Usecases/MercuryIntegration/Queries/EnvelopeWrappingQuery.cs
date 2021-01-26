@@ -1,8 +1,6 @@
-﻿using Core.Application.Common;
-using Core.Domain.MercuryModels;
+﻿using Core.Domain.MercuryModels;
 using Core.Domain.MercuryModels.Bodies;
 using MediatR;
-using Microsoft.Extensions.Options;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
@@ -16,16 +14,15 @@ namespace Core.Application.Usecases.MercuryIntegration.Queries
 
         public XmlSerializerNamespaces Namespaces { get; set; }
 
-        public class Handler : IRequestHandler<EnvelopeWrappingQuery, object>
-        {
-            private readonly MercuryConstants _mercuryConstantsOption;
+        public string AbstractBodyName { get; set; }
 
+        private class Handler : IRequestHandler<EnvelopeWrappingQuery, object>
+        {
             private readonly IMediator _mediator;
 
-            public Handler(IMediator mediator, IOptionsMonitor<MercuryConstants> mercuryConstantOption)
+            public Handler(IMediator mediator)
             {
                 _mediator = mediator;
-                _mercuryConstantsOption = mercuryConstantOption.CurrentValue;
             }
 
             public async Task<object> Handle(EnvelopeWrappingQuery request, CancellationToken cancellationToken)
@@ -61,7 +58,7 @@ namespace Core.Application.Usecases.MercuryIntegration.Queries
                     xmlResponse.FirstChild.Attributes.Append(attr1);
 
                     var attr2 = xmlResponse.CreateAttribute("p8", "type", "http://www.w3.org/2001/XMLSchema-instance");
-                    attr2.Value = "soap:SubmitResponseBody";
+                    attr2.Value = $"soap:{request.AbstractBodyName}";
                     xmlResponse.FirstChild.FirstChild.Attributes.Append(attr2);
 
                     var rooot = new XmlRootAttribute
@@ -70,9 +67,16 @@ namespace Core.Application.Usecases.MercuryIntegration.Queries
                         Namespace = "http://schemas.xmlsoap.org/soap/envelope/"
                     };
 
-                    var response = new XmlSerializer(typeof(Envelope), rooot).Deserialize(new XmlNodeReader(xmlResponse));
+                    var response = new XmlSerializer(typeof(Envelope), rooot).Deserialize(new XmlNodeReader(xmlResponse)) as Envelope;
 
-                    return response;
+                    return new 
+                    {
+                        applicationId = (response.Body as SubmitResponseBody)
+                            .submitApplicationResponse.application.applicationId,
+
+                        status = (response.Body as SubmitResponseBody)
+                            .submitApplicationResponse.application.status.ToString()
+                    };
                 }
                 catch
                 {

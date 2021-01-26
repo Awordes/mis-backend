@@ -1,4 +1,4 @@
-﻿using Core.Domain.Users;
+﻿using Core.Domain.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System.Threading;

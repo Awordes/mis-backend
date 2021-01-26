@@ -1,5 +1,5 @@
 ﻿using Core.Application.Common;
-using Core.Domain.Users;
+using Core.Domain.Auth;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,7 +28,14 @@ namespace Infrastructure
 
             service.AddMediatR(Assembly.GetExecutingAssembly());
 
-            service.AddIdentity<User, Role>()
+            service.AddIdentity<User, Role>(options => 
+                {
+                    options.Password.RequiredLength = 10;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireDigit = false;
+                })
                 .AddEntityFrameworkStores<MisDbContext>();
 
             return service;

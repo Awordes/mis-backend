@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 
-namespace Core.Domain.Users
+namespace Core.Domain.Auth
 {
-    public class User: IdentityUser<Guid>
+    public class User : IdentityUser<Guid>
     {
     }
 }

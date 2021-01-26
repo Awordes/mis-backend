@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using Core.Domain.MercuryModels.Bodies;
+using System.Xml.Serialization;
 
 namespace Core.Domain.MercuryModels.Requests
 {

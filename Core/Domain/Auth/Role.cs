@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 
-namespace Core.Domain.Users
+namespace Core.Domain.Auth
 {
-    public class Role: IdentityRole<Guid>
+    public class Role : IdentityRole<Guid>
     {
     }
 }

@@ -1,8 +1,7 @@
-﻿using Core.Domain.Users;
+﻿using Core.Domain.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,7 +11,7 @@ namespace Core.Application.Usecases.Auth.Commands.Login
     {
         public string Login { get; set; }
 
-        public string HashedPassword { get; set; }
+        public string Password { get; set; }
 
         public bool RememberMe { get; set; }
 
@@ -32,11 +31,11 @@ namespace Core.Application.Usecases.Auth.Commands.Login
                 {
                     var result = await _signInManager
                         .PasswordSignInAsync(request.Login,
-                        Encoding.UTF8.GetString(Convert.FromBase64String(request.HashedPassword)),
+                        request.Password,
                         request.RememberMe, false);
 
                     if (!result.Succeeded)
-                        throw new System.Exception("Неправильный логин и пароль");
+                        throw new Exception("Неправильный логин и пароль");
 
                     return Unit.Value;
                 }

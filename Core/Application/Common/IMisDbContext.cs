@@ -1,4 +1,4 @@
-﻿using Core.Domain.Users;
+﻿using Core.Domain.Auth;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;

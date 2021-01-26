@@ -17,10 +17,9 @@ namespace Core.Application.Usecases.MercuryIntegration.Queries.Requests
 
         public XmlSerializerNamespaces Namespaces { get; set; }
 
-        public class Handler : IRequestHandler<SubmitRequestQuery, object>
+        private class Handler : IRequestHandler<SubmitRequestQuery, object>
         {
             private readonly MercuryConstants _mercuryConstantsOption;
-
             private readonly IMediator _mediator;
 
             public Handler(IMediator mediator, IOptionsMonitor<MercuryConstants> mercuryConstantOption)
@@ -48,14 +47,17 @@ namespace Core.Application.Usecases.MercuryIntegration.Queries.Requests
                         }
                     };
 
-
                     request.Namespaces.Add("apldef", "http://api.vetrf.ru/schema/cdm/application/ws-definitions");
                     request.Namespaces.Add("apl", "http://api.vetrf.ru/schema/cdm/application");
 
-                    return await _mediator.Send(new EnvelopeWrappingQuery { 
+                    var response = await _mediator.Send(new EnvelopeWrappingQuery
+                    {
                         Body = submitRequestBody,
-                        Namespaces = request.Namespaces
+                        Namespaces = request.Namespaces,
+                        AbstractBodyName = nameof(SubmitResponseBody)
                     });
+
+                    return response;
                 }
                 catch
                 {

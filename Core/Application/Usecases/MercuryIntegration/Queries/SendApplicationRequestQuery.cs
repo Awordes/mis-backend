@@ -15,7 +15,7 @@ namespace Core.Application.Usecases.MercuryIntegration.Queries
     {
         public XmlDocument RequestBody { get; set; }
 
-        public class Handler : IRequestHandler<SendApplicationRequestQuery, XmlDocument>
+        private class Handler : IRequestHandler<SendApplicationRequestQuery, XmlDocument>
         {
             private readonly MercuryConstants _mercuryConstantsOption;
 
