@@ -8,12 +8,6 @@ namespace Core.Application.Usecases.Auth.Commands.Logout
 {
     public class LogoutCommand: IRequest
     {
-        public string Login { get; set; }
-
-        public string Password { get; set; }
-
-        public bool RememberMe { get; set; }
-
         private class Handler : IRequestHandler<LogoutCommand>
         {
             private readonly SignInManager<User> _signInManager;

@@ -20,9 +20,9 @@ namespace Presentation.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Logout([FromBody] LogoutCommand command)
+        public async Task<IActionResult> Logout()
         {
-            await Mediator.Send(command);
+            await Mediator.Send(new LogoutCommand());
             return NoContent();
         }
     }
