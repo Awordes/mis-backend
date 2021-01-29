@@ -1,5 +1,6 @@
 ﻿using Core.Application.Usecases.Auth.Commands.Login;
 using Core.Application.Usecases.Auth.Commands.Logout;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 namespace Presentation.Controllers
 {
     public class AuthController: BaseController
-    {
+    {        
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]

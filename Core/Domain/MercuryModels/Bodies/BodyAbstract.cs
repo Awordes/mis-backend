@@ -6,6 +6,7 @@ namespace Core.Domain.MercuryModels.Bodies
     [XmlInclude(typeof(SubmitRequestBody))]
     [XmlInclude(typeof(SubmitResponseBody))]
     [XmlInclude(typeof(RecieveResultRequestBody))]
+    [XmlInclude(typeof(RecieveResultResponseBody))]
     public class BodyAbstract
     {
 

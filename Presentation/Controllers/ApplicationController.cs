@@ -1,10 +1,12 @@
 ﻿using Core.Application.Usecases.MercuryIntegration.Queries.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace Presentation.Controllers
 {
+    [Authorize]
     public class ApplicationController: BaseController
     {
         [HttpPost]

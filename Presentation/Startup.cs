@@ -84,7 +84,6 @@ namespace Presentation
             });
             services.Configure<IdentityOptions>(options =>
                 {
-                    // Password settings.
                     options.Password.RequireDigit = false;
                     options.Password.RequireLowercase = false;
                     options.Password.RequireNonAlphanumeric = false;
@@ -94,13 +93,12 @@ namespace Presentation
 
                 services.ConfigureApplicationCookie(options =>
                 {
-                    // Cookie settings
                     options.Cookie.HttpOnly = true;
-                    options.ExpireTimeSpan = TimeSpan.FromSeconds(20);
+                    options.ExpireTimeSpan = TimeSpan.FromHours(10);
                     options.Cookie.Name = "MercuryIntegrationService";
 
                     options.LoginPath = "/Account/Login";
-                    //options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                     options.SlidingExpiration = true;
                 });
 

@@ -1,4 +1,5 @@
 ﻿using Core.Application.Common;
+using Core.Domain.MercuryModels;
 using Core.Domain.MercuryModels.Bodies;
 using Core.Domain.MercuryModels.Data;
 using Core.Domain.MercuryModels.Requests;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Core.Application.Usecases.MercuryIntegration.Queries.Requests
@@ -50,14 +52,37 @@ namespace Core.Application.Usecases.MercuryIntegration.Queries.Requests
                     request.Namespaces.Add("apldef", "http://api.vetrf.ru/schema/cdm/application/ws-definitions");
                     request.Namespaces.Add("apl", "http://api.vetrf.ru/schema/cdm/application");
 
-                    var response = await _mediator.Send(new EnvelopeWrappingQuery
+                    var xmlResponse = await _mediator.Send(new EnvelopeWrappingQuery
                     {
                         Body = submitRequestBody,
-                        Namespaces = request.Namespaces,
-                        AbstractBodyName = nameof(SubmitResponseBody)
+                        Namespaces = request.Namespaces
                     });
+                    
+                    var attr1 = xmlResponse.CreateAttribute("xmlns:p8");
+                    attr1.Value = "http://www.w3.org/2001/XMLSchema-instance";
+                    xmlResponse.FirstChild.Attributes.Append(attr1);
 
-                    return response;
+                    var attr2 = xmlResponse.CreateAttribute("p8", "type", "http://www.w3.org/2001/XMLSchema-instance");
+                    attr2.Value = $"soap:{nameof(SubmitResponseBody)}";
+                    xmlResponse.FirstChild.FirstChild.Attributes.Append(attr2);
+
+                    var root = new XmlRootAttribute
+                    {
+                        ElementName = "Envelope",
+                        Namespace = "http://schemas.xmlsoap.org/soap/envelope/"
+                    };
+
+                    var response = new XmlSerializer(typeof(Envelope), root)
+                        .Deserialize(new XmlNodeReader(xmlResponse)) as Envelope;
+
+                    return new 
+                    {
+                        applicationId = (response.Body as SubmitResponseBody)
+                            .submitApplicationResponse.application.applicationId,
+
+                        status = (response.Body as SubmitResponseBody)
+                            .submitApplicationResponse.application.status.ToString()
+                    };
                 }
                 catch
                 {
