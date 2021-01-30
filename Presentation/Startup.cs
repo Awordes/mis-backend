@@ -82,25 +82,6 @@ namespace Presentation
                 config.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Presentation.xml"));
                 config.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Core.xml"));
             });
-            services.Configure<IdentityOptions>(options =>
-                {
-                    options.Password.RequireDigit = false;
-                    options.Password.RequireLowercase = false;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequireUppercase = false;
-                    options.Password.RequiredLength = 6;
-                });
-
-                services.ConfigureApplicationCookie(options =>
-                {
-                    options.Cookie.HttpOnly = true;
-                    options.ExpireTimeSpan = TimeSpan.FromHours(10);
-                    options.Cookie.Name = "MercuryIntegrationService";
-
-                    options.LoginPath = "/Account/Login";
-                    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-                    options.SlidingExpiration = true;
-                });
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>

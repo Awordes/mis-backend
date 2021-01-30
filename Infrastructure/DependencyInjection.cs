@@ -1,19 +1,23 @@
 ﻿using Core.Application.Common;
+using Core.Application.Common.Services;
 using Core.Domain.Auth;
+using Infrastructure.Integrations.Mercury;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Reflection;
 
 namespace Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection service,
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services,
             IConfiguration configuration)
         {
-            service.AddDbContext<MisDbContext>(builder =>
+            services.AddDbContext<MisDbContext>(builder =>
                builder.UseNpgsql(configuration.GetConnectionString(ConnectionStrings.PostgreSQLConnectionString),
                    b =>
                    {
@@ -24,11 +28,11 @@ namespace Infrastructure
                            "mis");
                    }));
 
-            service.AddScoped<IMisDbContext>(provider => provider.GetService<MisDbContext>());
+            services.AddScoped<IMisDbContext>(provider => provider.GetService<MisDbContext>());
 
-            service.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddMediatR(Assembly.GetExecutingAssembly());
 
-            service.AddIdentity<User, Role>(options => 
+            services.AddIdentity<User, Role>(options => 
                 {
                     options.Password.RequiredLength = 10;
                     options.Password.RequireLowercase = false;
@@ -38,7 +42,21 @@ namespace Infrastructure
                 })
                 .AddEntityFrameworkStores<MisDbContext>();
 
-            return service;
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromHours(10);
+                options.Cookie.Name = "MercuryIntegrationService";
+
+                options.LoginPath = "/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.SlidingExpiration = true;
+            });
+
+            services.AddScoped<MercuryService>();
+            services.AddScoped<IMercuryService>(provider => provider.GetService<MercuryService>());
+
+            return services;
         }
     }
 }

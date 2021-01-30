@@ -1,6 +1,6 @@
 ﻿namespace Core.Application.Common
 {
-    public class MercuryConstants
+    public class MercuryOptions
     {
         public string RequestUrl { get; set; }
 
