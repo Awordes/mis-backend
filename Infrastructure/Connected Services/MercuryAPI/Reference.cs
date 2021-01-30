@@ -838,6 +838,7 @@ namespace MercuryAPI
                 result.MaxReceivedMessageSize = int.MaxValue;
                 result.AllowCookies = true;
                 result.Security.Mode = System.ServiceModel.BasicHttpSecurityMode.Transport;
+                result.Security.Transport.ClientCredentialType = HttpClientCredentialType.Basic;
                 return result;
             }
             throw new System.InvalidOperationException(string.Format("Не удалось найти конечную точку с именем \"{0}\".", endpointConfiguration));
@@ -10754,7 +10755,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace= "http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace= "http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class GetVetDocumentListRequest : MercuryApplicationRequest
     {
         
@@ -10769,6 +10770,8 @@ namespace MercuryAPI
         private bool vetDocumentStatusFieldSpecified;
         
         private BusinessMember businessMemberField;
+
+        private string enterpriseGuidField;
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/base", Order=0)]
@@ -10851,6 +10854,20 @@ namespace MercuryAPI
             set
             {
                 this.businessMemberField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://api.vetrf.ru/schema/cdm/dictionary/v2", Order = 4)]
+        public string enterpriseGuid
+        {
+            get
+            {
+                return this.enterpriseGuidField;
+            }
+            set
+            {
+                this.enterpriseGuidField = value;
             }
         }
     }
@@ -12365,7 +12382,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class GetVetDocumentListResponse : ApplicationResultData
     {
         
