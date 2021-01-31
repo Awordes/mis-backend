@@ -49,7 +49,6 @@ namespace Infrastructure
                 options.Cookie.Name = "MercuryIntegrationService";
 
                 options.LoginPath = "/Account/Login";
-                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
 

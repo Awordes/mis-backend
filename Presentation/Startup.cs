@@ -1,9 +1,7 @@
 using Core;
 using Infrastructure;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -83,6 +81,14 @@ namespace Presentation
                 config.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Core.xml"));
             });
 
+            services.AddCors();
+            
+            // services.ConfigureApplicationCookie(options =>
+            // {
+            //     options.Cookie.SameSite = SameSiteMode.None;
+            //     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            // });
+
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 {
@@ -107,14 +113,17 @@ namespace Presentation
             });
 
             app.UseCors(builder =>
-            {
-                builder.AllowAnyOrigin();
-                builder.AllowAnyHeader();
-                builder.AllowAnyMethod();
-            });
+                builder.WithOrigins(
+                        "http://localhost:8080",
+                        "http://localhost:5010",
+                        "http://192.168.0.150:5010",
+                        "http://192.168.0.150:8080")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials());
 
             app.UseRouting();
-
+            app.UseCookiePolicy();
             app.UseAuthentication();
 
             app.UseAuthorization();
