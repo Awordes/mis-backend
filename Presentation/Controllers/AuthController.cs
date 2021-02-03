@@ -1,6 +1,7 @@
 ﻿using Core.Application.Usecases.Auth.Commands.Login;
 using Core.Application.Usecases.Auth.Commands.Logout;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -19,12 +20,22 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
         public async Task<IActionResult> Logout()
         {
             await Mediator.Send(new LogoutCommand());
             return NoContent();
+        }
+
+
+        [Authorize]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public IActionResult LoginCheck()
+        {
+            return Ok();
         }
     }
 }

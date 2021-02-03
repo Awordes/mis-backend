@@ -39,8 +39,9 @@ namespace Core.Application.Usecases.Auth.Commands.Login
 
                     return Unit.Value;
                 }
-                catch
+                catch (Exception e)
                 {
+                    Console.WriteLine(e);
                     throw;
                 }
             }

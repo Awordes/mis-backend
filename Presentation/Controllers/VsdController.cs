@@ -9,7 +9,7 @@ namespace Presentation.Controllers
     [Authorize]
     public class VsdController: BaseController
     {
-        [HttpPost]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
         public async Task<ActionResult<object>> GetVsdList([FromQuery] GetVetDocumentListQuery query)

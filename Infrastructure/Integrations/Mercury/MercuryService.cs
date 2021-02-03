@@ -1,9 +1,12 @@
+using System.Threading;
 using System;
 using System.Threading.Tasks;
 using Core.Application.Common;
 using Core.Application.Common.Services;
 using MercuryAPI;
 using Microsoft.Extensions.Options;
+using System.Collections.Generic;
+using Core.Domain.Mercury;
 
 namespace Infrastructure.Integrations.Mercury
 {
@@ -62,15 +65,54 @@ namespace Infrastructure.Integrations.Mercury
             var applicationId = applicationResponse.submitApplicationResponse.application.applicationId;
             var resultRequest = new receiveApplicationResultRequest  
                 {  
-                    apiKey = _mercuryOptions.ApiKey,  
-                    applicationId = applicationId,  
-                    issuerId = _mercuryOptions.IssuerId  
+                    apiKey = _mercuryOptions.ApiKey,
+                    applicationId = applicationId,
+                    issuerId = _mercuryOptions.IssuerId
                 };  
-  
-            var receiveApplicationResponse = await client.receiveApplicationResultAsync(resultRequest);  
-            var result = receiveApplicationResponse.receiveApplicationResultResponse.application.result.Deserialize<GetVetDocumentListResponse>();  
+
+            var receiveApplicationResponse = new receiveApplicationResultResponse1();
+
+            do
+            {
+                Thread.Sleep(1000);
+                receiveApplicationResponse = await client.receiveApplicationResultAsync(resultRequest);
+            } while(receiveApplicationResponse.receiveApplicationResultResponse.application.status == ApplicationStatus.IN_PROCESS);
+
+            var result = receiveApplicationResponse.receiveApplicationResultResponse
+                .application.result.Deserialize<GetVetDocumentListResponse>();
+
+            var vsds = new List<Vsd>();
+
+            foreach (var vetDocument in result.vetDocumentList.vetDocument)
+            {
+                var item = (CertifiedConsignment) vetDocument.Item;
+
+                var element = new Vsd
+                {
+                    Id = vetDocument.uuid,
+                    Name = item.batch.productItem.name,
+                    ProductGlobalId = item.batch.productItem.globalID,
+                    Volume = item.batch.volume,
+                    ExpirationDate = ComplexToDateTime(item.batch.expiryDate.firstDate),
+                    ProductDate = ComplexToDateTime(item.batch.dateOfProduction.firstDate)
+                }; 
+
+                vsds.Add(element);
+            }
             
-            return receiveApplicationResponse;  
+            return vsds;  
+        }
+
+        private DateTime ComplexToDateTime(ComplexDate complexDate)
+        {
+            return new DateTime(                    
+                complexDate.year,
+                complexDate.month,
+                complexDate.day,
+                complexDate.hour,
+                complexDate.minute,
+                0
+            );
         }
     }
 }
