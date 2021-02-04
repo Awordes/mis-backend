@@ -2,7 +2,6 @@ using System;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
-using Core.Application.Common.Extensions;
 using MercuryAPI;
 
 namespace Infrastructure.Integrations.Mercury

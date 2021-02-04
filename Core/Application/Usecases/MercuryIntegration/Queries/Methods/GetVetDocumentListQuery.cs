@@ -16,7 +16,7 @@ namespace Core.Application.Usecases.MercuryIntegration.Queries.Methods
         public int Page { get; set; }
 
         /// <summary>
-        /// Кол-во элементов на странице
+        /// Размер страницы
         /// </summary>
         public int PageSize { get; set; }
 

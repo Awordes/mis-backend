@@ -9,7 +9,10 @@ using System.Threading.Tasks;
 namespace Presentation.Controllers
 {
     public class AuthController: BaseController
-    {        
+    {
+        /// <summary>
+        /// Авторизация
+        /// </summary>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
@@ -19,6 +22,9 @@ namespace Presentation.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Сброс авторизации
+        /// </summary>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
@@ -28,7 +34,9 @@ namespace Presentation.Controllers
             return NoContent();
         }
 
-
+        /// <summary>
+        /// Проверка авторизации
+        /// </summary>
         [Authorize]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]

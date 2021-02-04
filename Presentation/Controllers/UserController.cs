@@ -9,6 +9,9 @@ namespace Presentation.Controllers
     [Authorize]
     public class UserController: BaseController
     {
+        /// <summary>
+        /// Создать пользователя
+        /// </summary>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
