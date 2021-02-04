@@ -2,6 +2,7 @@
 using Core.Application.Common.Services;
 using MediatR;
 using Microsoft.Extensions.Options;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,14 +11,14 @@ namespace Core.Application.Usecases.MercuryIntegration.Queries.Methods
     public class GetVetDocumentListQuery : IRequest<object>
     {
         /// <summary>
-        /// Количество ВСД
+        /// Номер страницы
         /// </summary>
-        public int Count { get; set; }
+        public int Page { get; set; }
 
         /// <summary>
-        /// Номер первого ВСД
+        /// Кол-во элементов на странице
         /// </summary>
-        public int Offset { get; set; }
+        public int PageSize { get; set; }
 
         /// <summary>
         /// Статус ВСД
@@ -49,11 +50,23 @@ namespace Core.Application.Usecases.MercuryIntegration.Queries.Methods
             {
                 try
                 {
-                    return await _mercuryService.GetVetDocumentList(_mercuryOptions.LocalTransactionId,
-                    _mercuryOptions.InitiatorLogin, request.Count, request.Offset, request.Type, request.Status, _mercuryOptions.EnterpriseId);
+                    var count = request.PageSize;
+
+                    var offset = request.PageSize * (request.Page - 1);
+
+                    return await _mercuryService.GetVetDocumentList(
+                        _mercuryOptions.LocalTransactionId,
+                        _mercuryOptions.InitiatorLogin,
+                        count,
+                        offset,
+                        request.Type,
+                        request.Status,
+                        _mercuryOptions.EnterpriseId
+                    );
                 }
-                catch
+                catch(Exception e)
                 {
+                    Console.WriteLine(e);
                     throw;
                 }
             }
