@@ -41,7 +41,9 @@ namespace Infrastructure.Integrations.Mercury
                 enterpriseGuid = enterpriseId
             };
 
-            var request = new submitApplicationRequest
+            var request = new submitApplicationRequestRequest
+            {
+                submitApplicationRequest = new submitApplicationRequest
                 {
                     apiKey = _mercuryOptions.ApiKey,
                     application = new Application
@@ -55,20 +57,24 @@ namespace Infrastructure.Integrations.Mercury
                             Any = requestData.Serialize()
                         }
                     }
-                };
+                }
+            };                
 
             var client = new ApplicationManagementServicePortTypeClient();
-
             client.ClientCredentials.UserName.UserName = _mercuryOptions.ApiLogin;
             client.ClientCredentials.UserName.Password = _mercuryOptions.ApiPassword;
+
             var applicationResponse = await client.submitApplicationRequestAsync(request);
             var applicationId = applicationResponse.submitApplicationResponse.application.applicationId;
-            var resultRequest = new receiveApplicationResultRequest  
-                {  
+            var resultRequest = new receiveApplicationResultRequest1
+            {
+                receiveApplicationResultRequest = new receiveApplicationResultRequest
+                {
                     apiKey = _mercuryOptions.ApiKey,
                     applicationId = applicationId,
                     issuerId = _mercuryOptions.IssuerId
-                };  
+                }
+            };  
 
             var receiveApplicationResponse = new receiveApplicationResultResponse1();
 

@@ -584,7 +584,6 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class submitApplicationRequestRequest
     {
@@ -604,7 +603,6 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class submitApplicationRequestResponse
     {
@@ -704,7 +702,6 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class receiveApplicationResultRequest1
     {
@@ -724,7 +721,6 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class receiveApplicationResultResponse1
     {
@@ -792,30 +788,14 @@ namespace MercuryAPI
         {
         }
         
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.submitApplicationRequestResponse> MercuryAPI.ApplicationManagementServicePortType.submitApplicationRequestAsync(MercuryAPI.submitApplicationRequestRequest request)
+        public System.Threading.Tasks.Task<MercuryAPI.submitApplicationRequestResponse> submitApplicationRequestAsync(MercuryAPI.submitApplicationRequestRequest request)
         {
             return base.Channel.submitApplicationRequestAsync(request);
         }
         
-        public System.Threading.Tasks.Task<MercuryAPI.submitApplicationRequestResponse> submitApplicationRequestAsync(MercuryAPI.submitApplicationRequest submitApplicationRequest)
-        {
-            MercuryAPI.submitApplicationRequestRequest inValue = new MercuryAPI.submitApplicationRequestRequest();
-            inValue.submitApplicationRequest = submitApplicationRequest;
-            return ((MercuryAPI.ApplicationManagementServicePortType)(this)).submitApplicationRequestAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.receiveApplicationResultResponse1> MercuryAPI.ApplicationManagementServicePortType.receiveApplicationResultAsync(MercuryAPI.receiveApplicationResultRequest1 request)
+        public System.Threading.Tasks.Task<MercuryAPI.receiveApplicationResultResponse1> receiveApplicationResultAsync(MercuryAPI.receiveApplicationResultRequest1 request)
         {
             return base.Channel.receiveApplicationResultAsync(request);
-        }
-        
-        public System.Threading.Tasks.Task<MercuryAPI.receiveApplicationResultResponse1> receiveApplicationResultAsync(MercuryAPI.receiveApplicationResultRequest receiveApplicationResultRequest)
-        {
-            MercuryAPI.receiveApplicationResultRequest1 inValue = new MercuryAPI.receiveApplicationResultRequest1();
-            inValue.receiveApplicationResultRequest = receiveApplicationResultRequest;
-            return ((MercuryAPI.ApplicationManagementServicePortType)(this)).receiveApplicationResultAsync(inValue);
         }
         
         public virtual System.Threading.Tasks.Task OpenAsync()
@@ -848,7 +828,7 @@ namespace MercuryAPI
         {
             if ((endpointConfiguration == EndpointConfiguration.ApplicationManagementServiceBindingQSPort))
             {
-                return new System.ServiceModel.EndpointAddress("https://api.vetrf.ru/platform/services/2.0/ApplicationManagementService");
+                return new System.ServiceModel.EndpointAddress("https://api.vetrf.ru/platform/services/2.1/ApplicationManagementService");
             }
             throw new System.InvalidOperationException(string.Format("Не удалось найти конечную точку с именем \"{0}\".", endpointConfiguration));
         }
@@ -871,135 +851,131 @@ namespace MercuryAPI
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2", ConfigurationName="MercuryAPI.MercuryG2BServicePortType")]
+    [System.ServiceModel.ServiceContractAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/service/v2", ConfigurationName="MercuryAPI.MercuryG2BServicePortType")]
     public interface MercuryG2BServicePortType
     {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/pr" +
-            "ocessIncomingConsignmentRequestRequest", ReplyAction="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/pr" +
-            "ocessIncomingConsignmentRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="processIncomingConsignmentRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<MercuryAPI.processIncomingConsignmentRequestResponse> processIncomingConsignmentRequestAsync(MercuryAPI.processIncomingConsignmentRequestRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/pr" +
-            "epareOutgoingConsignmentRequestRequest", ReplyAction="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/pr" +
-            "epareOutgoingConsignmentRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="processIncomingDeliveryRequest", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        System.Threading.Tasks.Task<MercuryAPI.processIncomingDeliveryRequestResponse> processIncomingDeliveryRequestAsync(MercuryAPI.processIncomingDeliveryRequestRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="prepareOutgoingConsignmentRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<MercuryAPI.prepareOutgoingConsignmentRequestResponse> prepareOutgoingConsignmentRequestAsync(MercuryAPI.prepareOutgoingConsignmentRequestRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/re" +
-            "gisterProductionOperationRequestRequest", ReplyAction="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/re" +
-            "gisterProductionOperationRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="registerProductionOperationRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<MercuryAPI.registerProductionOperationRequestResponse> registerProductionOperationRequestAsync(MercuryAPI.registerProductionOperationRequestRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/me" +
-            "rgeStockEntriesRequestRequest", ReplyAction="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/me" +
-            "rgeStockEntriesRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="mergeStockEntriesRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<MercuryAPI.mergeStockEntriesRequestResponse> mergeStockEntriesRequestAsync(MercuryAPI.mergeStockEntriesRequestRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/wi" +
-            "thdrawVetDocumentRequestRequest", ReplyAction="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/wi" +
-            "thdrawVetDocumentRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="withdrawVetDocumentRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<MercuryAPI.withdrawVetDocumentRequestResponse> withdrawVetDocumentRequestAsync(MercuryAPI.withdrawVetDocumentRequestRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/mo" +
-            "difyBusinessEntityRequestRequest", ReplyAction="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/mo" +
-            "difyBusinessEntityRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="modifyBusinessEntityRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<MercuryAPI.modifyBusinessEntityRequestResponse> modifyBusinessEntityRequestAsync(MercuryAPI.modifyBusinessEntityRequestRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/mo" +
-            "difyEnterpriseRequestRequest", ReplyAction="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/mo" +
-            "difyEnterpriseRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="modifyEnterpriseRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<MercuryAPI.modifyEnterpriseRequestResponse> modifyEnterpriseRequestAsync(MercuryAPI.modifyEnterpriseRequestRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/mo" +
-            "difyActivityLocationsRequestRequest", ReplyAction="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/mo" +
-            "difyActivityLocationsRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="modifyActivityLocationsRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<MercuryAPI.modifyActivityLocationsRequestResponse> modifyActivityLocationsRequestAsync(MercuryAPI.modifyActivityLocationsRequestRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/re" +
-            "solveDiscrepancyRequestRequest", ReplyAction="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/re" +
-            "solveDiscrepancyRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="resolveDiscrepancyRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<MercuryAPI.resolveDiscrepancyRequestResponse> resolveDiscrepancyRequestAsync(MercuryAPI.resolveDiscrepancyRequestRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/ge" +
-            "tVetDocumentByUuidRequestRequest", ReplyAction="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/ge" +
-            "tVetDocumentByUuidRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="modifyProducerStockListRequest", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        System.Threading.Tasks.Task<MercuryAPI.modifyProducerStockListRequestResponse> modifyProducerStockListRequestAsync(MercuryAPI.modifyProducerStockListRequestRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="getVetDocumentByUuidRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<MercuryAPI.getVetDocumentByUuidRequestResponse> getVetDocumentByUuidRequestAsync(MercuryAPI.getVetDocumentByUuidRequestRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/ge" +
-            "tVetDocumentListRequestRequest", ReplyAction="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/ge" +
-            "tVetDocumentListRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="getVetDocumentListRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<MercuryAPI.getVetDocumentListRequestResponse> getVetDocumentListRequestAsync(MercuryAPI.getVetDocumentListRequestRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/ge" +
-            "tVetDocumentChangesListRequestRequest", ReplyAction="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/ge" +
-            "tVetDocumentChangesListRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="getVetDocumentChangesListRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<MercuryAPI.getVetDocumentChangesListRequestResponse> getVetDocumentChangesListRequestAsync(MercuryAPI.getVetDocumentChangesListRequestRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/ge" +
-            "tStockEntryByGuidRequestRequest", ReplyAction="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/ge" +
-            "tStockEntryByGuidRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="getStockEntryByGuidRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<MercuryAPI.getStockEntryByGuidRequestResponse> getStockEntryByGuidRequestAsync(MercuryAPI.getStockEntryByGuidRequestRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/ge" +
-            "tStockEntryByUuidRequestRequest", ReplyAction="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/ge" +
-            "tStockEntryByUuidRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="getStockEntryByUuidRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<MercuryAPI.getStockEntryByUuidRequestResponse> getStockEntryByUuidRequestAsync(MercuryAPI.getStockEntryByUuidRequestRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/ge" +
-            "tStockEntryListRequestRequest", ReplyAction="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/ge" +
-            "tStockEntryListRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="getStockEntryListRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<MercuryAPI.getStockEntryListRequestResponse> getStockEntryListRequestAsync(MercuryAPI.getStockEntryListRequestRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/ge" +
-            "tStockEntryChangesListRequestRequest", ReplyAction="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/ge" +
-            "tStockEntryChangesListRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="getStockEntryChangesListRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<MercuryAPI.getStockEntryChangesListRequestResponse> getStockEntryChangesListRequestAsync(MercuryAPI.getStockEntryChangesListRequestRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/ge" +
-            "tStockEntryVersionListRequestRequest", ReplyAction="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/ge" +
-            "tStockEntryVersionListRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="getStockEntryVersionListRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<MercuryAPI.getStockEntryVersionListRequestResponse> getStockEntryVersionListRequestAsync(MercuryAPI.getStockEntryVersionListRequestRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/up" +
-            "dateTransportMovementDetailsRequestRequest", ReplyAction="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/up" +
-            "dateTransportMovementDetailsRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="updateTransportMovementDetailsRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<MercuryAPI.updateTransportMovementDetailsRequestResponse> updateTransportMovementDetailsRequestAsync(MercuryAPI.updateTransportMovementDetailsRequestRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/up" +
-            "dateVeterinaryEventsRequestRequest", ReplyAction="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/up" +
-            "dateVeterinaryEventsRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="updateVeterinaryEventsRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<MercuryAPI.updateVeterinaryEventsRequestResponse> updateVeterinaryEventsRequestAsync(MercuryAPI.updateVeterinaryEventsRequestRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/ch" +
-            "eckShipmentRegionalizationRequestRequest", ReplyAction="http://api.vetrf.ru/schema/cdm/mercury/vu/service/v2/MercuryG2BServicePortType/ch" +
-            "eckShipmentRegionalizationRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="checkShipmentRegionalizationRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<MercuryAPI.checkShipmentRegionalizationRequestResponse> checkShipmentRegionalizationRequestAsync(MercuryAPI.checkShipmentRegionalizationRequestRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="addBusinessEntityUserRequest", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        System.Threading.Tasks.Task<MercuryAPI.addBusinessEntityUserRequestResponse> addBusinessEntityUserRequestAsync(MercuryAPI.addBusinessEntityUserRequestRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="getBusinessEntityUserListRequest", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        System.Threading.Tasks.Task<MercuryAPI.getBusinessEntityUserListRequestResponse> getBusinessEntityUserListRequestAsync(MercuryAPI.getBusinessEntityUserListRequestRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="getBusinessEntityUserRequest", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        System.Threading.Tasks.Task<MercuryAPI.getBusinessEntityUserRequestResponse> getBusinessEntityUserRequestAsync(MercuryAPI.getBusinessEntityUserRequestRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="updateUserAuthoritiesRequest", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        System.Threading.Tasks.Task<MercuryAPI.updateUserAuthoritiesRequestResponse> updateUserAuthoritiesRequestAsync(MercuryAPI.updateUserAuthoritiesRequestRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="updateUserWorkingAreasRequest", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        System.Threading.Tasks.Task<MercuryAPI.updateUserWorkingAreasRequestResponse> updateUserWorkingAreasRequestAsync(MercuryAPI.updateUserWorkingAreasRequestRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="unbindBusinessEntityUserRequest", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        System.Threading.Tasks.Task<MercuryAPI.unbindBusinessEntityUserRequestResponse> unbindBusinessEntityUserRequestAsync(MercuryAPI.unbindBusinessEntityUserRequestRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="getApplicableUserAuthorityListRequest", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        System.Threading.Tasks.Task<MercuryAPI.getApplicableUserAuthorityListRequestResponse> getApplicableUserAuthorityListRequestAsync(MercuryAPI.getApplicableUserAuthorityListRequestRequest request);
     }
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class ProcessIncomingConsignmentRequest : MercuryApplicationRequest
     {
         
@@ -2366,6 +2342,14 @@ namespace MercuryAPI
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("22")]
         Item22,
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("23")]
+        Item23,
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("24")]
+        Item24,
     }
     
     /// <remarks/>
@@ -4920,6 +4904,10 @@ namespace MercuryAPI
         
         private EnterpriseOfficialRegistration[] officialRegistrationField;
         
+        private EnterpriseStatus registryStatusField;
+        
+        private bool registryStatusFieldSpecified;
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string name
@@ -5030,6 +5018,34 @@ namespace MercuryAPI
             set
             {
                 this.officialRegistrationField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=8)]
+        public EnterpriseStatus registryStatus
+        {
+            get
+            {
+                return this.registryStatusField;
+            }
+            set
+            {
+                this.registryStatusField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool registryStatusSpecified
+        {
+            get
+            {
+                return this.registryStatusFieldSpecified;
+            }
+            set
+            {
+                this.registryStatusFieldSpecified = value;
             }
         }
     }
@@ -6468,6 +6484,8 @@ namespace MercuryAPI
         
         private StockEntryEventList vetEventListField;
         
+        private string qualifierField;
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string entryNumber
@@ -6523,6 +6541,20 @@ namespace MercuryAPI
                 this.vetEventListField = value;
             }
         }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
+        public string qualifier
+        {
+            get
+            {
+                return this.qualifierField;
+            }
+            set
+            {
+                this.qualifierField = value;
+            }
+        }
     }
     
     /// <remarks/>
@@ -6569,6 +6601,8 @@ namespace MercuryAPI
         private Package[] packageListField;
         
         private BusinessEntity ownerField;
+        
+        private BatchExtraInfo applicableClassificationsField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
@@ -6820,6 +6854,20 @@ namespace MercuryAPI
             set
             {
                 this.ownerField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=14)]
+        public BatchExtraInfo applicableClassifications
+        {
+            get
+            {
+                return this.applicableClassificationsField;
+            }
+            set
+            {
+                this.applicableClassificationsField = value;
             }
         }
     }
@@ -7360,6 +7408,71 @@ namespace MercuryAPI
         
         /// <remarks/>
         BUNDLE,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2")]
+    public partial class BatchExtraInfo
+    {
+        
+        private NonFoodProductSourceType nonFoodSourceField;
+        
+        private bool nonFoodSourceFieldSpecified;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public NonFoodProductSourceType nonFoodSource
+        {
+            get
+            {
+                return this.nonFoodSourceField;
+            }
+            set
+            {
+                this.nonFoodSourceField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool nonFoodSourceSpecified
+        {
+            get
+            {
+                return this.nonFoodSourceFieldSpecified;
+            }
+            set
+            {
+                this.nonFoodSourceFieldSpecified = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2")]
+    public enum NonFoodProductSourceType
+    {
+        
+        /// <remarks/>
+        CATTLE_SLAUGHTER,
+        
+        /// <remarks/>
+        LOSS_OF_CATTLE,
+        
+        /// <remarks/>
+        MANUFACTURED,
+        
+        /// <remarks/>
+        MIXED,
+        
+        /// <remarks/>
+        FROM_HEALTHY_ANIMALS,
+        
+        /// <remarks/>
+        FROM_SICK_ANIMALS,
     }
     
     /// <remarks/>
@@ -8036,6 +8149,14 @@ namespace MercuryAPI
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("5")]
         Item5,
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("6")]
+        Item6,
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("7")]
+        Item7,
     }
     
     /// <remarks/>
@@ -9164,6 +9285,10 @@ namespace MercuryAPI
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("6")]
         Item6,
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("7")]
+        Item7,
     }
     
     /// <remarks/>
@@ -9321,6 +9446,8 @@ namespace MercuryAPI
         
         private bool blankFilterFieldSpecified;
         
+        private DateInterval receiptDateIntervalField;
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public StockEntryBlankFilter blankFilter
@@ -9348,6 +9475,20 @@ namespace MercuryAPI
                 this.blankFilterFieldSpecified = value;
             }
         }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        public DateInterval receiptDateInterval
+        {
+            get
+            {
+                return this.receiptDateIntervalField;
+            }
+            set
+            {
+                this.receiptDateIntervalField = value;
+            }
+        }
     }
     
     /// <remarks/>
@@ -9364,6 +9505,78 @@ namespace MercuryAPI
         
         /// <remarks/>
         NOT_BLANK,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/base")]
+    public partial class DateInterval
+    {
+        
+        private System.DateTime beginDateField;
+        
+        private bool beginDateFieldSpecified;
+        
+        private System.DateTime endDateField;
+        
+        private bool endDateFieldSpecified;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public System.DateTime beginDate
+        {
+            get
+            {
+                return this.beginDateField;
+            }
+            set
+            {
+                this.beginDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool beginDateSpecified
+        {
+            get
+            {
+                return this.beginDateFieldSpecified;
+            }
+            set
+            {
+                this.beginDateFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        public System.DateTime endDate
+        {
+            get
+            {
+                return this.endDateField;
+            }
+            set
+            {
+                this.endDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool endDateSpecified
+        {
+            get
+            {
+                return this.endDateFieldSpecified;
+            }
+            set
+            {
+                this.endDateFieldSpecified = value;
+            }
+        }
     }
     
     /// <remarks/>
@@ -9493,6 +9706,25 @@ namespace MercuryAPI
                 this.kppField = value;
             }
         }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/dictionary/v2")]
+    public enum EnterpriseStatus
+    {
+        
+        /// <remarks/>
+        UNVERIFIED,
+        
+        /// <remarks/>
+        VERIFIED,
+        
+        /// <remarks/>
+        CANCELED,
+        
+        /// <remarks/>
+        DELETED,
     }
     
     /// <remarks/>
@@ -10078,6 +10310,13 @@ namespace MercuryAPI
     }
     
     /// <remarks/>
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetApplicableUserAuthorityListRequest))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(UnbindBusinessEntityUserRequest))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(UpdateUserWorkingAreasRequest))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(UpdateUserAuthoritiesRequest))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetBusinessEntityUserRequest))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetBusinessEntityUserListRequest))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AddBusinessEntityUserRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CheckShipmentRegionalizationRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(UpdateVeterinaryEventsRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(UpdateTransportMovementDetailsRequest))]
@@ -10089,6 +10328,7 @@ namespace MercuryAPI
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetVetDocumentChangesListRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetVetDocumentListRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetVetDocumentByUuidRequest))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ModifyProducerStockListRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ResolveDiscrepancyRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ModifyActivityLocationsRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ModifyEnterpriseRequest))]
@@ -10097,10 +10337,11 @@ namespace MercuryAPI
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(MergeStockEntriesRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RegisterProductionOperationRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(PrepareOutgoingConsignmentRequest))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ProcessIncomingDeliveryRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ProcessIncomingConsignmentRequest))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace= "http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class MercuryApplicationRequest : ApplicationData
     {
         
@@ -10155,6 +10396,13 @@ namespace MercuryAPI
     
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(MercuryApplicationRequest))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetApplicableUserAuthorityListRequest))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(UnbindBusinessEntityUserRequest))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(UpdateUserWorkingAreasRequest))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(UpdateUserAuthoritiesRequest))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetBusinessEntityUserRequest))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetBusinessEntityUserListRequest))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AddBusinessEntityUserRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CheckShipmentRegionalizationRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(UpdateVeterinaryEventsRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(UpdateTransportMovementDetailsRequest))]
@@ -10166,6 +10414,7 @@ namespace MercuryAPI
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetVetDocumentChangesListRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetVetDocumentListRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetVetDocumentByUuidRequest))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ModifyProducerStockListRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ResolveDiscrepancyRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ModifyActivityLocationsRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ModifyEnterpriseRequest))]
@@ -10174,6 +10423,7 @@ namespace MercuryAPI
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(MergeStockEntriesRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RegisterProductionOperationRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(PrepareOutgoingConsignmentRequest))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ProcessIncomingDeliveryRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ProcessIncomingConsignmentRequest))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -10185,7 +10435,215 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
+    public partial class GetApplicableUserAuthorityListRequest : MercuryApplicationRequest
+    {
+        
+        private ListOptions listOptionsField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/base", Order=0)]
+        public ListOptions listOptions
+        {
+            get
+            {
+                return this.listOptionsField;
+            }
+            set
+            {
+                this.listOptionsField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/base")]
+    public partial class ListOptions
+    {
+        
+        private string countField;
+        
+        private string offsetField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger", Order=0)]
+        public string count
+        {
+            get
+            {
+                return this.countField;
+            }
+            set
+            {
+                this.countField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger", Order=1)]
+        public string offset
+        {
+            get
+            {
+                return this.offsetField;
+            }
+            set
+            {
+                this.offsetField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
+    public partial class UnbindBusinessEntityUserRequest : MercuryApplicationRequest
+    {
+        
+        private User[] userField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("user", Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2", Order=0)]
+        public User[] user
+        {
+            get
+            {
+                return this.userField;
+            }
+            set
+            {
+                this.userField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
+    public partial class UpdateUserWorkingAreasRequest : MercuryApplicationRequest
+    {
+        
+        private User[] userField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("user", Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2", Order=0)]
+        public User[] user
+        {
+            get
+            {
+                return this.userField;
+            }
+            set
+            {
+                this.userField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
+    public partial class UpdateUserAuthoritiesRequest : MercuryApplicationRequest
+    {
+        
+        private User[] userField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("user", Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2", Order=0)]
+        public User[] user
+        {
+            get
+            {
+                return this.userField;
+            }
+            set
+            {
+                this.userField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
+    public partial class GetBusinessEntityUserRequest : MercuryApplicationRequest
+    {
+        
+        private User userField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2", Order=0)]
+        public User user
+        {
+            get
+            {
+                return this.userField;
+            }
+            set
+            {
+                this.userField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
+    public partial class GetBusinessEntityUserListRequest : MercuryApplicationRequest
+    {
+        
+        private ListOptions listOptionsField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/base", Order=0)]
+        public ListOptions listOptions
+        {
+            get
+            {
+                return this.listOptionsField;
+            }
+            set
+            {
+                this.listOptionsField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
+    public partial class AddBusinessEntityUserRequest : MercuryApplicationRequest
+    {
+        
+        private User[] userField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("user", Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2", Order=0)]
+        public User[] user
+        {
+            get
+            {
+                return this.userField;
+            }
+            set
+            {
+                this.userField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class CheckShipmentRegionalizationRequest : MercuryApplicationRequest
     {
         
@@ -10226,11 +10684,9 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class UpdateVeterinaryEventsRequest : MercuryApplicationRequest
     {
-        
-        private BusinessEntity businessEntityField;
         
         private Enterprise enterpriseField;
         
@@ -10238,20 +10694,6 @@ namespace MercuryAPI
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
-        public BusinessEntity businessEntity
-        {
-            get
-            {
-                return this.businessEntityField;
-            }
-            set
-            {
-                this.businessEntityField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public Enterprise enterprise
         {
             get
@@ -10265,7 +10707,7 @@ namespace MercuryAPI
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("stockEntry", Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2", Order=2)]
+        [System.Xml.Serialization.XmlElementAttribute("stockEntry", Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2", Order=1)]
         public StockEntry[] stockEntry
         {
             get
@@ -10282,7 +10724,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class UpdateTransportMovementDetailsRequest : MercuryApplicationRequest
     {
         
@@ -10339,7 +10781,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class GetStockEntryVersionListRequest : MercuryApplicationRequest
     {
         
@@ -10347,7 +10789,7 @@ namespace MercuryAPI
         
         private string guidField;
         
-        private BusinessMember businessMemberField;
+        private string enterpriseGuidField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/base", Order=0)]
@@ -10378,16 +10820,16 @@ namespace MercuryAPI
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
-        public BusinessMember businessMember
+        [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/dictionary/v2", Order=2)]
+        public string enterpriseGuid
         {
             get
             {
-                return this.businessMemberField;
+                return this.enterpriseGuidField;
             }
             set
             {
-                this.businessMemberField = value;
+                this.enterpriseGuidField = value;
             }
         }
     }
@@ -10395,53 +10837,13 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/base")]
-    public partial class ListOptions
-    {
-        
-        private string countField;
-        
-        private string offsetField;
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger", Order=0)]
-        public string count
-        {
-            get
-            {
-                return this.countField;
-            }
-            set
-            {
-                this.countField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger", Order=1)]
-        public string offset
-        {
-            get
-            {
-                return this.offsetField;
-            }
-            set
-            {
-                this.offsetField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class GetStockEntryListRequest : MercuryApplicationRequest
     {
         
         private ListOptions listOptionsField;
         
-        private BusinessMember businessMemberField;
+        private string enterpriseGuidField;
         
         private StockEntrySearchPattern searchPatternField;
         
@@ -10460,16 +10862,16 @@ namespace MercuryAPI
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
-        public BusinessMember businessMember
+        [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/dictionary/v2", Order=1)]
+        public string enterpriseGuid
         {
             get
             {
-                return this.businessMemberField;
+                return this.enterpriseGuidField;
             }
             set
             {
-                this.businessMemberField = value;
+                this.enterpriseGuidField = value;
             }
         }
         
@@ -10491,7 +10893,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class GetStockEntryChangesListRequest : MercuryApplicationRequest
     {
         
@@ -10499,7 +10901,7 @@ namespace MercuryAPI
         
         private DateInterval updateDateIntervalField;
         
-        private BusinessMember businessMemberField;
+        private string enterpriseGuidField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/base", Order=0)]
@@ -10530,16 +10932,16 @@ namespace MercuryAPI
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
-        public BusinessMember businessMember
+        [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/dictionary/v2", Order=2)]
+        public string enterpriseGuid
         {
             get
             {
-                return this.businessMemberField;
+                return this.enterpriseGuidField;
             }
             set
             {
-                this.businessMemberField = value;
+                this.enterpriseGuidField = value;
             }
         }
     }
@@ -10547,85 +10949,13 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/base")]
-    public partial class DateInterval
-    {
-        
-        private System.DateTime beginDateField;
-        
-        private bool beginDateFieldSpecified;
-        
-        private System.DateTime endDateField;
-        
-        private bool endDateFieldSpecified;
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
-        public System.DateTime beginDate
-        {
-            get
-            {
-                return this.beginDateField;
-            }
-            set
-            {
-                this.beginDateField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool beginDateSpecified
-        {
-            get
-            {
-                return this.beginDateFieldSpecified;
-            }
-            set
-            {
-                this.beginDateFieldSpecified = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
-        public System.DateTime endDate
-        {
-            get
-            {
-                return this.endDateField;
-            }
-            set
-            {
-                this.endDateField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool endDateSpecified
-        {
-            get
-            {
-                return this.endDateFieldSpecified;
-            }
-            set
-            {
-                this.endDateFieldSpecified = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class GetStockEntryByUuidRequest : MercuryApplicationRequest
     {
         
         private string uuidField;
         
-        private BusinessMember businessMemberField;
+        private string enterpriseGuidField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/base", Order=0)]
@@ -10642,16 +10972,16 @@ namespace MercuryAPI
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
-        public BusinessMember businessMember
+        [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/dictionary/v2", Order=1)]
+        public string enterpriseGuid
         {
             get
             {
-                return this.businessMemberField;
+                return this.enterpriseGuidField;
             }
             set
             {
-                this.businessMemberField = value;
+                this.enterpriseGuidField = value;
             }
         }
     }
@@ -10659,13 +10989,13 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class GetStockEntryByGuidRequest : MercuryApplicationRequest
     {
         
         private string guidField;
         
-        private BusinessMember businessMemberField;
+        private string enterpriseGuidField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/base", Order=0)]
@@ -10682,16 +11012,16 @@ namespace MercuryAPI
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
-        public BusinessMember businessMember
+        [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/dictionary/v2", Order=1)]
+        public string enterpriseGuid
         {
             get
             {
-                return this.businessMemberField;
+                return this.enterpriseGuidField;
             }
             set
             {
-                this.businessMemberField = value;
+                this.enterpriseGuidField = value;
             }
         }
     }
@@ -10699,7 +11029,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class GetVetDocumentChangesListRequest : MercuryApplicationRequest
     {
         
@@ -10707,7 +11037,15 @@ namespace MercuryAPI
         
         private DateInterval updateDateIntervalField;
         
-        private BusinessMember businessMemberField;
+        private string enterpriseGuidField;
+        
+        private VetDocumentType vetDocumentTypeField;
+        
+        private bool vetDocumentTypeFieldSpecified;
+        
+        private VetDocumentStatus vetDocumentStatusField;
+        
+        private bool vetDocumentStatusFieldSpecified;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/base", Order=0)]
@@ -10738,16 +11076,72 @@ namespace MercuryAPI
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
-        public BusinessMember businessMember
+        [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/dictionary/v2", Order=2)]
+        public string enterpriseGuid
         {
             get
             {
-                return this.businessMemberField;
+                return this.enterpriseGuidField;
             }
             set
             {
-                this.businessMemberField = value;
+                this.enterpriseGuidField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2", Order=3)]
+        public VetDocumentType vetDocumentType
+        {
+            get
+            {
+                return this.vetDocumentTypeField;
+            }
+            set
+            {
+                this.vetDocumentTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool vetDocumentTypeSpecified
+        {
+            get
+            {
+                return this.vetDocumentTypeFieldSpecified;
+            }
+            set
+            {
+                this.vetDocumentTypeFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2", Order=4)]
+        public VetDocumentStatus vetDocumentStatus
+        {
+            get
+            {
+                return this.vetDocumentStatusField;
+            }
+            set
+            {
+                this.vetDocumentStatusField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool vetDocumentStatusSpecified
+        {
+            get
+            {
+                return this.vetDocumentStatusFieldSpecified;
+            }
+            set
+            {
+                this.vetDocumentStatusFieldSpecified = value;
             }
         }
     }
@@ -10755,7 +11149,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace= "http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class GetVetDocumentListRequest : MercuryApplicationRequest
     {
         
@@ -10769,10 +11163,14 @@ namespace MercuryAPI
         
         private bool vetDocumentStatusFieldSpecified;
         
-        private BusinessMember businessMemberField;
-
+        private DateInterval issueDateIntervalField;
+        
+        private BusinessMember consignorField;
+        
+        private ReferencedDocument referencedDocumentField;
+        
         private string enterpriseGuidField;
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/base", Order=0)]
         public ListOptions listOptions
@@ -10844,21 +11242,49 @@ namespace MercuryAPI
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
-        public BusinessMember businessMember
+        [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2", Order=3)]
+        public DateInterval issueDateInterval
         {
             get
             {
-                return this.businessMemberField;
+                return this.issueDateIntervalField;
             }
             set
             {
-                this.businessMemberField = value;
+                this.issueDateIntervalField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://api.vetrf.ru/schema/cdm/dictionary/v2", Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2", Order=4)]
+        public BusinessMember consignor
+        {
+            get
+            {
+                return this.consignorField;
+            }
+            set
+            {
+                this.consignorField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2", Order=5)]
+        public ReferencedDocument referencedDocument
+        {
+            get
+            {
+                return this.referencedDocumentField;
+            }
+            set
+            {
+                this.referencedDocumentField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/dictionary/v2", Order=6)]
         public string enterpriseGuid
         {
             get
@@ -10875,11 +11301,13 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class GetVetDocumentByUuidRequest : MercuryApplicationRequest
     {
         
         private string uuidField;
+        
+        private string enterpriseGuidField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/base", Order=0)]
@@ -10894,16 +11322,139 @@ namespace MercuryAPI
                 this.uuidField = value;
             }
         }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/dictionary/v2", Order=1)]
+        public string enterpriseGuid
+        {
+            get
+            {
+                return this.enterpriseGuidField;
+            }
+            set
+            {
+                this.enterpriseGuidField = value;
+            }
+        }
     }
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
-    public partial class ResolveDiscrepancyRequest : MercuryApplicationRequest
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
+    public partial class ModifyProducerStockListRequest : MercuryApplicationRequest
     {
         
-        private BusinessEntity businessEntityField;
+        private PSLModificationOperation modificationOperationField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public PSLModificationOperation modificationOperation
+        {
+            get
+            {
+                return this.modificationOperationField;
+            }
+            set
+            {
+                this.modificationOperationField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2")]
+    public partial class PSLModificationOperation
+    {
+        
+        private RegisterModificationType typeField;
+        
+        private ProductItemList affectedListField;
+        
+        private ProductItemList resultingListField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public RegisterModificationType type
+        {
+            get
+            {
+                return this.typeField;
+            }
+            set
+            {
+                this.typeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        public ProductItemList affectedList
+        {
+            get
+            {
+                return this.affectedListField;
+            }
+            set
+            {
+                this.affectedListField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
+        public ProductItemList resultingList
+        {
+            get
+            {
+                return this.resultingListField;
+            }
+            set
+            {
+                this.resultingListField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/base")]
+    public enum RegisterModificationType
+    {
+        
+        /// <remarks/>
+        CREATE,
+        
+        /// <remarks/>
+        FIND_OR_CREATE,
+        
+        /// <remarks/>
+        UPDATE,
+        
+        /// <remarks/>
+        DELETE,
+        
+        /// <remarks/>
+        MERGE,
+        
+        /// <remarks/>
+        ATTACH,
+        
+        /// <remarks/>
+        SPLIT,
+        
+        /// <remarks/>
+        FORK,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
+    public partial class ResolveDiscrepancyRequest : MercuryApplicationRequest
+    {
         
         private Enterprise enterpriseField;
         
@@ -10917,20 +11468,6 @@ namespace MercuryAPI
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
-        public BusinessEntity businessEntity
-        {
-            get
-            {
-                return this.businessEntityField;
-            }
-            set
-            {
-                this.businessEntityField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public Enterprise enterprise
         {
             get
@@ -10944,7 +11481,7 @@ namespace MercuryAPI
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public System.DateTime inventoryDate
         {
             get
@@ -10958,7 +11495,7 @@ namespace MercuryAPI
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public User responsible
         {
             get
@@ -10972,7 +11509,7 @@ namespace MercuryAPI
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("stockDiscrepancy", Order=4)]
+        [System.Xml.Serialization.XmlElementAttribute("stockDiscrepancy", Order=3)]
         public StockDiscrepancy[] stockDiscrepancy
         {
             get
@@ -10986,7 +11523,7 @@ namespace MercuryAPI
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("discrepancyReport", Order=5)]
+        [System.Xml.Serialization.XmlElementAttribute("discrepancyReport", Order=4)]
         public DiscrepancyReport[] discrepancyReport
         {
             get
@@ -11075,7 +11612,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class ModifyActivityLocationsRequest : MercuryApplicationRequest
     {
         
@@ -11154,37 +11691,6 @@ namespace MercuryAPI
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/base")]
-    public enum RegisterModificationType
-    {
-        
-        /// <remarks/>
-        CREATE,
-        
-        /// <remarks/>
-        FIND_OR_CREATE,
-        
-        /// <remarks/>
-        UPDATE,
-        
-        /// <remarks/>
-        DELETE,
-        
-        /// <remarks/>
-        MERGE,
-        
-        /// <remarks/>
-        ATTACH,
-        
-        /// <remarks/>
-        SPLIT,
-        
-        /// <remarks/>
-        FORK,
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2")]
     public partial class BEActivityLocationsModificationOperationActivityLocation
@@ -11226,7 +11732,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class ModifyEnterpriseRequest : MercuryApplicationRequest
     {
         
@@ -11322,7 +11828,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class ModifyBusinessEntityRequest : MercuryApplicationRequest
     {
         
@@ -11418,7 +11924,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class WithdrawVetDocumentRequest : MercuryApplicationRequest
     {
         
@@ -11490,11 +11996,9 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class MergeStockEntriesRequest : MercuryApplicationRequest
     {
-        
-        private BusinessEntity businessEntityField;
         
         private Enterprise enterpriseField;
         
@@ -11502,20 +12006,6 @@ namespace MercuryAPI
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
-        public BusinessEntity businessEntity
-        {
-            get
-            {
-                return this.businessEntityField;
-            }
-            set
-            {
-                this.businessEntityField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public Enterprise enterprise
         {
             get
@@ -11529,7 +12019,7 @@ namespace MercuryAPI
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public MergeStockEntriesOperation mergeOperation
         {
             get
@@ -11618,11 +12108,9 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class RegisterProductionOperationRequest : MercuryApplicationRequest
     {
-        
-        private BusinessEntity businessEntityField;
         
         private Enterprise enterpriseField;
         
@@ -11632,20 +12120,6 @@ namespace MercuryAPI
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
-        public BusinessEntity businessEntity
-        {
-            get
-            {
-                return this.businessEntityField;
-            }
-            set
-            {
-                this.businessEntityField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public Enterprise enterprise
         {
             get
@@ -11659,7 +12133,7 @@ namespace MercuryAPI
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public ProductionOperation productionOperation
         {
             get
@@ -11673,7 +12147,7 @@ namespace MercuryAPI
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("vetDocument", Order=3)]
+        [System.Xml.Serialization.XmlElementAttribute("vetDocument", Order=2)]
         public VetDocument[] vetDocument
         {
             get
@@ -12034,7 +12508,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class PrepareOutgoingConsignmentRequest : MercuryApplicationRequest
     {
         
@@ -12058,7 +12532,63 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
+    public partial class ProcessIncomingDeliveryRequest : MercuryApplicationRequest
+    {
+        
+        private Delivery deliveryField;
+        
+        private DeliveryFactList deliveryFactsField;
+        
+        private Delivery returnedDeliveryField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public Delivery delivery
+        {
+            get
+            {
+                return this.deliveryField;
+            }
+            set
+            {
+                this.deliveryField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        public DeliveryFactList deliveryFacts
+        {
+            get
+            {
+                return this.deliveryFactsField;
+            }
+            set
+            {
+                this.deliveryFactsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
+        public Delivery returnedDelivery
+        {
+            get
+            {
+                return this.returnedDeliveryField;
+            }
+            set
+            {
+                this.returnedDeliveryField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class ProcessIncomingConsignmentResponse : ApplicationResultData
     {
         
@@ -12096,6 +12626,13 @@ namespace MercuryAPI
     }
     
     /// <remarks/>
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetApplicableUserAuthorityListResponse))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(UnbindBusinessEntityUserResponse))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(UpdateUserWorkingAreasResponse))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(UpdateUserAuthoritiesResponse))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetBusinessEntityUserResponse))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetBusinessEntityUserListResponse))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AddBusinessEntityUserResponse))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CheckShipmentRegionalizationResponse))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(UpdateVeterinaryEventsResponse))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(UpdateTransportMovementDetailsResponse))]
@@ -12107,6 +12644,7 @@ namespace MercuryAPI
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetVetDocumentChangesListResponse))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetVetDocumentListResponse))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetVetDocumentByUuidResponse))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ModifyProducerStockListResponse))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ResolveDiscrepancyResponse))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ModifyActivityLocationsResponse))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ModifyEnterpriseResponse))]
@@ -12115,6 +12653,7 @@ namespace MercuryAPI
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(MergeStockEntriesResponse))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RegisterProductionOperationResponse))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(PrepareOutgoingConsignmentResponse))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ProcessIncomingDeliveryResponse))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ProcessIncomingConsignmentResponse))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -12126,7 +12665,176 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
+    public partial class GetApplicableUserAuthorityListResponse : ApplicationResultData
+    {
+        
+        private UserAuthority[] authorityListField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlArrayAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2", Order=0)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("authority", IsNullable=false)]
+        public UserAuthority[] authorityList
+        {
+            get
+            {
+                return this.authorityListField;
+            }
+            set
+            {
+                this.authorityListField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
+    public partial class UnbindBusinessEntityUserResponse : ApplicationResultData
+    {
+        
+        private User[] userField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("user", Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2", Order=0)]
+        public User[] user
+        {
+            get
+            {
+                return this.userField;
+            }
+            set
+            {
+                this.userField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
+    public partial class UpdateUserWorkingAreasResponse : ApplicationResultData
+    {
+        
+        private User[] userField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("user", Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2", Order=0)]
+        public User[] user
+        {
+            get
+            {
+                return this.userField;
+            }
+            set
+            {
+                this.userField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
+    public partial class UpdateUserAuthoritiesResponse : ApplicationResultData
+    {
+        
+        private User[] userField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("user", Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2", Order=0)]
+        public User[] user
+        {
+            get
+            {
+                return this.userField;
+            }
+            set
+            {
+                this.userField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
+    public partial class GetBusinessEntityUserResponse : ApplicationResultData
+    {
+        
+        private User userField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2", Order=0)]
+        public User user
+        {
+            get
+            {
+                return this.userField;
+            }
+            set
+            {
+                this.userField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
+    public partial class GetBusinessEntityUserListResponse : ApplicationResultData
+    {
+        
+        private UserList userListField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2", Order=0)]
+        public UserList userList
+        {
+            get
+            {
+                return this.userListField;
+            }
+            set
+            {
+                this.userListField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
+    public partial class AddBusinessEntityUserResponse : ApplicationResultData
+    {
+        
+        private User[] userField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("user", Namespace="http://api.vetrf.ru/schema/cdm/mercury/vet-document/v2", Order=0)]
+        public User[] user
+        {
+            get
+            {
+                return this.userField;
+            }
+            set
+            {
+                this.userField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class CheckShipmentRegionalizationResponse : ApplicationResultData
     {
         
@@ -12190,7 +12898,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class UpdateVeterinaryEventsResponse : ApplicationResultData
     {
         
@@ -12214,7 +12922,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class UpdateTransportMovementDetailsResponse : ApplicationResultData
     {
         
@@ -12238,7 +12946,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class GetStockEntryVersionListResponse : ApplicationResultData
     {
         
@@ -12262,7 +12970,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class GetStockEntryListResponse : ApplicationResultData
     {
         
@@ -12286,7 +12994,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class GetStockEntryChangesListResponse : ApplicationResultData
     {
         
@@ -12310,7 +13018,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class GetStockEntryByUuidResponse : ApplicationResultData
     {
         
@@ -12334,7 +13042,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class GetStockEntryByGuidResponse : ApplicationResultData
     {
         
@@ -12358,7 +13066,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class GetVetDocumentChangesListResponse : ApplicationResultData
     {
         
@@ -12406,7 +13114,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class GetVetDocumentByUuidResponse : ApplicationResultData
     {
         
@@ -12430,7 +13138,31 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
+    public partial class ModifyProducerStockListResponse : ApplicationResultData
+    {
+        
+        private ProductItemList productItemListField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public ProductItemList productItemList
+        {
+            get
+            {
+                return this.productItemListField;
+            }
+            set
+            {
+                this.productItemListField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class ResolveDiscrepancyResponse : ApplicationResultData
     {
         
@@ -12454,7 +13186,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class ModifyActivityLocationsResponse : ApplicationResultData
     {
         
@@ -12478,7 +13210,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class ModifyEnterpriseResponse : ApplicationResultData
     {
         
@@ -12502,7 +13234,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class ModifyBusinessEntityResponse : ApplicationResultData
     {
         
@@ -12526,7 +13258,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class WithdrawVetDocumentResponse : ApplicationResultData
     {
         
@@ -12566,7 +13298,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class MergeStockEntriesResponse : ApplicationResultData
     {
         
@@ -12590,25 +13322,25 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class RegisterProductionOperationResponse : ApplicationResultData
     {
         
-        private StockEntry[] stockEntryField;
+        private StockEntryList stockEntryListField;
         
         private VetDocument[] vetDocumentField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("stockEntry", Order=0)]
-        public StockEntry[] stockEntry
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public StockEntryList stockEntryList
         {
             get
             {
-                return this.stockEntryField;
+                return this.stockEntryListField;
             }
             set
             {
-                this.stockEntryField = value;
+                this.stockEntryListField = value;
             }
         }
         
@@ -12630,7 +13362,7 @@ namespace MercuryAPI
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
     public partial class PrepareOutgoingConsignmentResponse : ApplicationResultData
     {
         
@@ -12667,14 +13399,53 @@ namespace MercuryAPI
         }
     }
     
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2")]
+    public partial class ProcessIncomingDeliveryResponse : ApplicationResultData
+    {
+        
+        private StockEntry[] stockEntryField;
+        
+        private VetDocument[] vetDocumentField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("stockEntry", Order=0)]
+        public StockEntry[] stockEntry
+        {
+            get
+            {
+                return this.stockEntryField;
+            }
+            set
+            {
+                this.stockEntryField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("vetDocument", Order=1)]
+        public VetDocument[] vetDocument
+        {
+            get
+            {
+                return this.vetDocumentField;
+            }
+            set
+            {
+                this.vetDocumentField = value;
+            }
+        }
+    }
+    
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class processIncomingConsignmentRequestRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.ProcessIncomingConsignmentRequest processIncomingConsignmentRequest;
         
         public processIncomingConsignmentRequestRequest()
@@ -12689,12 +13460,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class processIncomingConsignmentRequestResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.ProcessIncomingConsignmentResponse processIncomingConsignmentResponse;
         
         public processIncomingConsignmentRequestResponse()
@@ -12709,12 +13479,49 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class processIncomingDeliveryRequestRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
+        public MercuryAPI.ProcessIncomingDeliveryRequest processIncomingDeliveryRequest;
+        
+        public processIncomingDeliveryRequestRequest()
+        {
+        }
+        
+        public processIncomingDeliveryRequestRequest(MercuryAPI.ProcessIncomingDeliveryRequest processIncomingDeliveryRequest)
+        {
+            this.processIncomingDeliveryRequest = processIncomingDeliveryRequest;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class processIncomingDeliveryRequestResponse
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
+        public MercuryAPI.ProcessIncomingDeliveryResponse processIncomingDeliveryResponse;
+        
+        public processIncomingDeliveryRequestResponse()
+        {
+        }
+        
+        public processIncomingDeliveryRequestResponse(MercuryAPI.ProcessIncomingDeliveryResponse processIncomingDeliveryResponse)
+        {
+            this.processIncomingDeliveryResponse = processIncomingDeliveryResponse;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class prepareOutgoingConsignmentRequestRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.PrepareOutgoingConsignmentRequest prepareOutgoingConsignmentRequest;
         
         public prepareOutgoingConsignmentRequestRequest()
@@ -12729,12 +13536,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class prepareOutgoingConsignmentRequestResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.PrepareOutgoingConsignmentResponse prepareOutgoingConsignmentResponse;
         
         public prepareOutgoingConsignmentRequestResponse()
@@ -12749,12 +13555,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class registerProductionOperationRequestRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.RegisterProductionOperationRequest registerProductionOperationRequest;
         
         public registerProductionOperationRequestRequest()
@@ -12769,12 +13574,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class registerProductionOperationRequestResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.RegisterProductionOperationResponse registerProductionOperationResponse;
         
         public registerProductionOperationRequestResponse()
@@ -12789,12 +13593,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class mergeStockEntriesRequestRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.MergeStockEntriesRequest mergeStockEntriesRequest;
         
         public mergeStockEntriesRequestRequest()
@@ -12809,12 +13612,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class mergeStockEntriesRequestResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.MergeStockEntriesResponse mergeStockEntriesResponse;
         
         public mergeStockEntriesRequestResponse()
@@ -12829,12 +13631,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class withdrawVetDocumentRequestRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.WithdrawVetDocumentRequest withdrawVetDocumentRequest;
         
         public withdrawVetDocumentRequestRequest()
@@ -12849,12 +13650,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class withdrawVetDocumentRequestResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.WithdrawVetDocumentResponse withdrawVetDocumentResponse;
         
         public withdrawVetDocumentRequestResponse()
@@ -12869,12 +13669,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class modifyBusinessEntityRequestRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.ModifyBusinessEntityRequest modifyBusinessEntityRequest;
         
         public modifyBusinessEntityRequestRequest()
@@ -12889,12 +13688,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class modifyBusinessEntityRequestResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.ModifyBusinessEntityResponse modifyBusinessEntityResponse;
         
         public modifyBusinessEntityRequestResponse()
@@ -12909,12 +13707,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class modifyEnterpriseRequestRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.ModifyEnterpriseRequest modifyEnterpriseRequest;
         
         public modifyEnterpriseRequestRequest()
@@ -12929,12 +13726,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class modifyEnterpriseRequestResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.ModifyEnterpriseResponse modifyEnterpriseResponse;
         
         public modifyEnterpriseRequestResponse()
@@ -12949,12 +13745,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class modifyActivityLocationsRequestRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.ModifyActivityLocationsRequest modifyActivityLocationsRequest;
         
         public modifyActivityLocationsRequestRequest()
@@ -12969,12 +13764,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class modifyActivityLocationsRequestResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.ModifyActivityLocationsResponse modifyActivityLocationsResponse;
         
         public modifyActivityLocationsRequestResponse()
@@ -12989,12 +13783,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class resolveDiscrepancyRequestRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.ResolveDiscrepancyRequest resolveDiscrepancyRequest;
         
         public resolveDiscrepancyRequestRequest()
@@ -13009,12 +13802,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class resolveDiscrepancyRequestResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.ResolveDiscrepancyResponse resolveDiscrepancyResponse;
         
         public resolveDiscrepancyRequestResponse()
@@ -13029,12 +13821,49 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class modifyProducerStockListRequestRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
+        public MercuryAPI.ModifyProducerStockListRequest modifyProducerStockListRequest;
+        
+        public modifyProducerStockListRequestRequest()
+        {
+        }
+        
+        public modifyProducerStockListRequestRequest(MercuryAPI.ModifyProducerStockListRequest modifyProducerStockListRequest)
+        {
+            this.modifyProducerStockListRequest = modifyProducerStockListRequest;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class modifyProducerStockListRequestResponse
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
+        public MercuryAPI.ModifyProducerStockListResponse modifyProducerStockListResponse;
+        
+        public modifyProducerStockListRequestResponse()
+        {
+        }
+        
+        public modifyProducerStockListRequestResponse(MercuryAPI.ModifyProducerStockListResponse modifyProducerStockListResponse)
+        {
+            this.modifyProducerStockListResponse = modifyProducerStockListResponse;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class getVetDocumentByUuidRequestRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.GetVetDocumentByUuidRequest getVetDocumentByUuidRequest;
         
         public getVetDocumentByUuidRequestRequest()
@@ -13049,12 +13878,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class getVetDocumentByUuidRequestResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.GetVetDocumentByUuidResponse getVetDocumentByUuidResponse;
         
         public getVetDocumentByUuidRequestResponse()
@@ -13069,12 +13897,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class getVetDocumentListRequestRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.GetVetDocumentListRequest getVetDocumentListRequest;
         
         public getVetDocumentListRequestRequest()
@@ -13089,12 +13916,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class getVetDocumentListRequestResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.GetVetDocumentListResponse getVetDocumentListResponse;
         
         public getVetDocumentListRequestResponse()
@@ -13109,12 +13935,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class getVetDocumentChangesListRequestRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.GetVetDocumentChangesListRequest getVetDocumentChangesListRequest;
         
         public getVetDocumentChangesListRequestRequest()
@@ -13129,12 +13954,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class getVetDocumentChangesListRequestResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.GetVetDocumentChangesListResponse getVetDocumentChangesListResponse;
         
         public getVetDocumentChangesListRequestResponse()
@@ -13149,12 +13973,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class getStockEntryByGuidRequestRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.GetStockEntryByGuidRequest getStockEntryByGuidRequest;
         
         public getStockEntryByGuidRequestRequest()
@@ -13169,12 +13992,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class getStockEntryByGuidRequestResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.GetStockEntryByGuidResponse getStockEntryByGuidResponse;
         
         public getStockEntryByGuidRequestResponse()
@@ -13189,12 +14011,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class getStockEntryByUuidRequestRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.GetStockEntryByUuidRequest getStockEntryByUuidRequest;
         
         public getStockEntryByUuidRequestRequest()
@@ -13209,12 +14030,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class getStockEntryByUuidRequestResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.GetStockEntryByUuidResponse getStockEntryByUuidResponse;
         
         public getStockEntryByUuidRequestResponse()
@@ -13229,12 +14049,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class getStockEntryListRequestRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.GetStockEntryListRequest getStockEntryListRequest;
         
         public getStockEntryListRequestRequest()
@@ -13249,12 +14068,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class getStockEntryListRequestResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.GetStockEntryListResponse getStockEntryListResponse;
         
         public getStockEntryListRequestResponse()
@@ -13269,12 +14087,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class getStockEntryChangesListRequestRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.GetStockEntryChangesListRequest getStockEntryChangesListRequest;
         
         public getStockEntryChangesListRequestRequest()
@@ -13289,12 +14106,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class getStockEntryChangesListRequestResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.GetStockEntryChangesListResponse getStockEntryChangesListResponse;
         
         public getStockEntryChangesListRequestResponse()
@@ -13309,12 +14125,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class getStockEntryVersionListRequestRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.GetStockEntryVersionListRequest getStockEntryVersionListRequest;
         
         public getStockEntryVersionListRequestRequest()
@@ -13329,12 +14144,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class getStockEntryVersionListRequestResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.GetStockEntryVersionListResponse getStockEntryVersionListResponse;
         
         public getStockEntryVersionListRequestResponse()
@@ -13349,12 +14163,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class updateTransportMovementDetailsRequestRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.UpdateTransportMovementDetailsRequest updateTransportMovementDetailsRequest;
         
         public updateTransportMovementDetailsRequestRequest()
@@ -13369,12 +14182,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class updateTransportMovementDetailsRequestResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.UpdateTransportMovementDetailsResponse updateTransportMovementDetailsResponse;
         
         public updateTransportMovementDetailsRequestResponse()
@@ -13389,12 +14201,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class updateVeterinaryEventsRequestRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.UpdateVeterinaryEventsRequest updateVeterinaryEventsRequest;
         
         public updateVeterinaryEventsRequestRequest()
@@ -13409,12 +14220,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class updateVeterinaryEventsRequestResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.UpdateVeterinaryEventsResponse updateVeterinaryEventsResponse;
         
         public updateVeterinaryEventsRequestResponse()
@@ -13429,12 +14239,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class checkShipmentRegionalizationRequestRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.CheckShipmentRegionalizationRequest checkShipmentRegionalizationRequest;
         
         public checkShipmentRegionalizationRequestRequest()
@@ -13449,12 +14258,11 @@ namespace MercuryAPI
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class checkShipmentRegionalizationRequestResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/vu/applications/v2", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
         public MercuryAPI.CheckShipmentRegionalizationResponse checkShipmentRegionalizationResponse;
         
         public checkShipmentRegionalizationRequestResponse()
@@ -13464,6 +14272,272 @@ namespace MercuryAPI
         public checkShipmentRegionalizationRequestResponse(MercuryAPI.CheckShipmentRegionalizationResponse checkShipmentRegionalizationResponse)
         {
             this.checkShipmentRegionalizationResponse = checkShipmentRegionalizationResponse;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class addBusinessEntityUserRequestRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
+        public MercuryAPI.AddBusinessEntityUserRequest addBusinessEntityUserRequest;
+        
+        public addBusinessEntityUserRequestRequest()
+        {
+        }
+        
+        public addBusinessEntityUserRequestRequest(MercuryAPI.AddBusinessEntityUserRequest addBusinessEntityUserRequest)
+        {
+            this.addBusinessEntityUserRequest = addBusinessEntityUserRequest;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class addBusinessEntityUserRequestResponse
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
+        public MercuryAPI.AddBusinessEntityUserResponse addBusinessEntityUserResponse;
+        
+        public addBusinessEntityUserRequestResponse()
+        {
+        }
+        
+        public addBusinessEntityUserRequestResponse(MercuryAPI.AddBusinessEntityUserResponse addBusinessEntityUserResponse)
+        {
+            this.addBusinessEntityUserResponse = addBusinessEntityUserResponse;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class getBusinessEntityUserListRequestRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
+        public MercuryAPI.GetBusinessEntityUserListRequest getBusinessEntityUserListRequest;
+        
+        public getBusinessEntityUserListRequestRequest()
+        {
+        }
+        
+        public getBusinessEntityUserListRequestRequest(MercuryAPI.GetBusinessEntityUserListRequest getBusinessEntityUserListRequest)
+        {
+            this.getBusinessEntityUserListRequest = getBusinessEntityUserListRequest;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class getBusinessEntityUserListRequestResponse
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
+        public MercuryAPI.GetBusinessEntityUserListResponse getBusinessEntityUserListResponse;
+        
+        public getBusinessEntityUserListRequestResponse()
+        {
+        }
+        
+        public getBusinessEntityUserListRequestResponse(MercuryAPI.GetBusinessEntityUserListResponse getBusinessEntityUserListResponse)
+        {
+            this.getBusinessEntityUserListResponse = getBusinessEntityUserListResponse;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class getBusinessEntityUserRequestRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
+        public MercuryAPI.GetBusinessEntityUserRequest getBusinessEntityUserRequest;
+        
+        public getBusinessEntityUserRequestRequest()
+        {
+        }
+        
+        public getBusinessEntityUserRequestRequest(MercuryAPI.GetBusinessEntityUserRequest getBusinessEntityUserRequest)
+        {
+            this.getBusinessEntityUserRequest = getBusinessEntityUserRequest;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class getBusinessEntityUserRequestResponse
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
+        public MercuryAPI.GetBusinessEntityUserResponse getBusinessEntityUserResponse;
+        
+        public getBusinessEntityUserRequestResponse()
+        {
+        }
+        
+        public getBusinessEntityUserRequestResponse(MercuryAPI.GetBusinessEntityUserResponse getBusinessEntityUserResponse)
+        {
+            this.getBusinessEntityUserResponse = getBusinessEntityUserResponse;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class updateUserAuthoritiesRequestRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
+        public MercuryAPI.UpdateUserAuthoritiesRequest updateUserAuthoritiesRequest;
+        
+        public updateUserAuthoritiesRequestRequest()
+        {
+        }
+        
+        public updateUserAuthoritiesRequestRequest(MercuryAPI.UpdateUserAuthoritiesRequest updateUserAuthoritiesRequest)
+        {
+            this.updateUserAuthoritiesRequest = updateUserAuthoritiesRequest;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class updateUserAuthoritiesRequestResponse
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
+        public MercuryAPI.UpdateUserAuthoritiesResponse updateUserAuthoritiesResponse;
+        
+        public updateUserAuthoritiesRequestResponse()
+        {
+        }
+        
+        public updateUserAuthoritiesRequestResponse(MercuryAPI.UpdateUserAuthoritiesResponse updateUserAuthoritiesResponse)
+        {
+            this.updateUserAuthoritiesResponse = updateUserAuthoritiesResponse;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class updateUserWorkingAreasRequestRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
+        public MercuryAPI.UpdateUserWorkingAreasRequest updateUserWorkingAreasRequest;
+        
+        public updateUserWorkingAreasRequestRequest()
+        {
+        }
+        
+        public updateUserWorkingAreasRequestRequest(MercuryAPI.UpdateUserWorkingAreasRequest updateUserWorkingAreasRequest)
+        {
+            this.updateUserWorkingAreasRequest = updateUserWorkingAreasRequest;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class updateUserWorkingAreasRequestResponse
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
+        public MercuryAPI.UpdateUserWorkingAreasResponse updateUserWorkingAreasResponse;
+        
+        public updateUserWorkingAreasRequestResponse()
+        {
+        }
+        
+        public updateUserWorkingAreasRequestResponse(MercuryAPI.UpdateUserWorkingAreasResponse updateUserWorkingAreasResponse)
+        {
+            this.updateUserWorkingAreasResponse = updateUserWorkingAreasResponse;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class unbindBusinessEntityUserRequestRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
+        public MercuryAPI.UnbindBusinessEntityUserRequest unbindBusinessEntityUserRequest;
+        
+        public unbindBusinessEntityUserRequestRequest()
+        {
+        }
+        
+        public unbindBusinessEntityUserRequestRequest(MercuryAPI.UnbindBusinessEntityUserRequest unbindBusinessEntityUserRequest)
+        {
+            this.unbindBusinessEntityUserRequest = unbindBusinessEntityUserRequest;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class unbindBusinessEntityUserRequestResponse
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
+        public MercuryAPI.UnbindBusinessEntityUserResponse unbindBusinessEntityUserResponse;
+        
+        public unbindBusinessEntityUserRequestResponse()
+        {
+        }
+        
+        public unbindBusinessEntityUserRequestResponse(MercuryAPI.UnbindBusinessEntityUserResponse unbindBusinessEntityUserResponse)
+        {
+            this.unbindBusinessEntityUserResponse = unbindBusinessEntityUserResponse;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class getApplicableUserAuthorityListRequestRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
+        public MercuryAPI.GetApplicableUserAuthorityListRequest getApplicableUserAuthorityListRequest;
+        
+        public getApplicableUserAuthorityListRequestRequest()
+        {
+        }
+        
+        public getApplicableUserAuthorityListRequestRequest(MercuryAPI.GetApplicableUserAuthorityListRequest getApplicableUserAuthorityListRequest)
+        {
+            this.getApplicableUserAuthorityListRequest = getApplicableUserAuthorityListRequest;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class getApplicableUserAuthorityListRequestResponse
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.vetrf.ru/schema/cdm/mercury/g2b/applications/v2", Order=0)]
+        public MercuryAPI.GetApplicableUserAuthorityListResponse getApplicableUserAuthorityListResponse;
+        
+        public getApplicableUserAuthorityListRequestResponse()
+        {
+        }
+        
+        public getApplicableUserAuthorityListRequestResponse(MercuryAPI.GetApplicableUserAuthorityListResponse getApplicableUserAuthorityListResponse)
+        {
+            this.getApplicableUserAuthorityListResponse = getApplicableUserAuthorityListResponse;
         }
     }
     
@@ -13482,264 +14556,149 @@ namespace MercuryAPI
         {
         }
         
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.processIncomingConsignmentRequestResponse> MercuryAPI.MercuryG2BServicePortType.processIncomingConsignmentRequestAsync(MercuryAPI.processIncomingConsignmentRequestRequest request)
+        public System.Threading.Tasks.Task<MercuryAPI.processIncomingConsignmentRequestResponse> processIncomingConsignmentRequestAsync(MercuryAPI.processIncomingConsignmentRequestRequest request)
         {
             return base.Channel.processIncomingConsignmentRequestAsync(request);
         }
         
-        public System.Threading.Tasks.Task<MercuryAPI.processIncomingConsignmentRequestResponse> processIncomingConsignmentRequestAsync(MercuryAPI.ProcessIncomingConsignmentRequest processIncomingConsignmentRequest)
+        public System.Threading.Tasks.Task<MercuryAPI.processIncomingDeliveryRequestResponse> processIncomingDeliveryRequestAsync(MercuryAPI.processIncomingDeliveryRequestRequest request)
         {
-            MercuryAPI.processIncomingConsignmentRequestRequest inValue = new MercuryAPI.processIncomingConsignmentRequestRequest();
-            inValue.processIncomingConsignmentRequest = processIncomingConsignmentRequest;
-            return ((MercuryAPI.MercuryG2BServicePortType)(this)).processIncomingConsignmentRequestAsync(inValue);
+            return base.Channel.processIncomingDeliveryRequestAsync(request);
         }
         
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.prepareOutgoingConsignmentRequestResponse> MercuryAPI.MercuryG2BServicePortType.prepareOutgoingConsignmentRequestAsync(MercuryAPI.prepareOutgoingConsignmentRequestRequest request)
+        public System.Threading.Tasks.Task<MercuryAPI.prepareOutgoingConsignmentRequestResponse> prepareOutgoingConsignmentRequestAsync(MercuryAPI.prepareOutgoingConsignmentRequestRequest request)
         {
             return base.Channel.prepareOutgoingConsignmentRequestAsync(request);
         }
         
-        public System.Threading.Tasks.Task<MercuryAPI.prepareOutgoingConsignmentRequestResponse> prepareOutgoingConsignmentRequestAsync(MercuryAPI.PrepareOutgoingConsignmentRequest prepareOutgoingConsignmentRequest)
-        {
-            MercuryAPI.prepareOutgoingConsignmentRequestRequest inValue = new MercuryAPI.prepareOutgoingConsignmentRequestRequest();
-            inValue.prepareOutgoingConsignmentRequest = prepareOutgoingConsignmentRequest;
-            return ((MercuryAPI.MercuryG2BServicePortType)(this)).prepareOutgoingConsignmentRequestAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.registerProductionOperationRequestResponse> MercuryAPI.MercuryG2BServicePortType.registerProductionOperationRequestAsync(MercuryAPI.registerProductionOperationRequestRequest request)
+        public System.Threading.Tasks.Task<MercuryAPI.registerProductionOperationRequestResponse> registerProductionOperationRequestAsync(MercuryAPI.registerProductionOperationRequestRequest request)
         {
             return base.Channel.registerProductionOperationRequestAsync(request);
         }
         
-        public System.Threading.Tasks.Task<MercuryAPI.registerProductionOperationRequestResponse> registerProductionOperationRequestAsync(MercuryAPI.RegisterProductionOperationRequest registerProductionOperationRequest)
-        {
-            MercuryAPI.registerProductionOperationRequestRequest inValue = new MercuryAPI.registerProductionOperationRequestRequest();
-            inValue.registerProductionOperationRequest = registerProductionOperationRequest;
-            return ((MercuryAPI.MercuryG2BServicePortType)(this)).registerProductionOperationRequestAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.mergeStockEntriesRequestResponse> MercuryAPI.MercuryG2BServicePortType.mergeStockEntriesRequestAsync(MercuryAPI.mergeStockEntriesRequestRequest request)
+        public System.Threading.Tasks.Task<MercuryAPI.mergeStockEntriesRequestResponse> mergeStockEntriesRequestAsync(MercuryAPI.mergeStockEntriesRequestRequest request)
         {
             return base.Channel.mergeStockEntriesRequestAsync(request);
         }
         
-        public System.Threading.Tasks.Task<MercuryAPI.mergeStockEntriesRequestResponse> mergeStockEntriesRequestAsync(MercuryAPI.MergeStockEntriesRequest mergeStockEntriesRequest)
-        {
-            MercuryAPI.mergeStockEntriesRequestRequest inValue = new MercuryAPI.mergeStockEntriesRequestRequest();
-            inValue.mergeStockEntriesRequest = mergeStockEntriesRequest;
-            return ((MercuryAPI.MercuryG2BServicePortType)(this)).mergeStockEntriesRequestAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.withdrawVetDocumentRequestResponse> MercuryAPI.MercuryG2BServicePortType.withdrawVetDocumentRequestAsync(MercuryAPI.withdrawVetDocumentRequestRequest request)
+        public System.Threading.Tasks.Task<MercuryAPI.withdrawVetDocumentRequestResponse> withdrawVetDocumentRequestAsync(MercuryAPI.withdrawVetDocumentRequestRequest request)
         {
             return base.Channel.withdrawVetDocumentRequestAsync(request);
         }
         
-        public System.Threading.Tasks.Task<MercuryAPI.withdrawVetDocumentRequestResponse> withdrawVetDocumentRequestAsync(MercuryAPI.WithdrawVetDocumentRequest withdrawVetDocumentRequest)
-        {
-            MercuryAPI.withdrawVetDocumentRequestRequest inValue = new MercuryAPI.withdrawVetDocumentRequestRequest();
-            inValue.withdrawVetDocumentRequest = withdrawVetDocumentRequest;
-            return ((MercuryAPI.MercuryG2BServicePortType)(this)).withdrawVetDocumentRequestAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.modifyBusinessEntityRequestResponse> MercuryAPI.MercuryG2BServicePortType.modifyBusinessEntityRequestAsync(MercuryAPI.modifyBusinessEntityRequestRequest request)
+        public System.Threading.Tasks.Task<MercuryAPI.modifyBusinessEntityRequestResponse> modifyBusinessEntityRequestAsync(MercuryAPI.modifyBusinessEntityRequestRequest request)
         {
             return base.Channel.modifyBusinessEntityRequestAsync(request);
         }
         
-        public System.Threading.Tasks.Task<MercuryAPI.modifyBusinessEntityRequestResponse> modifyBusinessEntityRequestAsync(MercuryAPI.ModifyBusinessEntityRequest modifyBusinessEntityRequest)
-        {
-            MercuryAPI.modifyBusinessEntityRequestRequest inValue = new MercuryAPI.modifyBusinessEntityRequestRequest();
-            inValue.modifyBusinessEntityRequest = modifyBusinessEntityRequest;
-            return ((MercuryAPI.MercuryG2BServicePortType)(this)).modifyBusinessEntityRequestAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.modifyEnterpriseRequestResponse> MercuryAPI.MercuryG2BServicePortType.modifyEnterpriseRequestAsync(MercuryAPI.modifyEnterpriseRequestRequest request)
+        public System.Threading.Tasks.Task<MercuryAPI.modifyEnterpriseRequestResponse> modifyEnterpriseRequestAsync(MercuryAPI.modifyEnterpriseRequestRequest request)
         {
             return base.Channel.modifyEnterpriseRequestAsync(request);
         }
         
-        public System.Threading.Tasks.Task<MercuryAPI.modifyEnterpriseRequestResponse> modifyEnterpriseRequestAsync(MercuryAPI.ModifyEnterpriseRequest modifyEnterpriseRequest)
-        {
-            MercuryAPI.modifyEnterpriseRequestRequest inValue = new MercuryAPI.modifyEnterpriseRequestRequest();
-            inValue.modifyEnterpriseRequest = modifyEnterpriseRequest;
-            return ((MercuryAPI.MercuryG2BServicePortType)(this)).modifyEnterpriseRequestAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.modifyActivityLocationsRequestResponse> MercuryAPI.MercuryG2BServicePortType.modifyActivityLocationsRequestAsync(MercuryAPI.modifyActivityLocationsRequestRequest request)
+        public System.Threading.Tasks.Task<MercuryAPI.modifyActivityLocationsRequestResponse> modifyActivityLocationsRequestAsync(MercuryAPI.modifyActivityLocationsRequestRequest request)
         {
             return base.Channel.modifyActivityLocationsRequestAsync(request);
         }
         
-        public System.Threading.Tasks.Task<MercuryAPI.modifyActivityLocationsRequestResponse> modifyActivityLocationsRequestAsync(MercuryAPI.ModifyActivityLocationsRequest modifyActivityLocationsRequest)
-        {
-            MercuryAPI.modifyActivityLocationsRequestRequest inValue = new MercuryAPI.modifyActivityLocationsRequestRequest();
-            inValue.modifyActivityLocationsRequest = modifyActivityLocationsRequest;
-            return ((MercuryAPI.MercuryG2BServicePortType)(this)).modifyActivityLocationsRequestAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.resolveDiscrepancyRequestResponse> MercuryAPI.MercuryG2BServicePortType.resolveDiscrepancyRequestAsync(MercuryAPI.resolveDiscrepancyRequestRequest request)
+        public System.Threading.Tasks.Task<MercuryAPI.resolveDiscrepancyRequestResponse> resolveDiscrepancyRequestAsync(MercuryAPI.resolveDiscrepancyRequestRequest request)
         {
             return base.Channel.resolveDiscrepancyRequestAsync(request);
         }
         
-        public System.Threading.Tasks.Task<MercuryAPI.resolveDiscrepancyRequestResponse> resolveDiscrepancyRequestAsync(MercuryAPI.ResolveDiscrepancyRequest resolveDiscrepancyRequest)
+        public System.Threading.Tasks.Task<MercuryAPI.modifyProducerStockListRequestResponse> modifyProducerStockListRequestAsync(MercuryAPI.modifyProducerStockListRequestRequest request)
         {
-            MercuryAPI.resolveDiscrepancyRequestRequest inValue = new MercuryAPI.resolveDiscrepancyRequestRequest();
-            inValue.resolveDiscrepancyRequest = resolveDiscrepancyRequest;
-            return ((MercuryAPI.MercuryG2BServicePortType)(this)).resolveDiscrepancyRequestAsync(inValue);
+            return base.Channel.modifyProducerStockListRequestAsync(request);
         }
         
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.getVetDocumentByUuidRequestResponse> MercuryAPI.MercuryG2BServicePortType.getVetDocumentByUuidRequestAsync(MercuryAPI.getVetDocumentByUuidRequestRequest request)
+        public System.Threading.Tasks.Task<MercuryAPI.getVetDocumentByUuidRequestResponse> getVetDocumentByUuidRequestAsync(MercuryAPI.getVetDocumentByUuidRequestRequest request)
         {
             return base.Channel.getVetDocumentByUuidRequestAsync(request);
         }
         
-        public System.Threading.Tasks.Task<MercuryAPI.getVetDocumentByUuidRequestResponse> getVetDocumentByUuidRequestAsync(MercuryAPI.GetVetDocumentByUuidRequest getVetDocumentByUuidRequest)
-        {
-            MercuryAPI.getVetDocumentByUuidRequestRequest inValue = new MercuryAPI.getVetDocumentByUuidRequestRequest();
-            inValue.getVetDocumentByUuidRequest = getVetDocumentByUuidRequest;
-            return ((MercuryAPI.MercuryG2BServicePortType)(this)).getVetDocumentByUuidRequestAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.getVetDocumentListRequestResponse> MercuryAPI.MercuryG2BServicePortType.getVetDocumentListRequestAsync(MercuryAPI.getVetDocumentListRequestRequest request)
+        public System.Threading.Tasks.Task<MercuryAPI.getVetDocumentListRequestResponse> getVetDocumentListRequestAsync(MercuryAPI.getVetDocumentListRequestRequest request)
         {
             return base.Channel.getVetDocumentListRequestAsync(request);
         }
         
-        public System.Threading.Tasks.Task<MercuryAPI.getVetDocumentListRequestResponse> getVetDocumentListRequestAsync(MercuryAPI.GetVetDocumentListRequest getVetDocumentListRequest)
-        {
-            MercuryAPI.getVetDocumentListRequestRequest inValue = new MercuryAPI.getVetDocumentListRequestRequest();
-            inValue.getVetDocumentListRequest = getVetDocumentListRequest;
-            return ((MercuryAPI.MercuryG2BServicePortType)(this)).getVetDocumentListRequestAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.getVetDocumentChangesListRequestResponse> MercuryAPI.MercuryG2BServicePortType.getVetDocumentChangesListRequestAsync(MercuryAPI.getVetDocumentChangesListRequestRequest request)
+        public System.Threading.Tasks.Task<MercuryAPI.getVetDocumentChangesListRequestResponse> getVetDocumentChangesListRequestAsync(MercuryAPI.getVetDocumentChangesListRequestRequest request)
         {
             return base.Channel.getVetDocumentChangesListRequestAsync(request);
         }
         
-        public System.Threading.Tasks.Task<MercuryAPI.getVetDocumentChangesListRequestResponse> getVetDocumentChangesListRequestAsync(MercuryAPI.GetVetDocumentChangesListRequest getVetDocumentChangesListRequest)
-        {
-            MercuryAPI.getVetDocumentChangesListRequestRequest inValue = new MercuryAPI.getVetDocumentChangesListRequestRequest();
-            inValue.getVetDocumentChangesListRequest = getVetDocumentChangesListRequest;
-            return ((MercuryAPI.MercuryG2BServicePortType)(this)).getVetDocumentChangesListRequestAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.getStockEntryByGuidRequestResponse> MercuryAPI.MercuryG2BServicePortType.getStockEntryByGuidRequestAsync(MercuryAPI.getStockEntryByGuidRequestRequest request)
+        public System.Threading.Tasks.Task<MercuryAPI.getStockEntryByGuidRequestResponse> getStockEntryByGuidRequestAsync(MercuryAPI.getStockEntryByGuidRequestRequest request)
         {
             return base.Channel.getStockEntryByGuidRequestAsync(request);
         }
         
-        public System.Threading.Tasks.Task<MercuryAPI.getStockEntryByGuidRequestResponse> getStockEntryByGuidRequestAsync(MercuryAPI.GetStockEntryByGuidRequest getStockEntryByGuidRequest)
-        {
-            MercuryAPI.getStockEntryByGuidRequestRequest inValue = new MercuryAPI.getStockEntryByGuidRequestRequest();
-            inValue.getStockEntryByGuidRequest = getStockEntryByGuidRequest;
-            return ((MercuryAPI.MercuryG2BServicePortType)(this)).getStockEntryByGuidRequestAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.getStockEntryByUuidRequestResponse> MercuryAPI.MercuryG2BServicePortType.getStockEntryByUuidRequestAsync(MercuryAPI.getStockEntryByUuidRequestRequest request)
+        public System.Threading.Tasks.Task<MercuryAPI.getStockEntryByUuidRequestResponse> getStockEntryByUuidRequestAsync(MercuryAPI.getStockEntryByUuidRequestRequest request)
         {
             return base.Channel.getStockEntryByUuidRequestAsync(request);
         }
         
-        public System.Threading.Tasks.Task<MercuryAPI.getStockEntryByUuidRequestResponse> getStockEntryByUuidRequestAsync(MercuryAPI.GetStockEntryByUuidRequest getStockEntryByUuidRequest)
-        {
-            MercuryAPI.getStockEntryByUuidRequestRequest inValue = new MercuryAPI.getStockEntryByUuidRequestRequest();
-            inValue.getStockEntryByUuidRequest = getStockEntryByUuidRequest;
-            return ((MercuryAPI.MercuryG2BServicePortType)(this)).getStockEntryByUuidRequestAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.getStockEntryListRequestResponse> MercuryAPI.MercuryG2BServicePortType.getStockEntryListRequestAsync(MercuryAPI.getStockEntryListRequestRequest request)
+        public System.Threading.Tasks.Task<MercuryAPI.getStockEntryListRequestResponse> getStockEntryListRequestAsync(MercuryAPI.getStockEntryListRequestRequest request)
         {
             return base.Channel.getStockEntryListRequestAsync(request);
         }
         
-        public System.Threading.Tasks.Task<MercuryAPI.getStockEntryListRequestResponse> getStockEntryListRequestAsync(MercuryAPI.GetStockEntryListRequest getStockEntryListRequest)
-        {
-            MercuryAPI.getStockEntryListRequestRequest inValue = new MercuryAPI.getStockEntryListRequestRequest();
-            inValue.getStockEntryListRequest = getStockEntryListRequest;
-            return ((MercuryAPI.MercuryG2BServicePortType)(this)).getStockEntryListRequestAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.getStockEntryChangesListRequestResponse> MercuryAPI.MercuryG2BServicePortType.getStockEntryChangesListRequestAsync(MercuryAPI.getStockEntryChangesListRequestRequest request)
+        public System.Threading.Tasks.Task<MercuryAPI.getStockEntryChangesListRequestResponse> getStockEntryChangesListRequestAsync(MercuryAPI.getStockEntryChangesListRequestRequest request)
         {
             return base.Channel.getStockEntryChangesListRequestAsync(request);
         }
         
-        public System.Threading.Tasks.Task<MercuryAPI.getStockEntryChangesListRequestResponse> getStockEntryChangesListRequestAsync(MercuryAPI.GetStockEntryChangesListRequest getStockEntryChangesListRequest)
-        {
-            MercuryAPI.getStockEntryChangesListRequestRequest inValue = new MercuryAPI.getStockEntryChangesListRequestRequest();
-            inValue.getStockEntryChangesListRequest = getStockEntryChangesListRequest;
-            return ((MercuryAPI.MercuryG2BServicePortType)(this)).getStockEntryChangesListRequestAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.getStockEntryVersionListRequestResponse> MercuryAPI.MercuryG2BServicePortType.getStockEntryVersionListRequestAsync(MercuryAPI.getStockEntryVersionListRequestRequest request)
+        public System.Threading.Tasks.Task<MercuryAPI.getStockEntryVersionListRequestResponse> getStockEntryVersionListRequestAsync(MercuryAPI.getStockEntryVersionListRequestRequest request)
         {
             return base.Channel.getStockEntryVersionListRequestAsync(request);
         }
         
-        public System.Threading.Tasks.Task<MercuryAPI.getStockEntryVersionListRequestResponse> getStockEntryVersionListRequestAsync(MercuryAPI.GetStockEntryVersionListRequest getStockEntryVersionListRequest)
-        {
-            MercuryAPI.getStockEntryVersionListRequestRequest inValue = new MercuryAPI.getStockEntryVersionListRequestRequest();
-            inValue.getStockEntryVersionListRequest = getStockEntryVersionListRequest;
-            return ((MercuryAPI.MercuryG2BServicePortType)(this)).getStockEntryVersionListRequestAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.updateTransportMovementDetailsRequestResponse> MercuryAPI.MercuryG2BServicePortType.updateTransportMovementDetailsRequestAsync(MercuryAPI.updateTransportMovementDetailsRequestRequest request)
+        public System.Threading.Tasks.Task<MercuryAPI.updateTransportMovementDetailsRequestResponse> updateTransportMovementDetailsRequestAsync(MercuryAPI.updateTransportMovementDetailsRequestRequest request)
         {
             return base.Channel.updateTransportMovementDetailsRequestAsync(request);
         }
         
-        public System.Threading.Tasks.Task<MercuryAPI.updateTransportMovementDetailsRequestResponse> updateTransportMovementDetailsRequestAsync(MercuryAPI.UpdateTransportMovementDetailsRequest updateTransportMovementDetailsRequest)
-        {
-            MercuryAPI.updateTransportMovementDetailsRequestRequest inValue = new MercuryAPI.updateTransportMovementDetailsRequestRequest();
-            inValue.updateTransportMovementDetailsRequest = updateTransportMovementDetailsRequest;
-            return ((MercuryAPI.MercuryG2BServicePortType)(this)).updateTransportMovementDetailsRequestAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.updateVeterinaryEventsRequestResponse> MercuryAPI.MercuryG2BServicePortType.updateVeterinaryEventsRequestAsync(MercuryAPI.updateVeterinaryEventsRequestRequest request)
+        public System.Threading.Tasks.Task<MercuryAPI.updateVeterinaryEventsRequestResponse> updateVeterinaryEventsRequestAsync(MercuryAPI.updateVeterinaryEventsRequestRequest request)
         {
             return base.Channel.updateVeterinaryEventsRequestAsync(request);
         }
         
-        public System.Threading.Tasks.Task<MercuryAPI.updateVeterinaryEventsRequestResponse> updateVeterinaryEventsRequestAsync(MercuryAPI.UpdateVeterinaryEventsRequest updateVeterinaryEventsRequest)
-        {
-            MercuryAPI.updateVeterinaryEventsRequestRequest inValue = new MercuryAPI.updateVeterinaryEventsRequestRequest();
-            inValue.updateVeterinaryEventsRequest = updateVeterinaryEventsRequest;
-            return ((MercuryAPI.MercuryG2BServicePortType)(this)).updateVeterinaryEventsRequestAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<MercuryAPI.checkShipmentRegionalizationRequestResponse> MercuryAPI.MercuryG2BServicePortType.checkShipmentRegionalizationRequestAsync(MercuryAPI.checkShipmentRegionalizationRequestRequest request)
+        public System.Threading.Tasks.Task<MercuryAPI.checkShipmentRegionalizationRequestResponse> checkShipmentRegionalizationRequestAsync(MercuryAPI.checkShipmentRegionalizationRequestRequest request)
         {
             return base.Channel.checkShipmentRegionalizationRequestAsync(request);
         }
         
-        public System.Threading.Tasks.Task<MercuryAPI.checkShipmentRegionalizationRequestResponse> checkShipmentRegionalizationRequestAsync(MercuryAPI.CheckShipmentRegionalizationRequest checkShipmentRegionalizationRequest)
+        public System.Threading.Tasks.Task<MercuryAPI.addBusinessEntityUserRequestResponse> addBusinessEntityUserRequestAsync(MercuryAPI.addBusinessEntityUserRequestRequest request)
         {
-            MercuryAPI.checkShipmentRegionalizationRequestRequest inValue = new MercuryAPI.checkShipmentRegionalizationRequestRequest();
-            inValue.checkShipmentRegionalizationRequest = checkShipmentRegionalizationRequest;
-            return ((MercuryAPI.MercuryG2BServicePortType)(this)).checkShipmentRegionalizationRequestAsync(inValue);
+            return base.Channel.addBusinessEntityUserRequestAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<MercuryAPI.getBusinessEntityUserListRequestResponse> getBusinessEntityUserListRequestAsync(MercuryAPI.getBusinessEntityUserListRequestRequest request)
+        {
+            return base.Channel.getBusinessEntityUserListRequestAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<MercuryAPI.getBusinessEntityUserRequestResponse> getBusinessEntityUserRequestAsync(MercuryAPI.getBusinessEntityUserRequestRequest request)
+        {
+            return base.Channel.getBusinessEntityUserRequestAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<MercuryAPI.updateUserAuthoritiesRequestResponse> updateUserAuthoritiesRequestAsync(MercuryAPI.updateUserAuthoritiesRequestRequest request)
+        {
+            return base.Channel.updateUserAuthoritiesRequestAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<MercuryAPI.updateUserWorkingAreasRequestResponse> updateUserWorkingAreasRequestAsync(MercuryAPI.updateUserWorkingAreasRequestRequest request)
+        {
+            return base.Channel.updateUserWorkingAreasRequestAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<MercuryAPI.unbindBusinessEntityUserRequestResponse> unbindBusinessEntityUserRequestAsync(MercuryAPI.unbindBusinessEntityUserRequestRequest request)
+        {
+            return base.Channel.unbindBusinessEntityUserRequestAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<MercuryAPI.getApplicableUserAuthorityListRequestResponse> getApplicableUserAuthorityListRequestAsync(MercuryAPI.getApplicableUserAuthorityListRequestRequest request)
+        {
+            return base.Channel.getApplicableUserAuthorityListRequestAsync(request);
         }
         
         public virtual System.Threading.Tasks.Task OpenAsync()

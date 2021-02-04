@@ -6,12 +6,13 @@
   },
   "ExtendedData": {
     "inputs": [
-      "http://api.vetrf.ru/schema/platform/services/2.0-last/ams-mercury-vu.service_v2.0_production.wsdl"
+      "http://api.vetrf.ru/schema/platform/services/2.1-RC-last/ams-mercury-g2b.service_v2.1_production.wsdl"
     ],
     "collectionTypes": [
       "System.Collections.Generic.Dictionary`2",
       "System.Collections.Generic.List`1"
     ],
+    "messageContract": true,
     "namespaceMappings": [
       "*, MercuryAPI"
     ],
