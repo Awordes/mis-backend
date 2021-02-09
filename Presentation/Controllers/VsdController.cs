@@ -1,8 +1,8 @@
-﻿using Core.Application.Usecases.MercuryIntegration.Queries.Methods;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Core.Application.Usecases.MercuryIntegration.Queries;
 
 namespace Presentation.Controllers
 {
@@ -40,6 +40,17 @@ namespace Presentation.Controllers
         public async Task<ActionResult<object>> GetVsdStatuses()
         {
             return await Mediator.Send(new GetVsdStatusesQuery());
+        }
+        
+        /// <summary>
+        /// Получение ВСД по идентификатору
+        /// </summary>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<object>> GetVsdByUuid([FromQuery] GetVetDocumentByUuidQuery query)
+        {
+            return await Mediator.Send(query);
         }
     }
 }

@@ -1,5 +1,8 @@
 using System;
+using System.Linq;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using MercuryAPI;
@@ -44,6 +47,106 @@ namespace Infrastructure.Integrations.Mercury
         private static string ToCamelCase(this Type requestType)  
         {  
             return $"{char.ToLower(requestType.Name[0])}{requestType.Name.Substring(1)}";  
+        }
+        
+        public static async Task<TResponse> SendRequest<TResponse>(
+            this MercuryApplicationRequest requestData,
+            string apiKey,
+            string serviceId,
+            string issuerId,
+            string apiLogin,
+            string apiPassword
+            ) where TResponse : ApplicationResultData 
+        {
+            try
+            {
+                var request = new submitApplicationRequestRequest
+                {
+                    submitApplicationRequest = new submitApplicationRequest
+                    {
+                        apiKey = apiKey,
+                        application = new Application
+                        {
+                            serviceId = serviceId,
+                            issuerId = issuerId,
+                            issueDate = DateTime.Now,
+                            issueDateSpecified = true,
+                            data = new ApplicationDataWrapper
+                            {
+                                Any = requestData.Serialize()
+                            }
+                        }
+                    }
+                };                
+
+                var client = new ApplicationManagementServicePortTypeClient();
+                client.ClientCredentials.UserName.UserName = apiLogin;
+                client.ClientCredentials.UserName.Password = apiPassword;
+
+                var applicationResponse = await client.submitApplicationRequestAsync(request);
+                
+                var resultRequest = new receiveApplicationResultRequest1
+                {
+                    receiveApplicationResultRequest = new receiveApplicationResultRequest
+                    {
+                        apiKey = apiKey,
+                        applicationId = applicationResponse.submitApplicationResponse.application.applicationId,
+                        issuerId = issuerId
+                    }
+                };  
+
+                receiveApplicationResultResponse1 receiveApplicationResponse;
+                ApplicationStatus status;
+
+                do
+                {
+                    Thread.Sleep(1000);
+                    receiveApplicationResponse = await client.receiveApplicationResultAsync(resultRequest);
+                    status = receiveApplicationResponse.receiveApplicationResultResponse.application.status;
+                } while(status == ApplicationStatus.IN_PROCESS);
+
+                switch (status)
+                {
+                    case ApplicationStatus.COMPLETED:
+                        return receiveApplicationResponse.receiveApplicationResultResponse.application.result
+                            .Deserialize<TResponse>();
+                    
+                    case ApplicationStatus.REJECTED:
+                    {
+                        var application = receiveApplicationResponse.receiveApplicationResultResponse.application;
+                    
+                        var errorMessage = "applicationId: '" + application.applicationId;
+                    
+                        errorMessage = application.errors.Aggregate(errorMessage,
+                            (current, error) => 
+                                current + ("', errorCode: '" + error.code + "', errorMessage: '" + error.Value));
+                    
+                        throw new Exception(errorMessage + "'");
+                    }
+                    
+                    default:
+                        return null;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+        
+        public static DateTime? ToDateTime(this ComplexDate complexDate)
+        {
+            if (complexDate == null) return null;
+            
+            return complexDate.yearSpecified ? new DateTime(
+                complexDate.year,
+                complexDate.monthSpecified ? complexDate.month : 1,
+                complexDate.daySpecified ? complexDate.day : 1,
+                complexDate.hourSpecified ? complexDate.hour : 0,
+                complexDate.minuteSpecified ? complexDate.minute : 0,
+                0
+            ) : null;
         }
     }
 }

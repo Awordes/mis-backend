@@ -1,12 +1,11 @@
-using System.Threading;
 using System;
 using System.Threading.Tasks;
-using Core.Application.Common;
 using Core.Application.Common.Services;
 using MercuryAPI;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
+using Core.Application.Common;
 using Core.Domain.Mercury;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Integrations.Mercury
 {
@@ -18,7 +17,7 @@ namespace Infrastructure.Integrations.Mercury
         {
             _mercuryOptions = mercuryOptions.CurrentValue;
         }
-
+        
         public async Task<object> GetVetDocumentList(
             string localTransactionId,
             string initiatorLogin,
@@ -29,96 +28,88 @@ namespace Infrastructure.Integrations.Mercury
             string enterpriseId
             )
         {
-            var requestData = new GetVetDocumentListRequest
+            try
             {
-                localTransactionId = localTransactionId,
-                initiator = new User { login = initiatorLogin },
-                listOptions = new ListOptions { count = count.ToString(), offset = offset.ToString() },
-                vetDocumentTypeSpecified = true,
-                vetDocumentType = (VetDocumentType)vetDocumentType,
-                vetDocumentStatusSpecified = true,
-                vetDocumentStatus = (VetDocumentStatus)vetDocumentStatus,
-                enterpriseGuid = enterpriseId
-            };
-
-            var request = new submitApplicationRequestRequest
-            {
-                submitApplicationRequest = new submitApplicationRequest
+                var requestData = new GetVetDocumentListRequest
                 {
-                    apiKey = _mercuryOptions.ApiKey,
-                    application = new Application
+                    localTransactionId = localTransactionId,
+                    initiator = new User { login = initiatorLogin },
+                    listOptions = new ListOptions { count = count.ToString(), offset = offset.ToString() },
+                    vetDocumentTypeSpecified = true,
+                    vetDocumentType = (VetDocumentType)vetDocumentType,
+                    vetDocumentStatusSpecified = true,
+                    vetDocumentStatus = (VetDocumentStatus)vetDocumentStatus,
+                    enterpriseGuid = enterpriseId
+                };
+
+                var result = await requestData.SendRequest<GetVetDocumentListResponse>(
+                    _mercuryOptions.ApiKey,
+                    _mercuryOptions.ServiceId,
+                    _mercuryOptions.IssuerId,
+                    _mercuryOptions.ApiLogin,
+                    _mercuryOptions.ApiPassword
+                );
+
+                var vsds = new List<Vsd>();
+
+                foreach (var vetDocument in result.vetDocumentList.vetDocument)
+                {
+                    var item = (CertifiedConsignment) vetDocument.Item;
+
+                    var element = new Vsd
                     {
-                        serviceId = _mercuryOptions.ServiceId,
-                        issuerId = _mercuryOptions.IssuerId,
-                        issueDate = DateTime.Now,
-                        issueDateSpecified = true,
-                        data = new ApplicationDataWrapper
-                        {
-                            Any = requestData.Serialize()
-                        }
-                    }
+                        Id = vetDocument.uuid,
+                        Name = item.batch.productItem.name,
+                        ProductGlobalId = item.batch.productItem.globalID,
+                        Volume = item.batch.volume,
+                        ExpirationDate = item.batch.expiryDate.firstDate.ToDateTime(),
+                        ProductDate = item.batch.dateOfProduction.firstDate.ToDateTime()
+                    }; 
+
+                    vsds.Add(element);
                 }
-            };                
-
-            var client = new ApplicationManagementServicePortTypeClient();
-            client.ClientCredentials.UserName.UserName = _mercuryOptions.ApiLogin;
-            client.ClientCredentials.UserName.Password = _mercuryOptions.ApiPassword;
-
-            var applicationResponse = await client.submitApplicationRequestAsync(request);
-            var applicationId = applicationResponse.submitApplicationResponse.application.applicationId;
-            var resultRequest = new receiveApplicationResultRequest1
-            {
-                receiveApplicationResultRequest = new receiveApplicationResultRequest
-                {
-                    apiKey = _mercuryOptions.ApiKey,
-                    applicationId = applicationId,
-                    issuerId = _mercuryOptions.IssuerId
-                }
-            };  
-
-            var receiveApplicationResponse = new receiveApplicationResultResponse1();
-
-            do
-            {
-                Thread.Sleep(1000);
-                receiveApplicationResponse = await client.receiveApplicationResultAsync(resultRequest);
-            } while(receiveApplicationResponse.receiveApplicationResultResponse.application.status == ApplicationStatus.IN_PROCESS);
-
-            var result = receiveApplicationResponse.receiveApplicationResultResponse
-                .application.result.Deserialize<GetVetDocumentListResponse>();
-
-            var vsds = new List<Vsd>();
-
-            foreach (var vetDocument in result.vetDocumentList.vetDocument)
-            {
-                var item = (CertifiedConsignment) vetDocument.Item;
-
-                var element = new Vsd
-                {
-                    Id = vetDocument.uuid,
-                    Name = item.batch.productItem.name,
-                    ProductGlobalId = item.batch.productItem.globalID,
-                    Volume = item.batch.volume,
-                    ExpirationDate = ComplexToDateTime(item.batch.expiryDate.firstDate),
-                    ProductDate = ComplexToDateTime(item.batch.dateOfProduction.firstDate)
-                }; 
-
-                vsds.Add(element);
-            }
             
-            return vsds;  
+                return vsds;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
-        private DateTime ComplexToDateTime(ComplexDate complexDate)
+        public async Task<object> GetVetDocumentByUuid(
+            string uuid,
+            string enterpriseId,
+            string localTransactionId,
+            string initiatorLogin
+            )
         {
-            return new DateTime(                    
-                complexDate.year,
-                complexDate.month,
-                complexDate.day,
-                complexDate.hour,
-                complexDate.minute,
-                0
-            );
+            try
+            {
+                var requestData = new GetVetDocumentByUuidRequest
+                {
+                    localTransactionId = localTransactionId,
+                    initiator = new User {login = initiatorLogin},
+                    enterpriseGuid = enterpriseId,
+                    uuid = uuid
+                };
+
+                var result = await requestData.SendRequest<GetVetDocumentByUuidResponse>(
+                    _mercuryOptions.ApiKey,
+                    _mercuryOptions.ServiceId,
+                    _mercuryOptions.IssuerId,
+                    _mercuryOptions.ApiLogin,
+                    _mercuryOptions.ApiPassword
+                );
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }

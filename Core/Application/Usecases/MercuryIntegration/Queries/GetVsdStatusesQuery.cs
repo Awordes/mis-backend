@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Core.Domain.Mercury;
 using MediatR;
 
-namespace Core.Application.Usecases.MercuryIntegration.Queries.Methods
+namespace Core.Application.Usecases.MercuryIntegration.Queries
 {
     public class GetVsdStatusesQuery: IRequest<object>
     {

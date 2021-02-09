@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using System;
 
 namespace Core.Application.Common.Services
 {
@@ -14,5 +13,12 @@ namespace Core.Application.Common.Services
             int vetDocumentStatus,
             string enterpriseId
             );
+
+        Task<object> GetVetDocumentByUuid(
+            string uuid,
+            string enterpriseId,
+            string localTransactionId,
+            string initiatorLogin
+        );
     }
 }

@@ -1,12 +1,12 @@
-﻿using Core.Application.Common;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Core.Application.Common;
 using Core.Application.Common.Services;
 using MediatR;
 using Microsoft.Extensions.Options;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace Core.Application.Usecases.MercuryIntegration.Queries.Methods
+namespace Core.Application.Usecases.MercuryIntegration.Queries
 {
     public class GetVetDocumentListQuery : IRequest<object>
     {
@@ -33,15 +33,12 @@ namespace Core.Application.Usecases.MercuryIntegration.Queries.Methods
         private class Handler : IRequestHandler<GetVetDocumentListQuery, object>
         {
             private readonly MercuryOptions _mercuryOptions;
-            private readonly IMediator _mediator;
             private readonly IMercuryService _mercuryService;
 
             public Handler(
-                IMediator mediator,
                 IOptionsMonitor<MercuryOptions> mercuryOptions,
                 IMercuryService mercuryService)
             {
-                _mediator = mediator;
                 _mercuryOptions = mercuryOptions.CurrentValue;
                 _mercuryService = mercuryService;
             }
