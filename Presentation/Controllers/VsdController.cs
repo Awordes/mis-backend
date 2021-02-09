@@ -21,17 +21,6 @@ namespace Presentation.Controllers
         }
 
         /// <summary>
-        /// Получение типов ВСД
-        /// </summary>
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesDefaultResponseType]
-        public async Task<ActionResult<object>> GetVsdTypes()
-        {
-            return await Mediator.Send(new GetVsdTypesQuery());
-        }
-
-        /// <summary>
         /// Получение статусов ВСД
         /// </summary>
         [HttpGet]
@@ -40,6 +29,17 @@ namespace Presentation.Controllers
         public async Task<ActionResult<object>> GetVsdStatuses()
         {
             return await Mediator.Send(new GetVsdStatusesQuery());
+        }
+
+        /// <summary>
+        /// Получение типов ВСД
+        /// </summary>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<object>> GetVsdTypes()
+        {
+            return await Mediator.Send(new GetVsdTypesQuery());
         }
         
         /// <summary>
