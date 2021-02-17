@@ -7,6 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
 using System.ServiceModel;
 
 namespace MercuryAPI
@@ -7853,19 +7854,19 @@ namespace MercuryAPI
     public enum VetDocumentType
     {
         
-        /// <remarks/>
+        [Display(Name = "Транспортный")]
         TRANSPORT,
-        
-        /// <remarks/>
+
+        [Display(Name = "Производственный")]
         PRODUCTIVE,
-        
-        /// <remarks/>
+
+        [Display(Name = "Возвратный")]
         RETURNABLE,
-        
-        /// <remarks/>
+
+        [Display(Name = "Входящий")]
         INCOMING,
-        
-        /// <remarks/>
+
+        [Display(Name = "Исходящий")]
         OUTGOING,
     }
     
@@ -7875,19 +7876,19 @@ namespace MercuryAPI
     public enum VetDocumentStatus
     {
         
-        /// <remarks/>
+        [Display(Name = "Создан")]
         CREATED,
         
-        /// <remarks/>
+        [Display(Name = "Оформлен")]
         CONFIRMED,
         
-        /// <remarks/>
+        [Display(Name = "Аннулирован")]
         WITHDRAWN,
         
-        /// <remarks/>
+        [Display(Name = "Погашен")]
         UTILIZED,
         
-        /// <remarks/>
+        [Display(Name = "Закрыт")]
         FINALIZED,
     }
     
