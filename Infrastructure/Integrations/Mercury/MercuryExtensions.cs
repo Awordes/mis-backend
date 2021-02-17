@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -14,7 +13,7 @@ namespace Infrastructure.Integrations.Mercury
 {
     public static class MercuryExtensions
     {
-        public static XmlElement Serialize(this MercuryApplicationRequest requestData)
+        private static XmlElement Serialize(this MercuryApplicationRequest requestData)
         {
             var result = new XmlDocument();
 
@@ -23,33 +22,33 @@ namespace Infrastructure.Integrations.Mercury
             var rootElement = new XmlRootAttribute
             {
                 ElementName = requestType.ToCamelCase(),
-                Namespace = requestType.GetCustomAttribute<XmlTypeAttribute>().Namespace
+                Namespace = requestType.GetCustomAttribute<XmlTypeAttribute>()?.Namespace
             };
 
-            using (var writer = result.CreateNavigator().AppendChild())
+            using (var writer = result.CreateNavigator()?.AppendChild())
             {
-                new XmlSerializer(requestType, rootElement)
-                    .Serialize(writer, requestData);
+                if (writer is not null) new XmlSerializer(requestType, rootElement).Serialize(writer, requestData);
             }
 
             return result.DocumentElement;
         }
-        public static TResponse Deserialize<TResponse>(this ApplicationResultWrapper wrapper)  
+
+        private static TResponse Deserialize<TResponse>(this ApplicationResultWrapper wrapper)  
             where TResponse : ApplicationResultData  
         {  
             var responseType = typeof(TResponse);  
             var rootAttribute = new XmlRootAttribute  
             {  
                 ElementName = responseType.ToCamelCase(),  
-                Namespace = responseType.GetCustomAttribute<XmlTypeAttribute>().Namespace  
+                Namespace = responseType.GetCustomAttribute<XmlTypeAttribute>()?.Namespace  
             };  
             var serializer = new XmlSerializer(responseType, rootAttribute);  
             return (TResponse) serializer.Deserialize(new XmlNodeReader(wrapper.Any));  
         } 
 
-        private static string ToCamelCase(this Type requestType)  
+        private static string ToCamelCase(this MemberInfo requestType)  
         {  
-            return $"{char.ToLower(requestType.Name[0])}{requestType.Name.Substring(1)}";  
+            return $"{char.ToLower(requestType.Name[0])}{requestType.Name[1..]}";  
         }
         
         public static async Task<TResponse> SendRequest<TResponse>(
@@ -152,17 +151,17 @@ namespace Infrastructure.Integrations.Mercury
             ) : null;
         }
 
-        public static EnumElementListViewModel GetDisplayNames(this Enum vetDocumentType)
+        public static EnumElementListViewModel GetDisplayNames(this Enum enumElement)
         {
-            var vetdocs = Enum.GetNames(vetDocumentType.GetType());
+            var enumNames = Enum.GetNames(enumElement.GetType());
 
             return new EnumElementListViewModel
             {
-                EnumElements = vetdocs.Select((t, i) => new EnumElementViewModel
+                EnumElements = enumNames.Select((t, i) => new EnumElementViewModel
                     {
                         Id = i,
                         Name = t,
-                        Title = vetDocumentType.GetType().GetMember(t)[0]
+                        Title = enumElement.GetType().GetMember(t)[0]
                             .GetCustomAttribute<DisplayAttribute>()?.Name ?? ""
                     }).ToList()
             };

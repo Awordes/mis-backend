@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Core.Application.Usecases.MercuryIntegration.Commands;
 using Core.Application.Usecases.MercuryIntegration.Queries;
 
 namespace Presentation.Controllers
@@ -51,6 +52,17 @@ namespace Presentation.Controllers
         public async Task<ActionResult<object>> GetVsdByUuid([FromQuery] GetVetDocumentByUuidQuery query)
         {
             return await Mediator.Send(query);
+        }
+        
+        /// <summary>
+        /// Погасить ВСД по идентификатору
+        /// </summary>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<object>> FinishVsd([FromBody] FinishVetDocumentCommand command)
+        {
+            return await Mediator.Send(command);
         }
     }
 }

@@ -7355,7 +7355,6 @@ namespace MercuryAPI
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(ProductMarkingClass.UNDEFINED)]
         public ProductMarkingClass @class
         {
             get
