@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using Core.Application.Usecases.MercuryIntegration.ViewModels;
 using MercuryAPI;
+using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure.Integrations.Mercury
 {
@@ -147,6 +150,22 @@ namespace Infrastructure.Integrations.Mercury
                 complexDate.minuteSpecified ? complexDate.minute : 0,
                 0
             ) : null;
+        }
+
+        public static EnumElementListViewModel GetDisplayNames(this Enum vetDocumentType)
+        {
+            var vetdocs = Enum.GetNames(vetDocumentType.GetType());
+
+            return new EnumElementListViewModel
+            {
+                EnumElements = vetdocs.Select((t, i) => new EnumElementViewModel
+                    {
+                        Id = i,
+                        Name = t,
+                        Title = vetDocumentType.GetType().GetMember(t)[0]
+                            .GetCustomAttribute<DisplayAttribute>()?.Name ?? ""
+                    }).ToList()
+            };
         }
     }
 }

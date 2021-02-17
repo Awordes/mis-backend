@@ -14,7 +14,6 @@ namespace Presentation
 {
     public class Startup
     {
-
         public IConfiguration Configuration { get; }
         public IWebHostEnvironment Environment { get; }
 
@@ -49,7 +48,7 @@ namespace Presentation
                 {
                     Title = "Mercury Integration Service",
                     Version = "v1",
-                    Description = "Сервис интеграции с системой \"Меркурий\""
+                    Description = "РЎРµСЂРІРёСЃ РёРЅС‚РµРіСЂР°С†РёРё СЃ СЃРёСЃС‚РµРјРѕР№ \"РњРµСЂРєСѓСЂРёР№\""
                 });
 
                 config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -73,7 +72,7 @@ namespace Presentation
                                 Id = "Bearer"
                             }
                         },
-                        new string[] { }
+                        Array.Empty<string>()
                     }
                 });
 
@@ -90,7 +89,7 @@ namespace Presentation
                 });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -109,8 +108,6 @@ namespace Presentation
             app.UseCors(builder =>
                 builder.WithOrigins(
                         "http://localhost:8080",
-                        "http://localhost:5010",
-                        "http://192.168.0.150:5010",
                         "http://192.168.0.150:8080")
                     .AllowAnyHeader()
                     .AllowAnyMethod()

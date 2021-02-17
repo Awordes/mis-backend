@@ -4,6 +4,7 @@ using Core.Application.Common.Services;
 using MercuryAPI;
 using System.Collections.Generic;
 using Core.Application.Common;
+using Core.Application.Usecases.MercuryIntegration.ViewModels;
 using Core.Domain.Mercury;
 using Microsoft.Extensions.Options;
 
@@ -16,6 +17,16 @@ namespace Infrastructure.Integrations.Mercury
         public MercuryService(IOptionsMonitor<MercuryOptions> mercuryOptions)
         {
             _mercuryOptions = mercuryOptions.CurrentValue;
+        }
+
+        public EnumElementListViewModel GetVsdTypeListViewModel()
+        {
+            return VetDocumentType.INCOMING.GetDisplayNames();
+        }
+
+        public EnumElementListViewModel GetVsdStatusListViewModel()
+        {
+            return VetDocumentStatus.CREATED.GetDisplayNames();
         }
         
         public async Task<object> GetVetDocumentList(

@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Core.Application.Usecases.MercuryIntegration.ViewModels;
 
 namespace Core.Application.Common.Services
 {
@@ -20,5 +21,9 @@ namespace Core.Application.Common.Services
             string localTransactionId,
             string initiatorLogin
         );
+
+        EnumElementListViewModel GetVsdTypeListViewModel();
+        
+        EnumElementListViewModel GetVsdStatusListViewModel();
     }
 }

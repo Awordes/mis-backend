@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Application.Common.Services;
 using Core.Domain.Mercury;
 using MediatR;
 
@@ -10,11 +11,18 @@ namespace Core.Application.Usecases.MercuryIntegration.Queries
     {
         private class Handler : IRequestHandler<GetVsdTypesQuery, object>
         {
+            private readonly IMercuryService _mercuryService;
+
+            public Handler(IMercuryService mercuryService)
+            {
+                _mercuryService = mercuryService;
+            }
+            
             public async Task<object> Handle(GetVsdTypesQuery request, CancellationToken cancellationToken)
             {
                 try
                 {
-                    return await Task.FromResult(VsdType.GetAll());
+                    return await Task.FromResult(_mercuryService.GetVsdTypeListViewModel());
                 }
                 catch (Exception e)
                 {
