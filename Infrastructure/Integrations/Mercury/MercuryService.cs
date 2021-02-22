@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using Core.Application.Common.Services;
 using MercuryAPI;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Core.Application.Common;
 using Core.Application.Usecases.MercuryIntegration.ViewModels;
-using Core.Domain.Mercury;
 using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Integrations.Mercury
@@ -30,7 +30,7 @@ namespace Infrastructure.Integrations.Mercury
             return VetDocumentStatus.CREATED.GetDisplayNames();
         }
         
-        public async Task<object> GetVetDocumentList(
+        public async Task<VsdListViewModel> GetVetDocumentList(
             string localTransactionId,
             string initiatorLogin,
             int count,
@@ -62,13 +62,13 @@ namespace Infrastructure.Integrations.Mercury
                     _mercuryOptions.ApiPassword
                 );
 
-                var vetDocumentList = new List<Vsd>();
+                var vetDocumentList = new List<VsdViewModel>();
 
                 foreach (var vetDocument in result.vetDocumentList.vetDocument)
                 {
                     var item = (CertifiedConsignment) vetDocument.Item;
 
-                    var element = new Vsd
+                    var element = new VsdViewModel
                     {
                         Id = vetDocument.uuid,
                         Name = item.batch.productItem.name,
@@ -81,7 +81,11 @@ namespace Infrastructure.Integrations.Mercury
                     vetDocumentList.Add(element);
                 }
             
-                return vetDocumentList;
+                return new VsdListViewModel
+                {
+                    result = vetDocumentList,
+                    ElementCount = result.vetDocumentList.total
+                };
             }
             catch (Exception e)
             {
@@ -145,7 +149,7 @@ namespace Infrastructure.Integrations.Mercury
                 
                 var consignment = mapper.Map<Consignment>(batch);
 
-                var tnn = vetDocument.vetDocument.referencedDocument[0];
+                var tnn = vetDocument.vetDocument.referencedDocument.First(x => x.type == DocumentType.Item1);
                 
                 var waybill = new Waybill
                 {

@@ -14,14 +14,12 @@ namespace Presentation
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
-        public IWebHostEnvironment Environment { get; }
+        private IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
-            Environment = env;
-
+            
             var builder = new ConfigurationBuilder()
                          .SetBasePath(env.ContentRootPath)
                          .AddJsonFile("appsettings.json", false, true)
@@ -51,31 +49,6 @@ namespace Presentation
                     Description = "Сервис интеграции с системой \"Меркурий\""
                 });
 
-                config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer",
-                    BearerFormat = "JWT",
-                    In = ParameterLocation.Header,
-                    Description = "JWT Authorization header using the Bearer scheme."
-                });
-
-                config.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        Array.Empty<string>()
-                    }
-                });
-
                 config.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Presentation.xml"));
                 config.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Core.xml"));
             });
@@ -102,13 +75,14 @@ namespace Presentation
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mercury Integration Service V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mercury Integration Service v1");
             });
 
             app.UseCors(builder =>
                 builder.WithOrigins(
                         "http://localhost:8080",
-                        "http://192.168.0.150:8080")
+                        "http://192.168.0.150:8080",
+                        "http://192.168.1.250:8080")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials());

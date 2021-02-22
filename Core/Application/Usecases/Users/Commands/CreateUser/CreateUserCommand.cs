@@ -14,9 +14,29 @@ namespace Core.Application.Usecases.Users.Commands.CreateUser
 {
     public class CreateUserCommand : IRequest, IMapTo<User>
     {
-        public string Login { get; set; }
+        public string Login { get; }
 
-        public string Password { get; set; }
+        public string Password { get; }
+        
+        public string Inn { get; set; }
+
+        public string Title { get; set; }
+
+        public string Contact { get; set; }
+
+        public string MercuryLogin { get; set; }
+
+        public string MercuryPassword { get; set; }
+
+        public string ApiLogin { get; set; }
+
+        public string ApiPassword { get; set; }
+
+        public string ApiKey { get; set; }
+
+        public string IssuerId { get; set; }
+
+        public bool EditAllow { get; set; }
 
         public void Mapping(Profile profile)
         {
@@ -27,16 +47,13 @@ namespace Core.Application.Usecases.Users.Commands.CreateUser
 
         private class Handler : IRequestHandler<CreateUserCommand>
         {
-            private readonly IMisDbContext _context;
             private readonly IMapper _mapper;
             private readonly UserManager<User> _userManager;
 
             public Handler(
-                IMisDbContext context,
                 IMapper mapper,
                 UserManager<User> userManager)
             {
-                _context = context;
                 _mapper = mapper;
                 _userManager = userManager;
             }
@@ -58,8 +75,9 @@ namespace Core.Application.Usecases.Users.Commands.CreateUser
 
                     return Unit.Value;
                 }
-                catch
+                catch(Exception e)
                 {
+                    Console.Write(e);
                     throw;
                 }
             }

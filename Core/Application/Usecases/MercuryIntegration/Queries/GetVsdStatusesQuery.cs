@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Application.Common.Services;
-using Core.Domain.Mercury;
 using MediatR;
 
 namespace Core.Application.Usecases.MercuryIntegration.Queries

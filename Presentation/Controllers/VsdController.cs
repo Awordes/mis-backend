@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Core.Application.Usecases.MercuryIntegration.Commands;
 using Core.Application.Usecases.MercuryIntegration.Queries;
+using Core.Application.Usecases.MercuryIntegration.ViewModels;
 
 namespace Presentation.Controllers
 {
@@ -16,7 +17,7 @@ namespace Presentation.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult<object>> GetVsdList([FromQuery] GetVetDocumentListQuery query)
+        public async Task<ActionResult<VsdListViewModel>> GetVsdList([FromQuery] GetVetDocumentListQuery query)
         {
             return await Mediator.Send(query);
         }

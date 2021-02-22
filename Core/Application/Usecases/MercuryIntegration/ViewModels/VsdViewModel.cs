@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 
-namespace Core.Domain.Mercury
+namespace Core.Application.Usecases.MercuryIntegration.ViewModels
 {
-    public class Vsd
-    {
+    public class VsdViewModel
+    {        
         public string Id { get; set; }
 
         public string Name { get; set; }

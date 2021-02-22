@@ -9,7 +9,7 @@ namespace Core.Application.Common.Services
         
         EnumElementListViewModel GetVsdStatusListViewModel();
         
-        Task<object> GetVetDocumentList(
+        Task<VsdListViewModel> GetVetDocumentList(
             string localTransactionId,
             string initiatorLogin,
             int count,
