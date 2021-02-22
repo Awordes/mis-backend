@@ -45,11 +45,9 @@ namespace Infrastructure
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
+                options.SlidingExpiration = true;
                 options.ExpireTimeSpan = TimeSpan.FromHours(10);
                 options.Cookie.Name = "MercuryIntegrationService";
-
-                options.LoginPath = "/Account/Login";
-                options.SlidingExpiration = true;
             });
 
             services.AddScoped<MercuryService>();
