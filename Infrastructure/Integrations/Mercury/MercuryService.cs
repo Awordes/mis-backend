@@ -32,12 +32,11 @@ namespace Infrastructure.Integrations.Mercury
         
         public async Task<VsdListViewModel> GetVetDocumentList(
             string localTransactionId,
-            string initiatorLogin,
+            Core.Domain.Auth.User user,
             int count,
             int offset,
             int vetDocumentType,
-            int vetDocumentStatus,
-            string enterpriseId
+            int vetDocumentStatus
             )
         {
             try
@@ -45,21 +44,21 @@ namespace Infrastructure.Integrations.Mercury
                 var requestData = new GetVetDocumentListRequest
                 {
                     localTransactionId = localTransactionId,
-                    initiator = new User { login = initiatorLogin },
+                    initiator = new User { login = user.MercuryLogin },
                     listOptions = new ListOptions { count = count.ToString(), offset = offset.ToString() },
                     vetDocumentTypeSpecified = true,
                     vetDocumentType = (VetDocumentType)vetDocumentType,
                     vetDocumentStatusSpecified = true,
                     vetDocumentStatus = (VetDocumentStatus)vetDocumentStatus,
-                    enterpriseGuid = enterpriseId
+                    enterpriseGuid = user.EnterpriseId
                 };
 
                 var result = await requestData.SendRequest<GetVetDocumentListResponse>(
-                    _mercuryOptions.ApiKey,
+                    user.ApiKey,
                     _mercuryOptions.ServiceId,
-                    _mercuryOptions.IssuerId,
-                    _mercuryOptions.ApiLogin,
-                    _mercuryOptions.ApiPassword
+                    user.IssuerId,
+                    user.ApiLogin,
+                    user.ApiPassword
                 );
 
                 var vetDocumentList = new List<VsdViewModel>();

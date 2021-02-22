@@ -1,28 +1,20 @@
-﻿using AutoMapper;
-using Core.Application.Common;
+﻿using System;
 using Core.Application.Common.Mapping;
 using Core.Domain.Auth;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Core.Application.Common.Extensions;
 
-namespace Core.Application.Usecases.Users.Commands.CreateUser
+namespace Core.Application.Usecases.Users.ViewModels
 {
-    public class CreateUserCommand : IRequest, IMapTo<User>
+    public class UserViewModel: IMapFrom<User>
     {
+        /// <summary>
+        /// Идентификатор пользователя
+        /// </summary>
+        public Guid Id { get; set; }
+
         /// <summary>
         /// Логин пользователя
         /// </summary>
         public string UserName { get; set; }
-
-        /// <summary>
-        /// Пароль пользователя
-        /// </summary>
-        public string Password { get; set; }
         
         /// <summary>
         /// ИНН
@@ -79,35 +71,9 @@ namespace Core.Application.Usecases.Users.Commands.CreateUser
         /// </summary>
         public bool EditAllow { get; set; }
 
-        private class Handler : IRequestHandler<CreateUserCommand>
-        {
-            private readonly IMapper _mapper;
-            private readonly UserManager<User> _userManager;
-
-            public Handler(
-                IMapper mapper,
-                UserManager<User> userManager)
-            {
-                _mapper = mapper;
-                _userManager = userManager;
-            }
-
-            public async Task<Unit> Handle(CreateUserCommand request, CancellationToken cancellationToken)
-            {
-                try
-                {
-                    var user = _mapper.Map<User>(request);
-
-                    (await _userManager.CreateAsync(user, request.Password)).CheckResult();
-
-                    return Unit.Value;
-                }
-                catch(Exception e)
-                {
-                    Console.Write(e);
-                    throw;
-                }
-            }
-        }
+        /// <summary>
+        /// Признак удалённого пользователя
+        /// </summary>
+        public bool Deleted { get; set; }
     }
 }

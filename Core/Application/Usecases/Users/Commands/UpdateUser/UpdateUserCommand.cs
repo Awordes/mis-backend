@@ -1,28 +1,29 @@
-﻿using AutoMapper;
-using Core.Application.Common;
+﻿using System;
+using System.Linq;
+using System.Text.Json.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
+using AutoMapper;
+using Core.Application.Common.Extensions;
 using Core.Application.Common.Mapping;
 using Core.Domain.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Core.Application.Common.Extensions;
 
-namespace Core.Application.Usecases.Users.Commands.CreateUser
+namespace Core.Application.Usecases.Users.Commands.UpdateUser
 {
-    public class CreateUserCommand : IRequest, IMapTo<User>
+    public class UpdateUserCommand: IRequest, IMapTo<User>
     {
+        /// <summary>
+        /// Идентификатор пользователя
+        /// </summary>
+        [JsonIgnore]
+        public Guid UserId { get; set; }
+        
         /// <summary>
         /// Логин пользователя
         /// </summary>
-        public string UserName { get; set; }
-
-        /// <summary>
-        /// Пароль пользователя
-        /// </summary>
-        public string Password { get; set; }
+        public string Login { get; set; }
         
         /// <summary>
         /// ИНН
@@ -79,7 +80,7 @@ namespace Core.Application.Usecases.Users.Commands.CreateUser
         /// </summary>
         public bool EditAllow { get; set; }
 
-        private class Handler : IRequestHandler<CreateUserCommand>
+        private class Handler: IRequestHandler<UpdateUserCommand>
         {
             private readonly IMapper _mapper;
             private readonly UserManager<User> _userManager;
@@ -91,20 +92,23 @@ namespace Core.Application.Usecases.Users.Commands.CreateUser
                 _mapper = mapper;
                 _userManager = userManager;
             }
-
-            public async Task<Unit> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+            
+            public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
             {
                 try
                 {
-                    var user = _mapper.Map<User>(request);
+                    var user = await _userManager.FindByIdAsync(request.UserId.ToString())
+                        ?? throw new Exception($@"Пользователь с идентификатором {request.UserId} не найден.");
 
-                    (await _userManager.CreateAsync(user, request.Password)).CheckResult();
+                    _mapper.Map(request, user);
 
+                    (await _userManager.UpdateAsync(user)).CheckResult();
+                    
                     return Unit.Value;
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
-                    Console.Write(e);
+                    Console.WriteLine(e);
                     throw;
                 }
             }

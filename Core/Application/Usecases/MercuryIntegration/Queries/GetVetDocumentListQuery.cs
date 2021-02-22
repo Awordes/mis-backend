@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Core.Application.Common;
 using Core.Application.Common.Services;
 using Core.Application.Usecases.MercuryIntegration.ViewModels;
+using Core.Domain.Auth;
 using MediatR;
-using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace Core.Application.Usecases.MercuryIntegration.Queries
 {
@@ -33,33 +34,40 @@ namespace Core.Application.Usecases.MercuryIntegration.Queries
 
         private class Handler : IRequestHandler<GetVetDocumentListQuery, VsdListViewModel>
         {
-            private readonly MercuryOptions _mercuryOptions;
             private readonly IMercuryService _mercuryService;
+            private readonly IHttpContextAccessor _httpContextAccessor;
+            private readonly UserManager<User> _userManager;
 
             public Handler(
-                IOptionsMonitor<MercuryOptions> mercuryOptions,
-                IMercuryService mercuryService)
+                IMercuryService mercuryService,
+                IHttpContextAccessor httpContextAccessor,
+                UserManager<User> userManager)
             {
-                _mercuryOptions = mercuryOptions.CurrentValue;
                 _mercuryService = mercuryService;
+                _httpContextAccessor = httpContextAccessor;
+                _userManager = userManager;
             }
 
             public async Task<VsdListViewModel> Handle(GetVetDocumentListQuery request, CancellationToken cancellationToken)
             {
                 try
                 {
+                    var userName = _httpContextAccessor.HttpContext?.User.Identity?.Name;
+
+                    var user = await _userManager.FindByNameAsync(userName)
+                        ?? throw new Exception($@"Пользователь с именем {userName} не найден.");
+                    
                     var count = request.PageSize;
 
                     var offset = request.PageSize * (request.Page - 1);
 
                     var vm =  await _mercuryService.GetVetDocumentList(
-                        _mercuryOptions.LocalTransactionId,
-                        _mercuryOptions.InitiatorLogin,
+                        "a10003",
+                        user,
                         count,
                         offset,
                         request.Type,
-                        request.Status,
-                        _mercuryOptions.EnterpriseId
+                        request.Status
                     );
 
                     vm.PageSize = request.PageSize;

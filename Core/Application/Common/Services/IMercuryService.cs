@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Core.Application.Usecases.MercuryIntegration.ViewModels;
+using Core.Domain.Auth;
 
 namespace Core.Application.Common.Services
 {
@@ -11,12 +12,11 @@ namespace Core.Application.Common.Services
         
         Task<VsdListViewModel> GetVetDocumentList(
             string localTransactionId,
-            string initiatorLogin,
+            User user,
             int count,
             int offset,
             int vetDocumentType,
-            int vetDocumentStatus,
-            string enterpriseId
+            int vetDocumentStatus
         );
 
         Task<object> GetVetDocumentByUuid(

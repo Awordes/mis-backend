@@ -40,7 +40,8 @@ namespace Infrastructure
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireDigit = false;
                 })
-                .AddEntityFrameworkStores<MisDbContext>();
+                .AddEntityFrameworkStores<MisDbContext>()
+                .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);;
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -48,6 +49,11 @@ namespace Infrastructure
                 options.SlidingExpiration = true;
                 options.ExpireTimeSpan = TimeSpan.FromHours(10);
                 options.Cookie.Name = "MercuryIntegrationService";
+            });
+            
+            services.Configure<SecurityStampValidatorOptions>(options =>
+            {
+                options.ValidationInterval = TimeSpan.Zero;   
             });
 
             services.AddScoped<MercuryService>();
