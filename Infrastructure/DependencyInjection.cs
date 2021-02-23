@@ -32,7 +32,7 @@ namespace Infrastructure
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
-            services.AddIdentity<User, Role>(options => 
+            services.AddIdentity<User, Role>(options =>
                 {
                     options.Password.RequiredLength = 10;
                     options.Password.RequireLowercase = false;
@@ -41,7 +41,7 @@ namespace Infrastructure
                     options.Password.RequireDigit = false;
                 })
                 .AddEntityFrameworkStores<MisDbContext>()
-                .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);;
+                .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
 
             services.ConfigureApplicationCookie(options =>
             {
