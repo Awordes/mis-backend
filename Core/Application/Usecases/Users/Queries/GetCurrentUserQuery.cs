@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Core.Application.Usecases.Users.Queries.GetUser;
 using Core.Application.Usecases.Users.ViewModels;
 using Core.Domain.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
-namespace Core.Application.Usecases.Users.Queries.GetCurrentUser
+namespace Core.Application.Usecases.Users.Queries
 {
     public class GetCurrentUserQuery: IRequest<UserViewModel>
     {

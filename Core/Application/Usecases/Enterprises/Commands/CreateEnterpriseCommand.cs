@@ -8,7 +8,7 @@ using Core.Domain.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Core.Application.Usecases.Enterprises.Commands.CreateEnterprise
+namespace Core.Application.Usecases.Enterprises.Commands
 {
     public class CreateEnterpriseCommand: IRequest, IMapTo<Enterprise>
     {

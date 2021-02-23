@@ -7,10 +7,9 @@ using Core.Application.Usecases.Users.ViewModels;
 using Core.Domain.Auth;
 using IdentityServer4.Extensions;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Application.Usecases.Users.Queries.GetUser
+namespace Core.Application.Usecases.Users.Queries
 {
     public class GetUserQuery: IRequest<UserViewModel>
     {

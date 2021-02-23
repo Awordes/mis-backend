@@ -1,5 +1,6 @@
-﻿using System.Threading.Tasks;
-using Core.Application.Usecases.Enterprises.Commands.CreateEnterprise;
+﻿using System;
+using System.Threading.Tasks;
+using Core.Application.Usecases.Enterprises.Commands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ namespace Presentation.Controllers
     public class EnterpriseController: BaseController
     {
         /// <summary>
-        /// Создать пользователя
+        /// Создать предприятие
         /// </summary>
         [HttpPost("/[controller]")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -19,6 +20,19 @@ namespace Presentation.Controllers
         {
             await Mediator.Send(command);
             return NoContent();
-        }        
+        }
+
+        /// <summary>
+        /// Обновить предприятие
+        /// </summary>
+        [HttpPut("/[controller]/{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateEnterpriseCommand command)
+        {
+            command.EnterpriseId = id;
+            await Mediator.Send(command);
+            return NoContent();
+        }
     }
 }

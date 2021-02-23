@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,7 +7,7 @@ using Core.Domain.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Core.Application.Usecases.Users.Commands.ChangePassword
+namespace Core.Application.Usecases.Users.Commands
 {
     public class UserChangePasswordCommand: IRequest
     {

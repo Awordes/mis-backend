@@ -64,7 +64,6 @@ namespace Presentation.Controllers
         public async Task<IActionResult> FinishVsd([FromBody] FinishVetDocumentCommand command)
         {
             await Mediator.Send(command);
-
             return NoContent();
         }
     }

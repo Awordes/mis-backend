@@ -1,10 +1,11 @@
-﻿using Core.Domain.Auth;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Domain.Auth;
+using MediatR;
+using Microsoft.AspNetCore.Identity;
 
-namespace Core.Application.Usecases.Auth.Commands.Logout
+namespace Core.Application.Usecases.Auth.Commands
 {
     public class LogoutCommand: IRequest
     {
@@ -26,8 +27,9 @@ namespace Core.Application.Usecases.Auth.Commands.Logout
 
                     return Unit.Value;
                 }
-                catch
+                catch (Exception e)
                 {
+                    Console.WriteLine(e);
                     throw;
                 }
             }

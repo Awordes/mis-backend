@@ -1,11 +1,11 @@
-﻿using Core.Domain.Auth;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Domain.Auth;
+using MediatR;
+using Microsoft.AspNetCore.Identity;
 
-namespace Core.Application.Usecases.Auth.Commands.Login
+namespace Core.Application.Usecases.Auth.Commands
 {
     public class LoginCommand : IRequest
     {

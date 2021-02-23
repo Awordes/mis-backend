@@ -1,10 +1,8 @@
-﻿using Core.Application.Usecases.Auth.Commands.Login;
-using Core.Application.Usecases.Auth.Commands.Logout;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Core.Application.Usecases.Auth.Commands;
 
 namespace Presentation.Controllers
 {

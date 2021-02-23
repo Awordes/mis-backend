@@ -1,13 +1,10 @@
 ﻿using System;
-using Core.Application.Usecases.Users.Commands.CreateUser;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Core.Application.Usecases.Users.Commands.ChangePassword;
-using Core.Application.Usecases.Users.Commands.UpdateUser;
-using Core.Application.Usecases.Users.Queries.GetCurrentUser;
-using Core.Application.Usecases.Users.Queries.GetUser;
+using Core.Application.Usecases.Users.Commands;
+using Core.Application.Usecases.Users.Queries;
 using Core.Application.Usecases.Users.ViewModels;
 
 namespace Presentation.Controllers
@@ -59,10 +56,8 @@ namespace Presentation.Controllers
         [ProducesDefaultResponseType]
         public async Task<ActionResult<UserViewModel>> ChangePassword(Guid id, [FromBody] UserChangePasswordCommand command)
         {
-            command.UserId = id;
-            
+            command.UserId = id;            
             await Mediator.Send(command);
-
             return NoContent();
         }
         

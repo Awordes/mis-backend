@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -10,20 +8,19 @@ using Core.Domain.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Core.Application.Usecases.Users.Commands.UpdateUser
+namespace Core.Application.Usecases.Users.Commands
 {
-    public class UpdateUserCommand: IRequest, IMapTo<User>
+    public class CreateUserCommand : IRequest, IMapTo<User>
     {
-        /// <summary>
-        /// Идентификатор пользователя
-        /// </summary>
-        [JsonIgnore]
-        public Guid UserId { get; set; }
-        
         /// <summary>
         /// Логин пользователя
         /// </summary>
-        public string Login { get; set; }
+        public string UserName { get; set; }
+
+        /// <summary>
+        /// Пароль пользователя
+        /// </summary>
+        public string Password { get; set; }
         
         /// <summary>
         /// ИНН
@@ -80,7 +77,7 @@ namespace Core.Application.Usecases.Users.Commands.UpdateUser
         /// </summary>
         public bool EditAllow { get; set; }
 
-        private class Handler: IRequestHandler<UpdateUserCommand>
+        private class Handler : IRequestHandler<CreateUserCommand>
         {
             private readonly IMapper _mapper;
             private readonly UserManager<User> _userManager;
@@ -92,23 +89,20 @@ namespace Core.Application.Usecases.Users.Commands.UpdateUser
                 _mapper = mapper;
                 _userManager = userManager;
             }
-            
-            public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+
+            public async Task<Unit> Handle(CreateUserCommand request, CancellationToken cancellationToken)
             {
                 try
                 {
-                    var user = await _userManager.FindByIdAsync(request.UserId.ToString())
-                        ?? throw new Exception($@"Пользователь с идентификатором {request.UserId} не найден.");
+                    var user = _mapper.Map<User>(request);
 
-                    _mapper.Map(request, user);
+                    (await _userManager.CreateAsync(user, request.Password)).CheckResult();
 
-                    (await _userManager.UpdateAsync(user)).CheckResult();
-                    
                     return Unit.Value;
                 }
-                catch (Exception e)
+                catch(Exception e)
                 {
-                    Console.WriteLine(e);
+                    Console.Write(e);
                     throw;
                 }
             }
