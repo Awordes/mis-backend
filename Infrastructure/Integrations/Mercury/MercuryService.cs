@@ -5,7 +5,6 @@ using MercuryAPI;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using Core.Application.Common;
 using Core.Application.Usecases.MercuryIntegration.ViewModels;
 using Microsoft.Extensions.Options;
 
@@ -33,6 +32,7 @@ namespace Infrastructure.Integrations.Mercury
         public async Task<VsdListViewModel> GetVetDocumentList(
             string localTransactionId,
             Core.Domain.Auth.User user,
+            Core.Domain.Auth.Enterprise enterprise,
             int count,
             int offset,
             int vetDocumentType,
@@ -50,7 +50,7 @@ namespace Infrastructure.Integrations.Mercury
                     vetDocumentType = (VetDocumentType)vetDocumentType,
                     vetDocumentStatusSpecified = true,
                     vetDocumentStatus = (VetDocumentStatus)vetDocumentStatus,
-                    enterpriseGuid = user.EnterpriseId
+                    enterpriseGuid = enterprise.MercuryId
                 };
 
                 var result = await requestData.SendRequest<GetVetDocumentListResponse>(
@@ -94,10 +94,10 @@ namespace Infrastructure.Integrations.Mercury
         }
 
         public async Task<object> GetVetDocumentByUuid(
-            string uuid,
-            string enterpriseId,
             string localTransactionId,
-            string initiatorLogin
+            Core.Domain.Auth.User user,
+            Core.Domain.Auth.Enterprise enterprise,
+            string uuid
             )
         {
             try
@@ -105,17 +105,17 @@ namespace Infrastructure.Integrations.Mercury
                 var requestData = new GetVetDocumentByUuidRequest
                 {
                     localTransactionId = localTransactionId,
-                    initiator = new User {login = initiatorLogin},
-                    enterpriseGuid = enterpriseId,
+                    initiator = new User {login = user.MercuryLogin},
+                    enterpriseGuid = enterprise.MercuryId,
                     uuid = uuid
                 };
 
                 var result = await requestData.SendRequest<GetVetDocumentByUuidResponse>(
-                    _mercuryOptions.ApiKey,
+                    user.ApiKey,
                     _mercuryOptions.ServiceId,
-                    _mercuryOptions.IssuerId,
-                    _mercuryOptions.ApiLogin,
-                    _mercuryOptions.ApiPassword
+                    user.IssuerId,
+                    user.ApiLogin,
+                    user.ApiPassword
                 );
 
                 return result;
@@ -127,15 +127,16 @@ namespace Infrastructure.Integrations.Mercury
             }
         }
 
-        public async Task<object> ProcessIncomingConsignment(
-            string uuid,
-            string enterpriseId,
+        public async Task ProcessIncomingConsignment(
             string localTransactionId,
-            string initiatorLogin)
+            Core.Domain.Auth.User user,
+            Core.Domain.Auth.Enterprise enterprise,
+            string uuid)
         {
             try
             {
-                var vetDocument = (GetVetDocumentByUuidResponse) await GetVetDocumentByUuid(uuid, enterpriseId, localTransactionId, initiatorLogin);
+                var vetDocument = (GetVetDocumentByUuidResponse) await GetVetDocumentByUuid(
+                    localTransactionId, user, enterprise, uuid);
 
                 var vetDocumentItem = (CertifiedConsignment) vetDocument.vetDocument.Item;
                 
@@ -167,7 +168,7 @@ namespace Infrastructure.Integrations.Mercury
                 var requestData = new ProcessIncomingConsignmentRequest
                 {
                     localTransactionId = localTransactionId,
-                    initiator = new User { login = initiatorLogin },
+                    initiator = new User { login = user.MercuryLogin },
                     delivery = new Delivery
                     {
                         accompanyingForms = new ConsignmentDocumentList
@@ -208,15 +209,13 @@ namespace Infrastructure.Integrations.Mercury
                     }
                 };
                 
-                var result = await requestData.SendRequest<ProcessIncomingConsignmentResponse>(
-                    _mercuryOptions.ApiKey,
+                await requestData.SendRequest<ProcessIncomingConsignmentResponse>(
+                    user.ApiKey,
                     _mercuryOptions.ServiceId,
-                    _mercuryOptions.IssuerId,
-                    _mercuryOptions.ApiLogin,
-                    _mercuryOptions.ApiPassword
+                    user.IssuerId,
+                    user.ApiLogin,
+                    user.ApiPassword
                 );
-
-                return result;
             }
             catch (Exception e)
             {

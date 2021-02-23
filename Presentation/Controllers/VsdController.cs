@@ -59,11 +59,13 @@ namespace Presentation.Controllers
         /// Погасить ВСД по идентификатору
         /// </summary>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult<object>> FinishVsd([FromBody] FinishVetDocumentCommand command)
+        public async Task<IActionResult> FinishVsd([FromBody] FinishVetDocumentCommand command)
         {
-            return await Mediator.Send(command);
+            await Mediator.Send(command);
+
+            return NoContent();
         }
     }
 }

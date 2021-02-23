@@ -20,4 +20,8 @@
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Application\Usecases\Enterprises\Commands" />
+  </ItemGroup>
+
 </Project>

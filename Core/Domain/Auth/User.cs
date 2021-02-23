@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 
 namespace Core.Domain.Auth
 {
@@ -51,11 +52,6 @@ namespace Core.Domain.Auth
         public string IssuerId { get; set; }
 
         /// <summary>
-        /// Идентификатор организации
-        /// </summary>
-        public string EnterpriseId { get; set; }
-
-        /// <summary>
         /// Разрешение редактирования
         /// </summary>
         public bool EditAllow { get; set; }
@@ -64,5 +60,10 @@ namespace Core.Domain.Auth
         /// Признак удалённого пользователя
         /// </summary>
         public bool Deleted { get; set; }
+
+        /// <summary>
+        /// Список предприятий пользователя
+        /// </summary>
+        public ICollection<Enterprise> Enterprises { get; set; }
     }
 }

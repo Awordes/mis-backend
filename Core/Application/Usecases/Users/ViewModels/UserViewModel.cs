@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Core.Application.Common.Mapping;
+using Core.Application.Usecases.Enterprises.ViewModels;
 using Core.Domain.Auth;
 
 namespace Core.Application.Usecases.Users.ViewModels
@@ -75,5 +77,7 @@ namespace Core.Application.Usecases.Users.ViewModels
         /// Признак удалённого пользователя
         /// </summary>
         public bool Deleted { get; set; }
+
+        public ICollection<EnterpriseViewModel> Enterprises { get; set; }
     }
 }

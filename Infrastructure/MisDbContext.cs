@@ -6,7 +6,7 @@ using System;
 
 namespace Infrastructure
 {
-    class MisDbContext : IdentityDbContext<User, Role, Guid>, IMisDbContext
+    internal class MisDbContext : IdentityDbContext<User, Role, Guid>, IMisDbContext
     {
         public MisDbContext(DbContextOptions options) : base(options)
         { }
@@ -16,5 +16,7 @@ namespace Infrastructure
             modelBuilder.HasDefaultSchema("mis");
             base.OnModelCreating(modelBuilder);
         }
+
+        public DbSet<Enterprise> Enterprises { get; set; }
     }
 }

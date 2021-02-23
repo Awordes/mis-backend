@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Core.Application.Usecases.Users.Commands.ChangePassword;
 using Core.Application.Usecases.Users.Commands.UpdateUser;
+using Core.Application.Usecases.Users.Queries.GetCurrentUser;
 using Core.Application.Usecases.Users.Queries.GetUser;
 using Core.Application.Usecases.Users.ViewModels;
 
@@ -63,6 +64,17 @@ namespace Presentation.Controllers
             await Mediator.Send(command);
 
             return NoContent();
+        }
+        
+        /// <summary>
+        /// Получить текущего пользователя
+        /// </summary>
+        [HttpGet("/[controller]/Current")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<UserViewModel>> GetCurrent()
+        {
+            return await Mediator.Send(new GetCurrentUserQuery());
         }
     }
 }

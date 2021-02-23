@@ -10,5 +10,7 @@ namespace Core.Application.Common
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
         DbSet<User> Users { get; set; }
+        
+        DbSet<Enterprise> Enterprises { get; set; }
     }
 }

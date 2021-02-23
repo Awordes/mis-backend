@@ -59,6 +59,8 @@ namespace Infrastructure
             services.AddScoped<MercuryService>();
             services.AddScoped<IMercuryService>(provider => provider.GetService<MercuryService>());
 
+            services.Configure<MercuryOptions>(configuration.GetSection(nameof(MercuryOptions)));
+            
             return services;
         }
     }

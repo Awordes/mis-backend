@@ -13,6 +13,7 @@ namespace Core.Application.Common.Services
         Task<VsdListViewModel> GetVetDocumentList(
             string localTransactionId,
             User user,
+            Enterprise enterprise,
             int count,
             int offset,
             int vetDocumentType,
@@ -20,17 +21,17 @@ namespace Core.Application.Common.Services
         );
 
         Task<object> GetVetDocumentByUuid(
-            string uuid,
-            string enterpriseId,
             string localTransactionId,
-            string initiatorLogin
+            User user,
+            Enterprise enterprise,
+            string uuid
         );
 
-        Task<object> ProcessIncomingConsignment(
-            string uuid,
-            string enterpriseId,
+        Task ProcessIncomingConsignment(
             string localTransactionId,
-            string initiatorLogin
+            User user,
+            Enterprise enterprise,
+            string uuid
         );
     }
 }

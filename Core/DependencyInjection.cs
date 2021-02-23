@@ -15,8 +15,6 @@ namespace Core
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
-            services.Configure<MercuryOptions>(configuration.GetSection(nameof(MercuryOptions)));
-
             return services;
         }
     }
