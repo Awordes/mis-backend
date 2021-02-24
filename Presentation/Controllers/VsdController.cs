@@ -61,7 +61,7 @@ namespace Presentation.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> FinishVsd([FromBody] FinishVetDocumentCommand command)
+        public async Task<IActionResult> ProcessVsd([FromBody] ProcessIncomingVsdCommand command)
         {
             await Mediator.Send(command);
             return NoContent();

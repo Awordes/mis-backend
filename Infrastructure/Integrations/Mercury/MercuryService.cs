@@ -26,7 +26,7 @@ namespace Infrastructure.Integrations.Mercury
 
         public EnumElementListViewModel GetVsdStatusListViewModel()
         {
-            return VetDocumentStatus.CREATED.GetDisplayNames();
+            return VetDocumentStatus.CONFIRMED.GetDisplayNames();
         }
         
         public async Task<VsdListViewModel> GetVetDocumentList(

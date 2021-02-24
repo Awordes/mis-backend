@@ -19,8 +19,7 @@ namespace Core.Application.Usecases.Auth.Commands
         {
             private readonly SignInManager<User> _signInManager;
 
-            public Handler(
-                SignInManager<User> signInManager)
+            public Handler(SignInManager<User> signInManager)
             {
                 _signInManager = signInManager;
             }

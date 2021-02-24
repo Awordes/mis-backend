@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Core.Application.Common.Mapping
 {
-    class AutoMappingProfile : Profile
+    internal class AutoMappingProfile : Profile
     {
         public AutoMappingProfile()
         {

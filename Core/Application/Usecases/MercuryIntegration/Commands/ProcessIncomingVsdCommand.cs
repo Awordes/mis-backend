@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Application.Usecases.MercuryIntegration.Commands
 {
-    public class FinishVetDocumentCommand: IRequest
+    public class ProcessIncomingVsdCommand: IRequest
     {
         /// <summary>
         /// Идентификатор ВСД
@@ -23,7 +23,7 @@ namespace Core.Application.Usecases.MercuryIntegration.Commands
         /// </summary>
         public Guid EnterpriseId { get; set; }
         
-        private class Handler: IRequestHandler<FinishVetDocumentCommand>
+        private class Handler: IRequestHandler<ProcessIncomingVsdCommand>
         {
             private readonly IMercuryService _mercuryService;
             private readonly IHttpContextAccessor _httpContextAccessor;
@@ -42,7 +42,7 @@ namespace Core.Application.Usecases.MercuryIntegration.Commands
                 _context = context;
             }
             
-            public async Task<Unit> Handle(FinishVetDocumentCommand request, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(ProcessIncomingVsdCommand request, CancellationToken cancellationToken)
             {
                 try
                 {
