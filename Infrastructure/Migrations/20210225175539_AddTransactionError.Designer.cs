@@ -3,15 +3,17 @@ using System;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(MisDbContext))]
-    partial class MisDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210225175539_AddTransactionError")]
+    partial class AddTransactionError
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,7 +169,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Core.Domain.Operations.Operation", b =>
+            modelBuilder.Entity("Core.Domain.Mercury.Operation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -179,9 +181,6 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
-
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uuid");
 
@@ -192,7 +191,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Operations");
                 });
 
-            modelBuilder.Entity("Core.Domain.Operations.VsdProcessTransaction", b =>
+            modelBuilder.Entity("Core.Domain.Mercury.VsdProcessTransaction", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -330,7 +329,7 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Core.Domain.Operations.Operation", b =>
+            modelBuilder.Entity("Core.Domain.Mercury.Operation", b =>
                 {
                     b.HasOne("Core.Domain.Auth.User", "User")
                         .WithMany()
@@ -339,9 +338,9 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Core.Domain.Operations.VsdProcessTransaction", b =>
+            modelBuilder.Entity("Core.Domain.Mercury.VsdProcessTransaction", b =>
                 {
-                    b.HasOne("Core.Domain.Operations.Operation", "Operation")
+                    b.HasOne("Core.Domain.Mercury.Operation", "Operation")
                         .WithMany()
                         .HasForeignKey("OperationId");
 
