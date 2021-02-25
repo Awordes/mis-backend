@@ -66,5 +66,17 @@ namespace Presentation.Controllers
             await Mediator.Send(command);
             return NoContent();
         }
+        
+        /// <summary>
+        /// Погасить список ВСД по их идентификаторам
+        /// </summary>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> ProcessVsdList([FromBody] ProcessIncomingVsdListCommand command)
+        {
+            await Mediator.Send(command);
+            return NoContent();
+        }
     }
 }

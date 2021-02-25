@@ -24,6 +24,8 @@ namespace Core.Application.Usecases.Logging.Operations
             {
                 try
                 {
+                    await _context.Database.BeginTransactionAsync(cancellationToken);
+                    
                     var operation = await _context.Operations
                             .FirstOrDefaultAsync(x => x.Id == request.OperationId, cancellationToken)
                         ?? throw new Exception($@"Операция с идентификатором {request.OperationId} не найдена.");
@@ -31,6 +33,8 @@ namespace Core.Application.Usecases.Logging.Operations
                     operation.FinishTime = DateTime.Now;
 
                     await _context.SaveChangesAsync(cancellationToken);
+
+                    await _context.Database.CommitTransactionAsync(cancellationToken);
                     
                     return Unit.Value;
                 }

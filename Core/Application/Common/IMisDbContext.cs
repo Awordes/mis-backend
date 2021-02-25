@@ -3,12 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Domain.Operations;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Core.Application.Common
 {
     public interface IMisDbContext
     {
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+        
+        DatabaseFacade Database { get; }
 
         DbSet<User> Users { get; set; }
         

@@ -26,6 +26,8 @@ namespace Core.Application.Usecases.Logging.VsdProcessTransaction
             {
                 try
                 {
+                    await _context.Database.BeginTransactionAsync(cancellationToken);
+                    
                     var operation = await _context.VsdProcessTransactions
                             .FirstOrDefaultAsync(x => x.Id == request.VsdProcessTransactionId, cancellationToken)
                         ?? throw new Exception(
@@ -36,6 +38,8 @@ namespace Core.Application.Usecases.Logging.VsdProcessTransaction
                     operation.Error = request.Error;
 
                     await _context.SaveChangesAsync(cancellationToken);
+
+                    await _context.Database.CommitTransactionAsync(cancellationToken);
 
                     return Unit.Value;
                 }

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Core.Application.Usecases.MercuryIntegration.ViewModels;
 using Core.Domain.Auth;
@@ -31,7 +32,8 @@ namespace Core.Application.Common.Services
             string localTransactionId,
             User user,
             Enterprise enterprise,
-            string uuid
+            string uuid,
+            Guid operationId
         );
     }
 }

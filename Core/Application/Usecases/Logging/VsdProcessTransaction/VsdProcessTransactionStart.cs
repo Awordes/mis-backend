@@ -26,6 +26,8 @@ namespace Core.Application.Usecases.Logging.VsdProcessTransaction
             {
                 try
                 {
+                    await _context.Database.BeginTransactionAsync(cancellationToken);
+                    
                     var operation = await _context.Operations
                             .FirstOrDefaultAsync(x => x.Id == request.OperationId, cancellationToken)
                         ?? throw new Exception($@"Операция с идентификатором {request.OperationId} не найдена.");
@@ -39,6 +41,8 @@ namespace Core.Application.Usecases.Logging.VsdProcessTransaction
                     await _context.VsdProcessTransactions.AddAsync(vsdTransaction, cancellationToken);
 
                     await _context.SaveChangesAsync(cancellationToken);
+
+                    await _context.Database.CommitTransactionAsync(cancellationToken);
 
                     return vsdTransaction.Id;
                 }

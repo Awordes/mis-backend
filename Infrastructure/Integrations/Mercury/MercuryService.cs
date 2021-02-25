@@ -5,7 +5,9 @@ using MercuryAPI;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Core.Application.Usecases.Logging.VsdProcessTransaction;
 using Core.Application.Usecases.MercuryIntegration.ViewModels;
+using MediatR;
 using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Integrations.Mercury
@@ -13,10 +15,13 @@ namespace Infrastructure.Integrations.Mercury
     public class MercuryService : IMercuryService
     {
         private readonly MercuryOptions _mercuryOptions;
+        private readonly IMediator _mediator;
 
-        public MercuryService(IOptionsMonitor<MercuryOptions> mercuryOptions)
+        public MercuryService(IOptionsMonitor<MercuryOptions> mercuryOptions,
+            IMediator mediator)
         {
             _mercuryOptions = mercuryOptions.CurrentValue;
+            _mediator = mediator;
         }
 
         public EnumElementListViewModel GetVsdTypeListViewModel()
@@ -131,31 +136,37 @@ namespace Infrastructure.Integrations.Mercury
             string localTransactionId,
             Core.Domain.Auth.User user,
             Core.Domain.Auth.Enterprise enterprise,
-            string uuid)
+            string uuid,
+            Guid operationId)
         {
+            var vsdProcessTransactionId = await _mediator.Send(new VsdProcessTransactionStart
+            {
+                OperationId = operationId,
+                VsdId = uuid
+            });
+            
+            string error = null;
+
             try
             {
                 var vetDocument = (GetVetDocumentByUuidResponse) await GetVetDocumentByUuid(
                     localTransactionId, user, enterprise, uuid);
 
                 var vetDocumentItem = (CertifiedConsignment) vetDocument.vetDocument.Item;
-                
+
                 var batch = vetDocumentItem.batch;
 
-                var mapper = new Mapper(new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<Batch, Consignment>();
-                }));
-                
+                var mapper = new Mapper(new MapperConfiguration(cfg => { cfg.CreateMap<Batch, Consignment>(); }));
+
                 var consignment = mapper.Map<Consignment>(batch);
 
                 var tnn = vetDocument.vetDocument.referencedDocument.First(x => x.type == DocumentType.Item1);
-                
+
                 var waybill = new Waybill
                 {
                     typeSpecified = true,
                     type = tnn.type,
-                    issueSeries = tnn.issueSeries,                    
+                    issueSeries = tnn.issueSeries,
                     issueNumber = tnn.issueNumber
                 };
 
@@ -168,12 +179,12 @@ namespace Infrastructure.Integrations.Mercury
                 var requestData = new ProcessIncomingConsignmentRequest
                 {
                     localTransactionId = localTransactionId,
-                    initiator = new User { login = user.MercuryLogin },
+                    initiator = new User {login = user.MercuryLogin},
                     delivery = new Delivery
                     {
                         accompanyingForms = new ConsignmentDocumentList
                         {
-                            vetCertificate = new []
+                            vetCertificate = new[]
                             {
                                 new VetDocument
                                 {
@@ -182,7 +193,7 @@ namespace Infrastructure.Integrations.Mercury
                             },
                             waybill = waybill
                         },
-                        consignment = new []
+                        consignment = new[]
                         {
                             consignment
                         },
@@ -208,7 +219,7 @@ namespace Infrastructure.Integrations.Mercury
                         decision = DeliveryDecision.ACCEPT_ALL
                     }
                 };
-                
+
                 await requestData.SendRequest<ProcessIncomingConsignmentResponse>(
                     user.ApiKey,
                     _mercuryOptions.ServiceId,
@@ -219,8 +230,17 @@ namespace Infrastructure.Integrations.Mercury
             }
             catch (Exception e)
             {
+                error = e.Message;
                 Console.WriteLine(e);
                 throw;
+            }
+            finally
+            {
+                await _mediator.Send(new VsdProcessTransactionFinish
+                {
+                    VsdProcessTransactionId = vsdProcessTransactionId,
+                    Error = error
+                });
             }
         }
     }

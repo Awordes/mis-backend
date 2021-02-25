@@ -27,6 +27,8 @@ namespace Core.Application.Usecases.Logging.Operations
             {
                 try
                 {
+                    await _context.Database.BeginTransactionAsync(cancellationToken);
+                
                     var user = await _context.Users
                             .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken)
                         ?? throw new Exception($@"Пользователь с идентификатором {request.UserId} не найден.");
@@ -36,6 +38,8 @@ namespace Core.Application.Usecases.Logging.Operations
                     await _context.Operations.AddAsync(operation, cancellationToken);
 
                     await _context.SaveChangesAsync(cancellationToken);
+
+                    await _context.Database.CommitTransactionAsync(cancellationToken);
 
                     return operation.Id;
                 }

@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Core.Application.Common;
 using Core.Application.Common.Services;
 using Core.Application.Usecases.Logging.Operations;
-using Core.Application.Usecases.Logging.VsdProcessTransaction;
 using Core.Domain.Auth;
 using Core.Domain.Operations;
 using MediatR;
@@ -14,19 +13,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Application.Usecases.MercuryIntegration.Commands
 {
-    public class ProcessIncomingVsdCommand: IRequest
+    public class ProcessIncomingVsdListCommand: IRequest
     {
         /// <summary>
         /// Идентификатор предприятия
         /// </summary>
-        public Guid EnterpriseId { get; set; }
-        
+        public Guid EnterpriseId { get; init; }
+
         /// <summary>
-        /// Идентификатор ВСД
+        /// Идентификаторы ВСД
         /// </summary>
-        public string Uuid { get; set; }
+        public string[] Uuids { get; init; }
         
-        private class Handler: IRequestHandler<ProcessIncomingVsdCommand>
+        private class Handler: IRequestHandler<ProcessIncomingVsdListCommand>
         {
             private readonly IMercuryService _mercuryService;
             private readonly IHttpContextAccessor _httpContextAccessor;
@@ -50,19 +49,18 @@ namespace Core.Application.Usecases.MercuryIntegration.Commands
                 _mediator = mediator;
             }
             
-            public async Task<Unit> Handle(ProcessIncomingVsdCommand request, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(ProcessIncomingVsdListCommand request, CancellationToken cancellationToken)
             {
                 try
                 {
                     var userName = _httpContextAccessor.HttpContext?.User.Identity?.Name;
 
                     var user = await _userManager.FindByNameAsync(userName)
-                               ?? throw new Exception($@"Пользователь с именем {userName} не найден.");
+                        ?? throw new Exception($@"Пользователь с именем {userName} не найден.");
 
                     var enterprise = await _context.Enterprises.AsNoTracking()
-                                         .FirstOrDefaultAsync(x => x.Id == request.EnterpriseId, cancellationToken)
-                                     ?? throw new Exception(
-                                         $@"Предприятие с идентификатором {request.EnterpriseId} не найден.");
+                            .FirstOrDefaultAsync(x => x.Id == request.EnterpriseId, cancellationToken)
+                        ?? throw new Exception($@"Предприятие с идентификатором {request.EnterpriseId} не найден.");
 
                     try
                     {
@@ -72,13 +70,16 @@ namespace Core.Application.Usecases.MercuryIntegration.Commands
                             Type = OperationType.VsdProcess
                         }, cancellationToken);
 
-                        await _mercuryService.ProcessIncomingConsignment(
-                            "a10003",
-                            user,
-                            enterprise,
-                            request.Uuid,
-                            _operationId
-                        );
+                        foreach (var uuid in request.Uuids)
+                        {
+                            await _mercuryService.ProcessIncomingConsignment(
+                                _operationId.ToString(),
+                                user,
+                                enterprise,
+                                uuid,
+                                _operationId);
+                        }
+
                     }
                     catch (Exception e)
                     {
