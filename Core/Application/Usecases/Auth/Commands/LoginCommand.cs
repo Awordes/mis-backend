@@ -34,7 +34,7 @@ namespace Core.Application.Usecases.Auth.Commands
                         request.RememberMe, false);
 
                     if (!result.Succeeded)
-                        throw new Exception("Неправильный логин и пароль");
+                        throw new Exception("Неправильный логин или пароль");
 
                     return Unit.Value;
                 }
