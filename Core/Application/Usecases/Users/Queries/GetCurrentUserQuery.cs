@@ -30,14 +30,13 @@ namespace Core.Application.Usecases.Users.Queries
             {
                 try
                 {
-                    var userName = _httpContextAccessor.HttpContext?.User.Identity?.Name;
-
-                    var user = await _userManager.FindByNameAsync(userName)
-                        ?? throw new Exception($@"Пользователь с именем {userName} не найден.");
+                    var user = await _userManager
+                            .FindByNameAsync(_httpContextAccessor.HttpContext?.User.Identity?.Name)
+                        ?? throw new Exception($@"Пользователь с именем не найден.");
                     
                     return await _mediator.Send(new GetUserQuery
                     {
-                        UserName = userName
+                        UserName = user.UserName
                     }, cancellationToken);
                 }
                 catch (Exception e)

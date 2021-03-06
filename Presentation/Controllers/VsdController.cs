@@ -8,7 +8,7 @@ using Core.Application.Usecases.MercuryIntegration.ViewModels;
 
 namespace Presentation.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "admin, client")]
     public class VsdController: BaseController
     {
         /// <summary>

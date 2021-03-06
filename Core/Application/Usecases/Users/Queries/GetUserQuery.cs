@@ -7,6 +7,7 @@ using Core.Application.Usecases.Users.ViewModels;
 using Core.Domain.Auth;
 using IdentityServer4.Extensions;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core.Application.Usecases.Users.Queries
@@ -20,14 +21,14 @@ namespace Core.Application.Usecases.Users.Queries
         private class Handler: IRequestHandler<GetUserQuery, UserViewModel>
         {
             private readonly IMapper _mapper;
-            private readonly IMisDbContext _context;
+            private readonly UserManager<User> _userManager;
 
             public Handler(
                 IMapper mapper,
-                IMisDbContext context)
+                UserManager<User> userManager)
             {
                 _mapper = mapper;
-                _context = context;
+                _userManager = userManager;
             }
             
             public async Task<UserViewModel> Handle(GetUserQuery request, CancellationToken cancellationToken)
@@ -37,19 +38,23 @@ namespace Core.Application.Usecases.Users.Queries
                     var user = new User();
 
                     if (request.Id.HasValue)
-                        user = await _context.Users.AsNoTracking()
+                        user = await _userManager.Users.AsNoTracking()
                                 .Include(x => x.Enterprises)
                                 .FirstOrDefaultAsync(x => x.Id == request.Id.Value, cancellationToken)
                             ?? throw new Exception($@"Пользователь с идентификатором {request.Id.Value} не найден.");
 
                     else if (!request.UserName.IsNullOrEmpty())
-                        user = await _context.Users.AsNoTracking()
+                        user = await _userManager.Users.AsNoTracking()
                                 .Include(x => x.Enterprises)
                                 .FirstOrDefaultAsync(x => 
                                     x.NormalizedUserName.Equals(request.UserName.ToUpper()), cancellationToken)
                             ?? throw new Exception($@"Пользователь с именем {request.UserName} не найден.");
+                    
+                    var vm = _mapper.Map<UserViewModel>(user);
 
-                    return _mapper.Map<UserViewModel>(user);
+                    vm.Roles = await _userManager.GetRolesAsync(user);
+
+                    return vm;
                 }
                 catch (Exception e)
                 {

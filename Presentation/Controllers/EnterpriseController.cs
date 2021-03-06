@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "admin, client")]
     public class EnterpriseController: BaseController
     {
         /// <summary>

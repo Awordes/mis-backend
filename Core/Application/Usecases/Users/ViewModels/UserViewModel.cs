@@ -79,5 +79,7 @@ namespace Core.Application.Usecases.Users.ViewModels
         public bool Deleted { get; set; }
 
         public ICollection<EnterpriseViewModel> Enterprises { get; set; }
+
+        public ICollection<string> Roles { get; set; }
     }
 }

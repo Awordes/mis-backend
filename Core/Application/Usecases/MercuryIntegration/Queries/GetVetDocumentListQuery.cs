@@ -69,17 +69,15 @@ namespace Core.Application.Usecases.MercuryIntegration.Queries
 
                     var enterprise = await _context.Enterprises.AsNoTracking()
                             .FirstOrDefaultAsync(x => x.Id == request.EnterpriseId, cancellationToken)
-                        ?? throw new Exception($@"Предприятие с идентификатором {request.EnterpriseId} не найден.");
+                        ?? throw new Exception($@"Предприятие с идентификатором {request.EnterpriseId} не найдено.");
                     
-                    var count = request.PageSize;
-
                     var offset = request.PageSize * (request.Page - 1);
 
                     var vm =  await _mercuryService.GetVetDocumentList(
                         "a10003",
                         user,
                         enterprise,
-                        count,
+                        request.PageSize,
                         offset,
                         request.Type,
                         request.Status
