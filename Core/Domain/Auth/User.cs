@@ -65,5 +65,10 @@ namespace Core.Domain.Auth
         /// Список предприятий пользователя
         /// </summary>
         public ICollection<Enterprise> Enterprises { get; set; }
+
+        /// <summary>
+        /// Дата, до которой активен пользователь
+        /// </summary>
+        public DateTime ExpirationDate { get; set; }
     }
 }

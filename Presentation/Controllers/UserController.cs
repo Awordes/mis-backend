@@ -93,13 +93,13 @@ namespace Presentation.Controllers
         }
         
         /// <summary>
-        /// Редактировать роли пользователя
+        /// Получить постраничный список пользователей
         /// </summary>
         [Authorize(Roles = "admin")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult<PagedResult<UserViewModel>>> GetPagedList([FromQuery] GetUserListQuery query)
+        public async Task<ActionResult<PagedResult<UserViewModel>>> GetList([FromQuery] GetUserListQuery query)
         {         
             return await Mediator.Send(query);
         }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Core.Domain.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Application.Usecases.Auth.Commands
 {
@@ -28,6 +29,13 @@ namespace Core.Application.Usecases.Auth.Commands
             {
                 try
                 {
+                    var user = await _signInManager.UserManager.Users.AsNoTracking().FirstOrDefaultAsync(x =>
+                        x.NormalizedUserName.Equals(request.Login.ToUpper()), cancellationToken)
+                        ?? throw new Exception("Неправильный логин или пароль");
+
+                    if (DateTime.Now > user.ExpirationDate)
+                        throw new Exception("Пользователь заблокирован");
+                    
                     var result = await _signInManager
                         .PasswordSignInAsync(request.Login,
                         request.Password,
