@@ -85,7 +85,19 @@ namespace Presentation.Controllers
         [ProducesDefaultResponseType]
         public async Task<ActionResult<UserRolesViewModel>> Roles(Guid id)
         {         
-            return await Mediator.Send(new GetUserRolesQuery{UserId = id});
+            return await Mediator.Send(new GetUserRolesQuery {UserId = id});
+        }
+        
+        /// <summary>
+        /// Получить список предприятий пользователя
+        /// </summary>
+        [Authorize(Roles = "admin")]
+        [HttpGet("/[controller]/{id:guid}/[action]")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<UserEnterprisesViewModel>> Enterprises(Guid id)
+        {         
+            return await Mediator.Send(new GetUserEnterprisesQuery {UserId = id});
         }
         
         /// <summary>
