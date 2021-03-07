@@ -78,8 +78,19 @@ namespace Core.Application.Usecases.Users.ViewModels
         /// </summary>
         public bool Deleted { get; set; }
 
+        /// <summary>
+        /// Список предприятий пользователя
+        /// </summary>
         public ICollection<EnterpriseViewModel> Enterprises { get; set; }
 
+        /// <summary>
+        /// Список ролей пользователя
+        /// </summary>
         public ICollection<string> Roles { get; set; }
+        
+        /// <summary>
+        /// Дата, до которой активен пользователь
+        /// </summary>
+        public DateTime ExpirationDate { get; set; }
     }
 }

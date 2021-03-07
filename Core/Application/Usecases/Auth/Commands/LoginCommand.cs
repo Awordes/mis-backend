@@ -32,8 +32,8 @@ namespace Core.Application.Usecases.Auth.Commands
                     var user = await _signInManager.UserManager.Users.AsNoTracking().FirstOrDefaultAsync(x =>
                         x.NormalizedUserName.Equals(request.Login.ToUpper()), cancellationToken)
                         ?? throw new Exception("Неправильный логин или пароль");
-
-                    if (DateTime.Now > user.ExpirationDate)
+                    
+                    if (DateTime.Now.CompareTo(user.ExpirationDate) > 0)
                         throw new Exception("Пользователь заблокирован");
                     
                     var result = await _signInManager

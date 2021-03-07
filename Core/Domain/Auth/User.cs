@@ -52,11 +52,6 @@ namespace Core.Domain.Auth
         public string IssuerId { get; set; }
 
         /// <summary>
-        /// Разрешение редактирования
-        /// </summary>
-        public bool EditAllow { get; set; }
-
-        /// <summary>
         /// Признак удалённого пользователя
         /// </summary>
         public bool Deleted { get; set; }

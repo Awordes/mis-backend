@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -33,7 +34,7 @@ namespace Core.Application.Usecases.Users.Queries
             {
                 try
                 {
-                    return await _context.Users.AsNoTracking().Include(x => x.Enterprises)
+                    return await _context.Users.AsNoTracking().Include(x => x.Enterprises).OrderBy(x => x.UserName)
                         .GetPagedAsync<User, UserViewModel>(request.Page, request.PageSize, _mapper, cancellationToken);
                 }
                 catch (Exception e)
