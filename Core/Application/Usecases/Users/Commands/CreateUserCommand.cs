@@ -77,6 +77,11 @@ namespace Core.Application.Usecases.Users.Commands
         /// </summary>
         public bool EditAllow { get; set; }
 
+        /// <summary>
+        /// Дата, до которой активен пользователь
+        /// </summary>
+        public DateTime ExpirationDate { get; set; }
+
         private class Handler : IRequestHandler<CreateUserCommand>
         {
             private readonly IMapper _mapper;
