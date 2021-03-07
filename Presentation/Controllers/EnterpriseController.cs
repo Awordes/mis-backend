@@ -34,5 +34,17 @@ namespace Presentation.Controllers
             await Mediator.Send(command);
             return NoContent();
         }
+
+        /// <summary>
+        /// Удалить предприятие
+        /// </summary>
+        [HttpDelete("/[controller]/{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            await Mediator.Send(new DeleteEnterpriseCommand { EnterpriseId = id });
+            return NoContent();
+        }
     }
 }
