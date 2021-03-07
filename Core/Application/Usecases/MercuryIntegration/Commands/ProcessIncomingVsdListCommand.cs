@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Application.Common;
 using Core.Application.Common.Services;
-using Core.Application.Usecases.Logging.Operations;
+using Core.Application.Usecases.Logging.Commands.Operations;
 using Core.Domain.Auth;
 using Core.Domain.Operations;
 using MediatR;

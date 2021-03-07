@@ -5,7 +5,7 @@ using Core.Application.Common;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Application.Usecases.Logging.VsdProcessTransaction
+namespace Core.Application.Usecases.Logging.Commands.VsdProcessTransaction
 {
     public class VsdProcessTransactionFinish: IRequest
     {

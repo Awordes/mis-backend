@@ -6,7 +6,7 @@ using Core.Domain.Operations;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Application.Usecases.Logging.Operations
+namespace Core.Application.Usecases.Logging.Commands.Operations
 {
     public class OperationStart: IRequest<Guid>
     {

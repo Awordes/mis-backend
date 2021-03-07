@@ -5,7 +5,7 @@ using Core.Application.Common;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Application.Usecases.Logging.Operations
+namespace Core.Application.Usecases.Logging.Commands.Operations
 {
     public class OperationFinish: IRequest
     {
