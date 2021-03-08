@@ -11,7 +11,7 @@ namespace Core.Domain.Operations
 
         public DateTime StartTime { get; init; } = DateTime.Now;
 
-        public DateTime FinishTime { get; set; }
+        public DateTime? FinishTime { get; set; }
 
         public OperationType Type { get; set; }
     }
