@@ -81,8 +81,7 @@ namespace Presentation
             app.UseCors(builder =>
                 builder.WithOrigins(
                         "http://localhost:8080",
-                        "http://192.168.0.150:8080",
-                        "http://192.168.1.250:8080")
+                        "http://my.server:8080")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials());
