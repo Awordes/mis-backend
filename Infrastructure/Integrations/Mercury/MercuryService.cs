@@ -160,7 +160,9 @@ namespace Infrastructure.Integrations.Mercury
 
                 var consignment = mapper.Map<Consignment>(batch);
 
-                var tnn = vetDocument.vetDocument.referencedDocument.First(x => x.type == DocumentType.Item1);
+                var tnn = vetDocument.vetDocument.referencedDocument.FirstOrDefault(x => 
+                        x.type == DocumentType.Item1 || x.type == DocumentType.Item5)
+                    ?? throw new Exception("Не найдены транспортные накладные ВСД");
 
                 var waybill = new Waybill
                 {
@@ -232,7 +234,6 @@ namespace Infrastructure.Integrations.Mercury
             {
                 error = e.Message;
                 Console.WriteLine(e);
-                throw;
             }
             finally
             {
