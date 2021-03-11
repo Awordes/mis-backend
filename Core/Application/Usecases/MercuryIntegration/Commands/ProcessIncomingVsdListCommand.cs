@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Application.Common;
@@ -69,22 +70,33 @@ namespace Core.Application.Usecases.MercuryIntegration.Commands
                             UserId = user.Id,
                             Type = OperationType.VsdProcess
                         }, cancellationToken);
+                        
+                        var tasks = new List<Task>();
 
                         foreach (var uuid in request.Uuids)
                         {
-                            await _mercuryService.ProcessIncomingConsignment(
+                            tasks.Add(_mercuryService.ProcessIncomingConsignment(
                                 _operationId.ToString(),
                                 user,
                                 enterprise,
                                 uuid,
-                                _operationId);
-                        }
+                                _operationId));
+                            
+                            if (tasks.Count % 5 == 0)
+                                Thread.Sleep(2000);
 
+                            if (tasks.Count > 99)
+                            {
+                                Task.WaitAll(tasks.ToArray(), cancellationToken);
+                                tasks = new List<Task>();
+                            }
+                        }
+                        
+                        Task.WaitAll(tasks.ToArray(), cancellationToken);
                     }
                     catch (Exception e)
                     {
                         Console.WriteLine(e);
-                        throw;
                     }
                     finally
                     {

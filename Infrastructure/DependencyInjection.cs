@@ -18,7 +18,7 @@ namespace Infrastructure
             IConfiguration configuration)
         {
             services.AddDbContext<MisDbContext>(builder =>
-               builder.UseNpgsql(configuration.GetConnectionString(ConnectionStrings.PostgreSQLConnectionString),
+               builder.UseNpgsql(configuration.GetConnectionString(ConnectionStrings.PostgreSqlConnectionString),
                    b =>
                    {
                        b.MigrationsAssembly("Infrastructure");

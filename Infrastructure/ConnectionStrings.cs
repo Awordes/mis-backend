@@ -2,6 +2,6 @@
 {
     public class ConnectionStrings
     {
-        public const string PostgreSQLConnectionString = "PostgreSQL";
+        public const string PostgreSqlConnectionString = "PostgreSQL";
     }
 }
