@@ -34,7 +34,7 @@ namespace Core.Application.Usecases.Auth.Commands
                         ?? throw new Exception("Неправильный логин или пароль");
                     
                     if (DateTime.Now.CompareTo(user.ExpirationDate) > 0)
-                        throw new Exception("Пользователь заблокирован");
+                        throw new Exception("Истёк период подписки.");
                     
                     var result = await _signInManager
                         .PasswordSignInAsync(request.Login,
