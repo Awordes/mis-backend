@@ -82,10 +82,7 @@ namespace Core.Application.Usecases.MercuryIntegration.Commands
                                 uuid,
                                 _operationId));
                             
-                            if (tasks.Count % 5 == 0)
-                                Thread.Sleep(2000);
-
-                            if (tasks.Count > 99)
+                            if (tasks.Count == 4)
                             {
                                 Task.WaitAll(tasks.ToArray(), cancellationToken);
                                 tasks = new List<Task>();
