@@ -53,6 +53,19 @@ namespace Presentation.Controllers
         }
         
         /// <summary>
+        /// Удалить пользователя
+        /// </summary>
+        [Authorize(Roles = "admin")]
+        [HttpDelete("/[controller]/{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            await Mediator.Send(new DeleteUserCommand { UserId = id });
+            return NoContent();
+        }
+        
+        /// <summary>
         /// Получить текущего пользователя
         /// </summary>
         [Authorize(Roles = "admin, client")]
