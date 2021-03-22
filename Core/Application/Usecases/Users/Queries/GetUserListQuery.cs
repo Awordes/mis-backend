@@ -15,9 +15,35 @@ namespace Core.Application.Usecases.Users.Queries
 {
     public class GetUserListQuery: IRequest<PagedResult<UserViewModel>>
     {
+        /// <summary>
+        /// Количество страниц
+        /// </summary>
         public int Page { get; set; }
 
+        /// <summary>
+        /// Количество элементов на странице
+        /// </summary>
         public int PageSize { get; set; }
+
+        /// <summary>
+        /// Логин
+        /// </summary>
+        public string Login { get; set; }
+
+        /// <summary>
+        /// ИНН
+        /// </summary>
+        public string Inn { get; set; }
+
+        /// <summary>
+        /// Дата окончания подписки с
+        /// </summary>
+        public DateTime? ExpirationDateStart { get; set; }
+
+        /// <summary>
+        /// Дата окончания подписки по
+        /// </summary>
+        public DateTime? ExpirationDateEnd { get; set; }
         
         private class Handler: IRequestHandler<GetUserListQuery, PagedResult<UserViewModel>>
         {
@@ -30,12 +56,30 @@ namespace Core.Application.Usecases.Users.Queries
                 _mapper = mapper;
             }
             
-            public async Task<PagedResult<UserViewModel>> Handle(GetUserListQuery request, CancellationToken cancellationToken)
+            public async Task<PagedResult<UserViewModel>> Handle
+                (GetUserListQuery request, CancellationToken cancellationToken)
             {
                 try
                 {
-                    return await _context.Users.AsNoTracking().Include(x => x.Enterprises).OrderBy(x => x.UserName)
-                        .GetPagedAsync<User, UserViewModel>(request.Page, request.PageSize, _mapper, cancellationToken);
+                    IQueryable<User> query = _context.Users
+                        .AsNoTracking()
+                        .Include(x => x.Enterprises);
+
+                    if (request.Login is not null)
+                        query = query.Where(x => x.UserName.ToLower().Contains(request.Login.ToLower()));
+
+                    if (request.Inn is not null)
+                        query = query.Where(x => x.Inn.ToLower().Contains(request.Inn.ToLower()));
+
+                    if (request.ExpirationDateStart is not null)
+                        query = query.Where(x => x.ExpirationDate >= request.ExpirationDateStart);
+                    
+                    if (request.ExpirationDateEnd is not null)
+                        query = query.Where(x => x.ExpirationDate <= request.ExpirationDateEnd);
+                    
+                    return await query.OrderBy(x => x.UserName)
+                        .GetPagedAsync<User, UserViewModel>
+                            (request.Page, request.PageSize, _mapper, cancellationToken);
                 }
                 catch (Exception e)
                 {
