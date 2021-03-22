@@ -97,5 +97,10 @@ namespace Core.Application.Usecases.Users.ViewModels
         /// Небезопасная копия пароля
         /// </summary>
         public string PasswordText { get; set; }
+
+        /// <summary>
+        /// Номер телефона
+        /// </summary>
+        public string PhoneNumber { get; set; }
     }
 }
