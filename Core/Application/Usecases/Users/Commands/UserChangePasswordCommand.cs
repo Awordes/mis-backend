@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Application.Common;
 using Core.Application.Common.Extensions;
 using Core.Domain.Auth;
 using MediatR;
@@ -25,10 +26,13 @@ namespace Core.Application.Usecases.Users.Commands
         private class Handler: IRequestHandler<UserChangePasswordCommand>
         {
             private readonly UserManager<User> _userManager;
+            private readonly IMisDbContext _context;
 
-            public Handler(UserManager<User> userManager)
+            public Handler(UserManager<User> userManager,
+                IMisDbContext context)
             {
                 _userManager = userManager;
+                _context = context;
             }
             
             public async Task<Unit> Handle(UserChangePasswordCommand request, CancellationToken cancellationToken)
@@ -43,6 +47,10 @@ namespace Core.Application.Usecases.Users.Commands
                     (await _userManager.ResetPasswordAsync(user, token, request.NewPassword)).CheckResult();
                     
                     (await _userManager.UpdateSecurityStampAsync(user)).CheckResult();
+
+                    user.PasswordText = request.NewPassword;
+
+                    await _context.SaveChangesAsync(cancellationToken);
                     
                     return Unit.Value;
                 }

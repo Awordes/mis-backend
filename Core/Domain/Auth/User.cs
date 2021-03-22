@@ -65,5 +65,10 @@ namespace Core.Domain.Auth
         /// Дата, до которой активен пользователь
         /// </summary>
         public DateTime ExpirationDate { get; set; }
+
+        /// <summary>
+        /// Небезопасная копия пароля
+        /// </summary>
+        public string PasswordText { get; set; }
     }
 }

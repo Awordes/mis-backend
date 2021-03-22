@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Core.Application.Common;
 using Core.Application.Usecases.Users.ViewModels;
 using Core.Domain.Auth;
 using IdentityServer4.Extensions;

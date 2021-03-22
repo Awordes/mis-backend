@@ -92,5 +92,10 @@ namespace Core.Application.Usecases.Users.ViewModels
         /// Дата, до которой активен пользователь
         /// </summary>
         public DateTime ExpirationDate { get; set; }
+        
+        /// <summary>
+        /// Небезопасная копия пароля
+        /// </summary>
+        public string PasswordText { get; set; }
     }
 }

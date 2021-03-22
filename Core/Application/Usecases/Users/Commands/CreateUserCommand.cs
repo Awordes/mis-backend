@@ -82,6 +82,17 @@ namespace Core.Application.Usecases.Users.Commands
         /// </summary>
         public DateTime ExpirationDate { get; set; }
 
+        /// <summary>
+        /// Номер телефона
+        /// </summary>
+        public string PhoneNumber { get; set; }
+
+        private void Mapping(Profile profile)
+        {
+            profile.CreateMap<CreateUserCommand, User>()
+                .ForMember(d => d.PasswordText, opt => opt.MapFrom(e => e.Password));
+        }
+
         private class Handler : IRequestHandler<CreateUserCommand>
         {
             private readonly IMapper _mapper;
@@ -100,7 +111,7 @@ namespace Core.Application.Usecases.Users.Commands
                 try
                 {
                     var user = _mapper.Map<User>(request);
-
+                    
                     (await _userManager.CreateAsync(user, request.Password)).CheckResult();
 
                     return Unit.Value;

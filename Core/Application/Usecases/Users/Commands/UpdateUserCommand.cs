@@ -84,6 +84,11 @@ namespace Core.Application.Usecases.Users.Commands
         /// </summary>
         public DateTime ExpirationDate { get; set; }
         
+        /// <summary>
+        /// Номер телефона
+        /// </summary>
+        public string PhoneNumber { get; set; }
+        
         private class Handler: IRequestHandler<UpdateUserCommand>
         {
             private readonly IMapper _mapper;
