@@ -44,6 +44,10 @@ namespace Core.Application.Usecases.Users.Queries
         /// Дата окончания подписки по
         /// </summary>
         public DateTime? ExpirationDateEnd { get; set; }
+
+        public string SortField { get; set; }
+
+        public string SortType { get; set; }
         
         private class Handler: IRequestHandler<GetUserListQuery, PagedResult<UserViewModel>>
         {
@@ -76,10 +80,19 @@ namespace Core.Application.Usecases.Users.Queries
                     
                     if (request.ExpirationDateEnd is not null)
                         query = query.Where(x => x.ExpirationDate <= request.ExpirationDateEnd);
-                    
-                    return await query.OrderBy(x => x.UserName)
-                        .GetPagedAsync<User, UserViewModel>
-                            (request.Page, request.PageSize, _mapper, cancellationToken);
+
+                    request.SortField ??= "userName";
+                    request.SortField = request.SortField.First().ToString().ToUpper() + request.SortField[1..];
+
+                    query = request.SortType switch
+                    {
+                        "asc" => query.OrderBy(x => EF.Property<User>(x, request.SortField)),
+                        "desc" => query.OrderByDescending(x => EF.Property<User>(x, request.SortField)),
+                        _ => query.OrderBy(x => EF.Property<User>(x, request.SortField))
+                    };
+
+                    return await query.GetPagedAsync<User, UserViewModel>
+                        (request.Page, request.PageSize, _mapper, cancellationToken);
                 }
                 catch (Exception e)
                 {
