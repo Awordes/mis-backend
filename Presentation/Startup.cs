@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using Presentation.Configurations;
 using System;
 using System.IO;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace Presentation
 {
@@ -64,6 +65,11 @@ namespace Presentation
 
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -81,7 +87,7 @@ namespace Presentation
             app.UseCors(builder =>
                 builder.WithOrigins(
                         "http://localhost:8080",
-                        "http://my.server:8080")
+                        "http://backend:80")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials());
