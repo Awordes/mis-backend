@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Presentation.Controllers
+namespace MercuryIntegrationService.Controllers
 {
     [Authorize(Roles = "admin")]
     public class RoleController: BaseController

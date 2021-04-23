@@ -6,12 +6,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Presentation.Configurations;
+using MercuryIntegrationService.Configurations;
 using System;
 using System.IO;
 using Microsoft.AspNetCore.HttpOverrides;
 
-namespace Presentation
+namespace MercuryIntegrationService
 {
     public class Startup
     {
@@ -50,7 +50,7 @@ namespace Presentation
                     Description = "Сервис интеграции с системой \"Меркурий\""
                 });
 
-                config.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Presentation.xml"));
+                config.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "MercuryIntegrationService.xml"));
                 config.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Core.xml"));
             });
 

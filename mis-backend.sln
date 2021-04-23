@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Presentation", "Presentation\Presentation.csproj", "{F487E402-8025-4E84-8FA8-BFEAF2358D67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MercuryIntegrationService", "MercuryIntegrationService\MercuryIntegrationService.csproj", "{F487E402-8025-4E84-8FA8-BFEAF2358D67}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{7E4C42B2-7A07-435C-90FA-7E903C719D38}"
 EndProject

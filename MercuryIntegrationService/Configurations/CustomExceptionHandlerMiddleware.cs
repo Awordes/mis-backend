@@ -5,7 +5,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Presentation.Configurations
+namespace MercuryIntegrationService.Configurations
 {
     public class CustomExceptionHandlerMiddleware
     {
