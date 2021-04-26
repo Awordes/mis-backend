@@ -3,6 +3,7 @@ using Core.Domain.Auth;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Core.Domain;
 using Core.Domain.Operations;
 
 namespace Infrastructure
@@ -23,5 +24,7 @@ namespace Infrastructure
         public DbSet<Operation> Operations { get; set; }
         
         public DbSet<VsdProcessTransaction> VsdProcessTransactions { get; set; }
+
+        public DbSet<Template> Templates { get; set; }
     }
 }

@@ -73,14 +73,9 @@ namespace Core.Application.Usecases.Users.Commands
         public string EnterpriseId { get; set; }
 
         /// <summary>
-        /// Разрешение редактирования
-        /// </summary>
-        public bool EditAllow { get; set; }
-
-        /// <summary>
         /// Дата, до которой активен пользователь
         /// </summary>
-        public DateTime ExpirationDate { get; set; }
+        public DateTime? ExpirationDate { get; set; }
 
         /// <summary>
         /// Номер телефона
