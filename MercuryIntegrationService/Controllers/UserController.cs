@@ -68,7 +68,6 @@ namespace MercuryIntegrationService.Controllers
         /// <summary>
         /// Получить текущего пользователя
         /// </summary>
-        [Authorize(Roles = "admin, client")]
         [HttpGet("/[controller]/[action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
@@ -151,6 +150,19 @@ namespace MercuryIntegrationService.Controllers
         public async Task<IActionResult> AttachVetisStatement([FromForm] AttachVetisStatementCommand command)
         {
             await Mediator.Send(command);
+            return NoContent();
+        }
+        
+        /// <summary>
+        /// Создать пользователя из заявителя
+        /// </summary>
+        [Authorize(Roles = "admin")]
+        [HttpPost("/[controller]/[action]/{applicantId:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> CreateFromApplicant(Guid applicantId)
+        {
+            await Mediator.Send(new CreateUserFromApplicantCommand { ApplicantId = applicantId });
             return NoContent();
         }
     }

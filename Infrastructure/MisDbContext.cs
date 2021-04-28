@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using Core.Domain;
+using Core.Domain.Applicants;
 using Core.Domain.Operations;
 
 namespace Infrastructure
@@ -26,5 +27,7 @@ namespace Infrastructure
         public DbSet<VsdProcessTransaction> VsdProcessTransactions { get; set; }
 
         public DbSet<Template> Templates { get; set; }
+        
+        public DbSet<Applicant> Applicants { get; set; }
     }
 }

@@ -82,7 +82,7 @@ namespace Core.Application.Usecases.Users.Commands
         /// </summary>
         public string PhoneNumber { get; set; }
 
-        private void Mapping(Profile profile)
+        public void Mapping(Profile profile)
         {
             profile.CreateMap<CreateUserCommand, User>()
                 .ForMember(d => d.PasswordText, opt => opt.MapFrom(e => e.Password));
