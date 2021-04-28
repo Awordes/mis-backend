@@ -140,5 +140,18 @@ namespace MercuryIntegrationService.Controllers
             await Mediator.Send(command);
             return NoContent();
         }
+        
+        /// <summary>
+        /// Прикрепить заявление Ветис.API
+        /// </summary>
+        [Authorize]
+        [HttpPost("/[controller]/[action]")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> AttachVetisStatement([FromForm] AttachVetisStatementCommand command)
+        {
+            await Mediator.Send(command);
+            return NoContent();
+        }
     }
 }
