@@ -15,7 +15,7 @@ namespace Core.Application.Usecases.Applicants.Commands
         /// <summary>
         /// Имя
         /// </summary>
-        public string TitleA { get; set; }
+        public string Title { get; set; }
 
         /// <summary>
         /// Номер телефона
