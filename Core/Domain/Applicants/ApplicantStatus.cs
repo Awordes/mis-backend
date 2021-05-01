@@ -1,11 +1,11 @@
-﻿namespace Core.Domain
+﻿namespace Core.Domain.Applicants
 {
     public enum ApplicantStatus
     {
         /// <summary>
         /// Добавлен
         /// </summary>
-        Created,
+        New,
         
         /// <summary>
         /// Подверждён

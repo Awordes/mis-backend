@@ -49,7 +49,7 @@ namespace Core.Application.Usecases.Applicants.Commands
                 {
                     var applicant = _mapper.Map<Applicant>(request);
 
-                    applicant.Status = ApplicantStatus.Created;
+                    applicant.Status = ApplicantStatus.New;
 
                     await _context.Applicants.AddAsync(applicant, cancellationToken);
 

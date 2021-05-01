@@ -1,5 +1,8 @@
 ﻿using System.Threading.Tasks;
+using Core.Application.Common.Pagination;
 using Core.Application.Usecases.Applicants.Commands;
+using Core.Application.Usecases.Applicants.Queries;
+using Core.Application.Usecases.Applicants.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +20,17 @@ namespace MercuryIntegrationService.Controllers
         {
             await Mediator.Send(command);
             return NoContent();
+        }
+        
+        /// <summary>
+        /// Получить список заявителей
+        /// </summary>
+        [HttpGet("/[controller]/List")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<PagedResult<ApplicantViewModel>>> GetList([FromQuery] GetApplicantListQuery query)
+        {
+            return await Mediator.Send(query);;
         }
     }
 }

@@ -5,6 +5,7 @@ using Core.Application.Common;
 using Core.Application.Common.Options;
 using Core.Application.Common.Services;
 using Core.Domain;
+using Core.Domain.Applicants;
 using Core.Domain.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
