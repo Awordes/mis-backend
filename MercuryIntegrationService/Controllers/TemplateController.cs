@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Core.Application.Usecases.Templates.Commands;
 using Core.Application.Usecases.Templates.Queries;
 using Core.Application.Usecases.Templates.ViewModels;
@@ -44,6 +45,20 @@ namespace MercuryIntegrationService.Controllers
         {
             var fileViewModel = await Mediator.Send(query);
             return File(fileViewModel.Content, fileViewModel.ContentType, fileViewModel.FileName);
+        }
+        
+        /// <summary>
+        /// Обновить шаблон
+        /// </summary>
+        [Authorize(Roles = "admin")]
+        [HttpPut("/[controller]/{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Update(Guid id, [FromForm] UpdateTemplateCommand command)
+        {
+            command.Id = id;
+            await Mediator.Send(command);
+            return NoContent();
         }
     }
 }
