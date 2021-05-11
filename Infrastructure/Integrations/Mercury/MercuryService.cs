@@ -201,6 +201,7 @@ namespace Infrastructure.Integrations.Mercury
                         },
                         consignor = vetDocumentItem.consignor,
                         consignee = vetDocumentItem.consignee,
+                        broker = vetDocumentItem.broker,
                         transportInfo = vetDocumentItem.transportInfo,
                         transportStorageType = vetDocumentItem.transportStorageType,
                         transportStorageTypeSpecified = true,

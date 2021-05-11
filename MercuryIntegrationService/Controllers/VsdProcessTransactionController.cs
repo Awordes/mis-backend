@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Presentation.Controllers
+namespace MercuryIntegrationService.Controllers
 {
     public class VsdProcessTransactionController: BaseController
     {

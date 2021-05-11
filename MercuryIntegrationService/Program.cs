@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Presentation
+namespace MercuryIntegrationService
 {
     public static class Program
     {

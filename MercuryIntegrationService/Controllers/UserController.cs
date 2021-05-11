@@ -8,7 +8,7 @@ using Core.Application.Usecases.Users.Commands;
 using Core.Application.Usecases.Users.Queries;
 using Core.Application.Usecases.Users.ViewModels;
 
-namespace Presentation.Controllers
+namespace MercuryIntegrationService.Controllers
 {
     [Authorize]
     public class UserController: BaseController

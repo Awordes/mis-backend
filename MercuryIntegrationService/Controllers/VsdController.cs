@@ -6,7 +6,7 @@ using Core.Application.Usecases.MercuryIntegration.Commands;
 using Core.Application.Usecases.MercuryIntegration.Queries;
 using Core.Application.Usecases.MercuryIntegration.ViewModels;
 
-namespace Presentation.Controllers
+namespace MercuryIntegrationService.Controllers
 {
     [Authorize(Roles = "admin, client")]
     public class VsdController: BaseController

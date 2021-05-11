@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Core.Application.Usecases.Auth.Commands;
 
-namespace Presentation.Controllers
+namespace MercuryIntegrationService.Controllers
 {
     public class AuthController: BaseController
     {
