@@ -38,7 +38,7 @@ namespace MercuryIntegrationService.Controllers
         /// <summary>
         /// Получить файл шаблона
         /// </summary>
-        [HttpGet("/[controller]/Download")]
+        [HttpGet("/[controller]/[action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
         public async Task<IActionResult> Download([FromQuery] GetTemplateFileQuery query)
@@ -59,6 +59,19 @@ namespace MercuryIntegrationService.Controllers
             command.Id = id;
             await Mediator.Send(command);
             return NoContent();
+        }
+        
+        /// <summary>
+        /// Заполнить шаблон данными
+        /// </summary>
+        [HttpPost("/[controller]/[action]/{templateName}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> FillTemplate(string templateName, [FromBody] FillTemplateCommand query)
+        {
+            query.TemplateName = templateName;
+            var fileViewModel = await Mediator.Send(query);
+            return File(fileViewModel.Content, fileViewModel.ContentType, fileViewModel.FileName);
         }
     }
 }

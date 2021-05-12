@@ -61,6 +61,7 @@ namespace Infrastructure
             services.AddScoped<IMercuryService, MercuryService>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IPasswordService, PasswordService>();
+            services.AddScoped<ITemplateService, TemplateService>();
 
             services.Configure<MercuryOptions>(configuration.GetSection(nameof(MercuryOptions)));
             services.Configure<MercuryFileOptions>(configuration.GetSection(nameof(MercuryFileOptions)));
