@@ -24,8 +24,6 @@ namespace Infrastructure.Services
                         case JTokenType.Array:
                             str = property.Values<string>()
                                 .Aggregate("", (current, value) => current + value + "; ");
-                            
-                            
                             doc = doc.SearchAndReplace(key, str, true);
                             break;
                         case JTokenType.None:
