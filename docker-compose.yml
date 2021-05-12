@@ -1,0 +1,59 @@
+version: "3"
+
+services:
+        backend:
+                build: backend/
+                container_name: mis-backend
+                volumes:
+                        - "./backend/publish:/app"
+                ports:
+                        - 5001:80
+                environment:
+                        - TZ=Europe/Moscow
+        frontend:
+                image: nginx:stable-alpine
+                container_name: mis-frontend
+                volumes:
+                        - web-root:/usr/share/nginx/html:Z
+                        - "./nginx.conf:/etc/nginx/conf.d/default.conf:ro"
+                        - certbot-etc:/etc/letsencrypt
+                        - certbot-var:/var/lib/letsencrypt
+                        - dhparam:/etc/ssl/certs
+                ports:
+                        - 80:80
+                        - 443:443
+        sertbot:
+                image: certbot/certbot:latest
+                container_name: sertbot
+                volumes:
+                        - certbot-etc:/etc/letsencrypt
+                        - certbot-var:/var/lib/letsencrypt
+                        - web-root:/var/www/html
+                depends_on:
+                        - frontend
+                command: renew
+        database:
+                image: postgres:alpine
+                container_name: postgres
+                volumes:
+                        - "./postgres:/var/lib/postgresql/data"
+                ports:
+                        - 5432:5432
+                environment:
+                        - POSTGRES_PASSWORD=1tsM1sP@sS
+
+volumes:
+        certbot-etc:
+        certbot-var:
+        web-root:
+                driver: local
+                driver_opts:
+                        type: none
+                        device: /home/srv_admin/docker/volumes/mis/frontend/dist
+                        o: bind
+        dhparam:
+                driver: local
+                driver_opts:
+                        type: none
+                        device: /home/srv_admin/docker/volumes/mis/dhparam/
+                        o: bind
