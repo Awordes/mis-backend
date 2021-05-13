@@ -144,12 +144,16 @@ namespace MercuryIntegrationService.Controllers
         /// Прикрепить заявление Ветис.API
         /// </summary>
         [Authorize]
-        [HttpPost("/[controller]/[action]")]
+        [HttpPost("/[controller]/{id:guid}/[action]")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> AttachVetisStatement([FromForm] AttachVetisStatementCommand command)
+        public async Task<IActionResult> UploadVetisStatement(Guid id, IFormFile file)
         {
-            await Mediator.Send(command);
+            await Mediator.Send(new UploadVetisStatementCommand
+            {
+                UserId = id,
+                FormFile = file
+            });
             return NoContent();
         }
         

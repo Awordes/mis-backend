@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Application.Usecases.Users.Commands
 {
-    public class AttachVetisStatementCommand: IRequest
+    public class UploadVetisStatementCommand: IRequest
     {
         /// <summary>
         /// Идентификатор пользователя
@@ -23,7 +23,7 @@ namespace Core.Application.Usecases.Users.Commands
         /// </summary>
         public IFormFile FormFile { get; set; }
 
-        private class Handler: IRequestHandler<AttachVetisStatementCommand>
+        private class Handler: IRequestHandler<UploadVetisStatementCommand>
         {
             private readonly IMisDbContext _context;
             private readonly IFileService _fileService;
@@ -34,7 +34,7 @@ namespace Core.Application.Usecases.Users.Commands
                 _fileService = fileService;
             }
 
-            public async Task<Unit> Handle(AttachVetisStatementCommand request, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(UploadVetisStatementCommand request, CancellationToken cancellationToken)
             {
                 try
                 {
