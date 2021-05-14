@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Application.Common.Options;
 using Core.Domain.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Core.Application.Usecases.Auth.Commands
 {
@@ -19,10 +21,12 @@ namespace Core.Application.Usecases.Auth.Commands
         private class Handler : IRequestHandler<LoginCommand>
         {
             private readonly SignInManager<User> _signInManager;
+            private readonly RoleOptions _roleOptions;
 
-            public Handler(SignInManager<User> signInManager)
+            public Handler(SignInManager<User> signInManager, IOptionsMonitor<RoleOptions> roleOptions)
             {
                 _signInManager = signInManager;
+                _roleOptions = roleOptions.CurrentValue;
             }
 
             public async Task<Unit> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -33,7 +37,11 @@ namespace Core.Application.Usecases.Auth.Commands
                         x.NormalizedUserName.Equals(request.Login.ToUpper()), cancellationToken)
                         ?? throw new Exception("Неправильный логин или пароль");
                     
-                    if (DateTime.Now.CompareTo(user.ExpirationDate) > 0)
+                    var userRoles = await _signInManager.UserManager.GetRolesAsync(user);
+                    
+                    //Проверяем, является ли пользователь гостем. Если да - то не проверять подписку.
+                    if (!(userRoles.Count == 1 && userRoles[0].Equals(_roleOptions.Guest))
+                        && DateTime.Now.CompareTo(user.ExpirationDate) > 0)
                         throw new Exception("Истёк период подписки.");
                     
                     var result = await _signInManager

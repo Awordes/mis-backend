@@ -68,7 +68,6 @@ namespace MercuryIntegrationService.Controllers
         /// <summary>
         /// Получить текущего пользователя
         /// </summary>
-        [Authorize(Roles = "admin, client")]
         [HttpGet("/[controller]/[action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
@@ -139,6 +138,50 @@ namespace MercuryIntegrationService.Controllers
             command.UserId = id.ToString();            
             await Mediator.Send(command);
             return NoContent();
+        }
+        
+        /// <summary>
+        /// Прикрепить заявление Ветис.API
+        /// </summary>
+        [Authorize]
+        [HttpPost("/[controller]/{id:guid}/[action]")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> UploadVetisStatement(Guid id, IFormFile file)
+        {
+            await Mediator.Send(new UploadVetisStatementCommand
+            {
+                UserId = id,
+                FormFile = file
+            });
+            return NoContent();
+        }
+        
+        /// <summary>
+        /// Создать пользователя из заявителя
+        /// </summary>
+        [Authorize(Roles = "admin")]
+        [HttpPost("/[controller]/[action]/{applicantId:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> CreateFromApplicant(Guid applicantId)
+        {
+            await Mediator.Send(new CreateUserFromApplicantCommand { ApplicantId = applicantId });
+            return NoContent();
+        }
+        
+        /// <summary>
+        /// Получить заявление Ветис.API пользователя
+        /// </summary>
+        [Authorize(Roles = "admin,client")]
+        [HttpPost("/[controller]/{id:guid}/[action]")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> VetisStatement(Guid id)
+        {
+            var result = await Mediator.Send(new GetUserVetisStatementQuery { UserId = id });
+
+            return File(result.Content, result.ContentType, result.FileName);
         }
     }
 }

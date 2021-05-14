@@ -7,6 +7,7 @@ using System.Linq;
 using AutoMapper;
 using Core.Application.Usecases.Logging.Commands.VsdProcessTransaction;
 using Core.Application.Usecases.MercuryIntegration.ViewModels;
+using Infrastructure.Options;
 using MediatR;
 using Microsoft.Extensions.Options;
 

@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Domain;
+using Core.Domain.Applicants;
 using Core.Domain.Operations;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
@@ -20,5 +22,9 @@ namespace Core.Application.Common
         DbSet<Operation> Operations { get; set; }
         
         DbSet<VsdProcessTransaction> VsdProcessTransactions { get; set; }
+        
+        DbSet<Template> Templates { get; set; }
+        
+        DbSet<Applicant> Applicants { get; set; }
     }
 }

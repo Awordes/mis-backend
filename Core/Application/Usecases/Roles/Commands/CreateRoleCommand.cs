@@ -12,6 +12,8 @@ namespace Core.Application.Usecases.Roles.Commands
     public class CreateRoleCommand: IRequest
     {
         public string Name { get; set; }
+
+        public string Title { get; set; }
         
         private class Handler: IRequestHandler<CreateRoleCommand>
         {
@@ -26,7 +28,7 @@ namespace Core.Application.Usecases.Roles.Commands
             {
                 try
                 {
-                    (await _roleManager.CreateAsync(new Role(request.Name))).CheckResult();
+                    (await _roleManager.CreateAsync(new Role(request.Name, request.Title))).CheckResult();
                     
                     return Unit.Value;
                 }

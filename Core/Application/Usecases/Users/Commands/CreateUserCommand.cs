@@ -73,21 +73,16 @@ namespace Core.Application.Usecases.Users.Commands
         public string EnterpriseId { get; set; }
 
         /// <summary>
-        /// Разрешение редактирования
-        /// </summary>
-        public bool EditAllow { get; set; }
-
-        /// <summary>
         /// Дата, до которой активен пользователь
         /// </summary>
-        public DateTime ExpirationDate { get; set; }
+        public DateTime? ExpirationDate { get; set; }
 
         /// <summary>
         /// Номер телефона
         /// </summary>
         public string PhoneNumber { get; set; }
 
-        private void Mapping(Profile profile)
+        public void Mapping(Profile profile)
         {
             profile.CreateMap<CreateUserCommand, User>()
                 .ForMember(d => d.PasswordText, opt => opt.MapFrom(e => e.Password));
