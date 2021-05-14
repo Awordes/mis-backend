@@ -35,9 +35,9 @@ namespace Infrastructure.Services
             return path;
         }
 
-        public Task<byte[]> Load(string path)
+        public async Task<byte[]> Load(string path)
         {
-            throw new NotImplementedException();
+            return await File.ReadAllBytesAsync(path);
         }
     }
 }

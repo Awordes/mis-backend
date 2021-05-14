@@ -169,5 +169,19 @@ namespace MercuryIntegrationService.Controllers
             await Mediator.Send(new CreateUserFromApplicantCommand { ApplicantId = applicantId });
             return NoContent();
         }
+        
+        /// <summary>
+        /// Получить заявление Ветис.API пользователя
+        /// </summary>
+        [Authorize(Roles = "admin,client")]
+        [HttpPost("/[controller]/{id:guid}/[action]")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> VetisStatement(Guid id)
+        {
+            var result = await Mediator.Send(new GetUserVetisStatementQuery { UserId = id });
+
+            return File(result.Content, result.ContentType, result.FileName);
+        }
     }
 }
