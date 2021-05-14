@@ -70,5 +70,10 @@ namespace Core.Domain.Auth
         /// Небезопасная копия пароля
         /// </summary>
         public string PasswordText { get; set; }
+
+        /// <summary>
+        /// Заявление шлюза Ветис.API
+        /// </summary>
+        public MercuryFileInfo VetisStatement { get; set; }
     }
 }

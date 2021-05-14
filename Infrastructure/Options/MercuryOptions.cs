@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Integrations.Mercury
+﻿namespace Infrastructure.Options
 {
     public class MercuryOptions
     {

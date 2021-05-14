@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Reflection;
+using Infrastructure.Options;
+using Infrastructure.Services;
 
 namespace Infrastructure
 {
@@ -22,7 +24,7 @@ namespace Infrastructure
                    b =>
                    {
                        b.MigrationsAssembly("Infrastructure");
-                       b.SetPostgresVersion(12, 0);
+                       b.SetPostgresVersion(12, 6);
                        b.MigrationsHistoryTable(
                            $"__MisEFMigrationsHistory",
                            "mis");
@@ -56,10 +58,13 @@ namespace Infrastructure
                 options.ValidationInterval = TimeSpan.Zero;   
             });
 
-            services.AddScoped<MercuryService>();
-            services.AddScoped<IMercuryService>(provider => provider.GetService<MercuryService>());
+            services.AddScoped<IMercuryService, MercuryService>();
+            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IPasswordService, PasswordService>();
+            services.AddScoped<ITemplateService, TemplateService>();
 
             services.Configure<MercuryOptions>(configuration.GetSection(nameof(MercuryOptions)));
+            services.Configure<MercuryFileOptions>(configuration.GetSection(nameof(MercuryFileOptions)));
             
             return services;
         }
