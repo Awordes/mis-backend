@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Core.Application.Common;
 using Core.Application.Common.Services;
 using Core.Application.Usecases.Logging.Commands.Operations;
+using Core.Application.Usecases.MercuryIntegration.Models;
 using Core.Domain.Auth;
 using Core.Domain.Operations;
 using MediatR;
@@ -24,7 +25,7 @@ namespace Core.Application.Usecases.MercuryIntegration.Commands
         /// <summary>
         /// Идентификаторы ВСД
         /// </summary>
-        public string[] Uuids { get; init; }
+        public ICollection<VsdForProcessModel> Vsds { get; init; }
         
         private class Handler: IRequestHandler<ProcessIncomingVsdListCommand>
         {
@@ -73,13 +74,12 @@ namespace Core.Application.Usecases.MercuryIntegration.Commands
                         
                         var tasks = new List<Task>();
 
-                        foreach (var uuid in request.Uuids)
+                        foreach (var vsd in request.Vsds)
                         {
                             tasks.Add(_mercuryService.ProcessIncomingConsignment(
                                 _operationId.ToString(),
                                 user,
                                 enterprise,
-                                uuid,
                                 vsd.VsdId,
                                 vsd.ProcessDate,
                                 _operationId));
