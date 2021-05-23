@@ -10,6 +10,8 @@ using Core.Application.Usecases.MercuryIntegration.ViewModels;
 using Infrastructure.Options;
 using MediatR;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Infrastructure.Integrations.Mercury
 {
@@ -72,6 +74,10 @@ namespace Infrastructure.Integrations.Mercury
                 foreach (var vetDocument in result.vetDocumentList.vetDocument)
                 {
                     var item = (CertifiedConsignment) vetDocument.Item;
+                    
+                    var tnns = vetDocument.referencedDocument
+                        .Where(x => x.type is DocumentType.Item1 or DocumentType.Item5)
+                        .OrderByDescending(x => x.issueDate).ToList();
 
                     var element = new VsdViewModel
                     {
@@ -80,7 +86,8 @@ namespace Infrastructure.Integrations.Mercury
                         ProductGlobalId = item.batch.productItem.globalID,
                         Volume = item.batch.volume,
                         ProductDate = item.batch.dateOfProduction.firstDate.ToDateTime(),
-                        IssueDate = vetDocument.issueDate
+                        IssueDate = vetDocument.issueDate,
+                        ProcessDate = tnns[0]?.issueDate.AddDays(1)
                     }; 
 
                     vetDocumentList.Add(element);
@@ -138,6 +145,7 @@ namespace Infrastructure.Integrations.Mercury
             Core.Domain.Auth.User user,
             Core.Domain.Auth.Enterprise enterprise,
             string uuid,
+            DateTime? processDate,
             Guid operationId)
         {
             var vsdProcessTransactionId = await _mediator.Send(new VsdProcessTransactionStart
@@ -161,9 +169,14 @@ namespace Infrastructure.Integrations.Mercury
 
                 var consignment = mapper.Map<Consignment>(batch);
 
-                var tnn = vetDocument.vetDocument.referencedDocument.FirstOrDefault(x => 
-                        x.type == DocumentType.Item1 || x.type == DocumentType.Item5)
-                    ?? throw new Exception("Не найдены транспортные накладные ВСД");
+                var tnns = vetDocument.vetDocument.referencedDocument
+                              .Where(x => x.type is DocumentType.Item1 or DocumentType.Item5)
+                              .OrderByDescending(x => x.issueDate).ToList();
+                
+                if (tnns.Count is 0)
+                    throw new Exception("Не найдены транспортные накладные ВСД");
+
+                var tnn = tnns[0];
 
                 var waybill = new Waybill
                 {
@@ -206,7 +219,7 @@ namespace Infrastructure.Integrations.Mercury
                         transportInfo = vetDocumentItem.transportInfo,
                         transportStorageType = vetDocumentItem.transportStorageType,
                         transportStorageTypeSpecified = true,
-                        deliveryDate = vetDocument.vetDocument.lastUpdateDate,
+                        deliveryDate = processDate ?? vetDocument.vetDocument.issueDate,
                         deliveryDateSpecified = true
                     },
                     deliveryFacts = new DeliveryFactList

@@ -12,6 +12,8 @@ namespace Core.Application.Usecases.MercuryIntegration.ViewModels
 
         public DateTime? IssueDate { get; set; }
 
+        public DateTime? ProcessDate { get; set; }
+
         public decimal? Volume { get; set; }
 
         public string ProductGlobalId { get; set; }

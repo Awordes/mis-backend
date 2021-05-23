@@ -80,6 +80,8 @@ namespace Core.Application.Usecases.MercuryIntegration.Commands
                                 user,
                                 enterprise,
                                 uuid,
+                                vsd.VsdId,
+                                vsd.ProcessDate,
                                 _operationId));
                             
                             if (tasks.Count == 4)

@@ -76,6 +76,7 @@ namespace Core.Application.Usecases.MercuryIntegration.Commands
                             user,
                             enterprise,
                             request.Uuid,
+                            null,
                             _operationId
                         );
                     }
