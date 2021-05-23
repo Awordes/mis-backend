@@ -79,8 +79,8 @@ namespace Infrastructure.Integrations.Mercury
                         Name = item.batch.productItem.name,
                         ProductGlobalId = item.batch.productItem.globalID,
                         Volume = item.batch.volume,
-                        ExpirationDate = item.batch.expiryDate.firstDate.ToDateTime(),
-                        ProductDate = item.batch.dateOfProduction.firstDate.ToDateTime()
+                        ProductDate = item.batch.dateOfProduction.firstDate.ToDateTime(),
+                        IssueDate = vetDocument.issueDate
                     }; 
 
                     vetDocumentList.Add(element);
