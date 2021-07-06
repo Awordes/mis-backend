@@ -192,6 +192,21 @@ namespace Infrastructure.Integrations.Mercury
                     waybill.issueDate = tnn.issueDate;
                 }
 
+                var isTransShipSpecified = false;
+                var transShipInfo = new TransportInfo();
+
+                try
+                {
+                    var shipmentRoute = vetDocumentItem.shipmentRoute.MaxBy(x => x.sqnId)[0];
+                    isTransShipSpecified = shipmentRoute.transshipmentSpecified;
+                    if (isTransShipSpecified)
+                        transShipInfo = shipmentRoute.nextTransport;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+                
                 var requestData = new ProcessIncomingConsignmentRequest
                 {
                     localTransactionId = localTransactionId,
@@ -216,9 +231,11 @@ namespace Infrastructure.Integrations.Mercury
                         consignor = vetDocumentItem.consignor,
                         consignee = vetDocumentItem.consignee,
                         broker = vetDocumentItem.broker,
-                        transportInfo = vetDocumentItem.transportInfo,
+                        transportInfo = isTransShipSpecified
+                                        ? transShipInfo
+                                        : vetDocumentItem.transportInfo,
                         transportStorageType = vetDocumentItem.transportStorageType,
-                        transportStorageTypeSpecified = true,
+                        transportStorageTypeSpecified = vetDocumentItem.transportStorageTypeSpecified,
                         deliveryDate = processDate ?? vetDocument.vetDocument.issueDate,
                         deliveryDateSpecified = true
                     },
