@@ -33,6 +33,7 @@ namespace Core.Application.Common.Services
             User user,
             Enterprise enterprise,
             string uuid,
+            DateTime? processDate,
             Guid operationId
         );
     }

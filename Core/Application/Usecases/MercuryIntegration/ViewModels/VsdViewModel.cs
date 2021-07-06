@@ -10,7 +10,9 @@ namespace Core.Application.Usecases.MercuryIntegration.ViewModels
 
         public DateTime? ProductDate { get; set; }
 
-        public DateTime? ExpirationDate { get; set; }
+        public DateTime? IssueDate { get; set; }
+
+        public DateTime? ProcessDate { get; set; }
 
         public decimal? Volume { get; set; }
 
