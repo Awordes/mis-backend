@@ -42,6 +42,16 @@ namespace Core.Application.Usecases.Applicants.ViewModels
         /// </summary>
         public DateTime CreationDate { get; set; }
 
+        /// <summary>
+        /// Логин Меркурия
+        /// </summary>
+        public string MercuryLogin { get; set; }
+
+        /// <summary>
+        /// Пароль Меркурия
+        /// </summary>
+        public string MercuryPassword { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Applicant, ApplicantViewModel>()

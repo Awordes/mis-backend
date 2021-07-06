@@ -38,5 +38,15 @@ namespace Core.Domain.Applicants
         /// Дата создания
         /// </summary>
         public DateTime CreationDate { get; set; } = DateTime.Now;
+
+        /// <summary>
+        /// Логин Меркурия
+        /// </summary>
+        public string MercuryLogin { get; set; }
+
+        /// <summary>
+        /// Пароль Меркурия
+        /// </summary>
+        public string MercuryPassword { get; set; }
     }
 }
