@@ -50,16 +50,18 @@ namespace Core.Application.Usecases.Users.Commands
                     if (applicant.Status == ApplicantStatus.Confirmed)
                         throw new Exception($"Заявитель {applicant.Inn} уже зарегистрирован как пользователь");
 
-                    var passw = _passwordService.GeneratePassword(10);
+                    var password = _passwordService.GeneratePassword(10);
 
                     await _mediator.Send(new CreateUserCommand
                     {
                         UserName = applicant.Inn,
-                        Password = passw,
+                        Password = password,
                         Inn = applicant.Inn,
                         Title = applicant.Title,
                         Contact = applicant.Email,
-                        PhoneNumber = applicant.PhoneNumber
+                        PhoneNumber = applicant.PhoneNumber,
+                        MercuryLogin = applicant.MercuryLogin,
+                        MercuryPassword = applicant.MercuryPassword
                     }, cancellationToken);
                     
                     var user = await _userManager.Users.AsNoTracking()

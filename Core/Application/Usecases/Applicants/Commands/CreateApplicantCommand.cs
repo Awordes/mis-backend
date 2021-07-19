@@ -31,6 +31,16 @@ namespace Core.Application.Usecases.Applicants.Commands
         /// ИНН
         /// </summary>
         public string Inn { get; set; }
+
+        /// <summary>
+        /// Логин Меркурия
+        /// </summary>
+        public string MercuryLogin { get; set; }
+
+        /// <summary>
+        /// Пароль Меркурия
+        /// </summary>
+        public string MercuryPassword { get; set; }
         
         private class Handler: IRequestHandler<CreateApplicantCommand>
         {
