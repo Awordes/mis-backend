@@ -44,7 +44,7 @@ namespace Core.Application.Usecases.Enterprises.Commands
 
                     entity.User = user;
 
-                    await _context.Enterprises.AddAsync(entity, cancellationToken);
+                    _context.Enterprises.Add(entity);
 
                     await _context.SaveChangesAsync(cancellationToken);
                     

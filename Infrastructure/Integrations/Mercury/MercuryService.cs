@@ -5,13 +5,10 @@ using MercuryAPI;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using Core.Application.Usecases.Logging.Commands.VsdProcessTransaction;
 using Core.Application.Usecases.MercuryIntegration.ViewModels;
 using Infrastructure.Options;
 using MediatR;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Infrastructure.Integrations.Mercury
 {
@@ -19,12 +16,14 @@ namespace Infrastructure.Integrations.Mercury
     {
         private readonly MercuryOptions _mercuryOptions;
         private readonly IMediator _mediator;
+        private readonly ILogService _logService;
 
         public MercuryService(IOptionsMonitor<MercuryOptions> mercuryOptions,
-            IMediator mediator)
+            IMediator mediator, ILogService logService)
         {
             _mercuryOptions = mercuryOptions.CurrentValue;
             _mediator = mediator;
+            _logService = logService;
         }
 
         public EnumElementListViewModel GetVsdTypeListViewModel()
@@ -148,132 +147,132 @@ namespace Infrastructure.Integrations.Mercury
             DateTime? processDate,
             Guid operationId)
         {
-            var vsdProcessTransactionId = await _mediator.Send(new VsdProcessTransactionStart
-            {
-                OperationId = operationId,
-                VsdId = uuid
-            });
-            
-            string error = null;
-
             try
             {
-                var vetDocument = (GetVetDocumentByUuidResponse) await GetVetDocumentByUuid(
-                    localTransactionId, user, enterprise, uuid);
-
-                var vetDocumentItem = (CertifiedConsignment) vetDocument.vetDocument.Item;
-
-                var batch = vetDocumentItem.batch;
-
-                var mapper = new Mapper(new MapperConfiguration(cfg => { cfg.CreateMap<Batch, Consignment>(); }));
-
-                var consignment = mapper.Map<Consignment>(batch);
-
-                var tnns = vetDocument.vetDocument.referencedDocument
-                              .Where(x => x.type is DocumentType.Item1 or DocumentType.Item5)
-                              .OrderByDescending(x => x.issueDate).ToList();
+                var vsdProcessTransactionId = await _logService.StartVsdProcessTransaction(operationId, uuid);
                 
-                if (tnns.Count is 0)
-                    throw new Exception("Не найдены транспортные накладные ВСД");
-
-                var tnn = tnns[0];
-
-                var waybill = new Waybill
-                {
-                    typeSpecified = true,
-                    type = tnn.type,
-                    issueSeries = tnn.issueSeries,
-                    issueNumber = tnn.issueNumber
-                };
-
-                if (tnn.issueDateSpecified)
-                {
-                    waybill.issueDateSpecified = true;
-                    waybill.issueDate = tnn.issueDate;
-                }
-
-                var isTransShipSpecified = false;
-                var transShipInfo = new TransportInfo();
+                string error = null;
 
                 try
                 {
-                    var shipmentRoute = vetDocumentItem.shipmentRoute.MaxBy(x => x.sqnId)[0];
-                    isTransShipSpecified = shipmentRoute.transshipmentSpecified;
-                    if (isTransShipSpecified)
-                        transShipInfo = shipmentRoute.nextTransport;
+                    var vetDocument = (GetVetDocumentByUuidResponse) await GetVetDocumentByUuid(
+                        localTransactionId, user, enterprise, uuid);
+
+                    var vetDocumentItem = (CertifiedConsignment) vetDocument.vetDocument.Item;
+
+                    var batch = vetDocumentItem.batch;
+
+                    var mapper = new Mapper(new MapperConfiguration(cfg => { cfg.CreateMap<Batch, Consignment>(); }));
+
+                    var consignment = mapper.Map<Consignment>(batch);
+
+                    var tnns = vetDocument.vetDocument.referencedDocument
+                                  .Where(x => x.type is DocumentType.Item1 or DocumentType.Item5)
+                                  .OrderByDescending(x => x.issueDate).ToList();
+                    
+                    if (tnns.Count is 0)
+                        throw new Exception("Не найдены транспортные накладные ВСД");
+
+                    var tnn = tnns[0];
+
+                    var waybill = new Waybill
+                    {
+                        typeSpecified = true,
+                        type = tnn.type,
+                        issueSeries = tnn.issueSeries,
+                        issueNumber = tnn.issueNumber
+                    };
+
+                    if (tnn.issueDateSpecified)
+                    {
+                        waybill.issueDateSpecified = true;
+                        waybill.issueDate = tnn.issueDate;
+                    }
+
+                    var isTransShipSpecified = false;
+                    var transShipInfo = new TransportInfo();
+
+                    try
+                    {
+                        var shipmentRoute = vetDocumentItem.shipmentRoute.MaxBy(x => x.sqnId)[0];
+                        isTransShipSpecified = shipmentRoute.transshipmentSpecified;
+                        if (isTransShipSpecified)
+                            transShipInfo = shipmentRoute.nextTransport;
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                    
+                    var requestData = new ProcessIncomingConsignmentRequest
+                    {
+                        localTransactionId = localTransactionId,
+                        initiator = new User {login = user.MercuryLogin},
+                        delivery = new Delivery
+                        {
+                            accompanyingForms = new ConsignmentDocumentList
+                            {
+                                vetCertificate = new[]
+                                {
+                                    new VetDocument
+                                    {
+                                        uuid = uuid
+                                    }
+                                },
+                                waybill = waybill
+                            },
+                            consignment = new[]
+                            {
+                                consignment
+                            },
+                            consignor = vetDocumentItem.consignor,
+                            consignee = vetDocumentItem.consignee,
+                            broker = vetDocumentItem.broker,
+                            transportInfo = isTransShipSpecified
+                                            ? transShipInfo
+                                            : vetDocumentItem.transportInfo,
+                            transportStorageType = vetDocumentItem.transportStorageType,
+                            transportStorageTypeSpecified = vetDocumentItem.transportStorageTypeSpecified,
+                            deliveryDate = processDate ?? vetDocument.vetDocument.issueDate,
+                            deliveryDateSpecified = true
+                        },
+                        deliveryFacts = new DeliveryFactList
+                        {
+                            vetCertificatePresence = DocumentNature.ELECTRONIC,
+                            docInspection = new DeliveryInspection
+                            {
+                                result = DeliveryInspectionResult.CORRESPONDS
+                            },
+                            vetInspection = new DeliveryInspection
+                            {
+                                result = DeliveryInspectionResult.CORRESPONDS
+                            },
+                            decision = DeliveryDecision.ACCEPT_ALL
+                        }
+                    };
+
+                    await requestData.SendRequest<ProcessIncomingConsignmentResponse>(
+                        user.ApiKey,
+                        _mercuryOptions.ServiceId,
+                        user.IssuerId,
+                        user.ApiLogin,
+                        user.ApiPassword
+                    );
                 }
                 catch (Exception e)
                 {
+                    error = e.Message;
                     Console.WriteLine(e);
                 }
-                
-                var requestData = new ProcessIncomingConsignmentRequest
+                finally
                 {
-                    localTransactionId = localTransactionId,
-                    initiator = new User {login = user.MercuryLogin},
-                    delivery = new Delivery
-                    {
-                        accompanyingForms = new ConsignmentDocumentList
-                        {
-                            vetCertificate = new[]
-                            {
-                                new VetDocument
-                                {
-                                    uuid = uuid
-                                }
-                            },
-                            waybill = waybill
-                        },
-                        consignment = new[]
-                        {
-                            consignment
-                        },
-                        consignor = vetDocumentItem.consignor,
-                        consignee = vetDocumentItem.consignee,
-                        broker = vetDocumentItem.broker,
-                        transportInfo = isTransShipSpecified
-                                        ? transShipInfo
-                                        : vetDocumentItem.transportInfo,
-                        transportStorageType = vetDocumentItem.transportStorageType,
-                        transportStorageTypeSpecified = vetDocumentItem.transportStorageTypeSpecified,
-                        deliveryDate = processDate ?? vetDocument.vetDocument.issueDate,
-                        deliveryDateSpecified = true
-                    },
-                    deliveryFacts = new DeliveryFactList
-                    {
-                        vetCertificatePresence = DocumentNature.ELECTRONIC,
-                        docInspection = new DeliveryInspection
-                        {
-                            result = DeliveryInspectionResult.CORRESPONDS
-                        },
-                        vetInspection = new DeliveryInspection
-                        {
-                            result = DeliveryInspectionResult.CORRESPONDS
-                        },
-                        decision = DeliveryDecision.ACCEPT_ALL
-                    }
-                };
-
-                await requestData.SendRequest<ProcessIncomingConsignmentResponse>(
-                    user.ApiKey,
-                    _mercuryOptions.ServiceId,
-                    user.IssuerId,
-                    user.ApiLogin,
-                    user.ApiPassword
-                );
+                    await _logService.FinishVsdProcessTransaction(vsdProcessTransactionId, error);
+                }
             }
             catch (Exception e)
             {
-                error = e.Message;
                 Console.WriteLine(e);
-            }
-            finally
-            {
-                await _mediator.Send(new VsdProcessTransactionFinish
-                {
-                    VsdProcessTransactionId = vsdProcessTransactionId,
-                    Error = error
-                });
+                throw;
             }
         }
     }

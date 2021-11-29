@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Application.Common;
 using Core.Application.Common.Services;
-using Core.Application.Usecases.Logging.Commands.Operations;
 using Core.Application.Usecases.MercuryIntegration.Models;
 using Core.Domain.Auth;
 using Core.Domain.Operations;
@@ -33,22 +32,18 @@ namespace Core.Application.Usecases.MercuryIntegration.Commands
             private readonly IHttpContextAccessor _httpContextAccessor;
             private readonly UserManager<User> _userManager;
             private readonly IMisDbContext _context;
-            private readonly IMediator _mediator;
+            private readonly ILogService _logService;
 
             private Guid _operationId;
 
-            public Handler(
-                IMercuryService mercuryService,
-                IHttpContextAccessor httpContextAccessor,
-                UserManager<User> userManager,
-                IMisDbContext context,
-                IMediator mediator)
+            public Handler(IMercuryService mercuryService, IHttpContextAccessor httpContextAccessor,
+                UserManager<User> userManager, IMisDbContext context, ILogService logService)
             {
                 _mercuryService = mercuryService;
                 _httpContextAccessor = httpContextAccessor;
                 _userManager = userManager;
                 _context = context;
-                _mediator = mediator;
+                _logService = logService;
             }
             
             public async Task<Unit> Handle(ProcessIncomingVsdListCommand request, CancellationToken cancellationToken)
@@ -66,43 +61,29 @@ namespace Core.Application.Usecases.MercuryIntegration.Commands
 
                     try
                     {
-                        _operationId = await _mediator.Send(new OperationStart
-                        {
-                            UserId = user.Id,
-                            Type = OperationType.VsdProcess
-                        }, cancellationToken);
+                        _operationId = await _logService.StartOperation(user.Id, OperationType.VsdProcess, cancellationToken);
                         
                         var tasks = new List<Task>();
 
                         foreach (var vsd in request.Vsds)
                         {
                             tasks.Add(_mercuryService.ProcessIncomingConsignment(
-                                _operationId.ToString(),
-                                user,
-                                enterprise,
-                                vsd.VsdId,
-                                vsd.ProcessDate,
-                                _operationId));
+                                _operationId.ToString(), user, enterprise, vsd.VsdId, vsd.ProcessDate, _operationId));
+
+                            if (tasks.Count != 4) continue;
                             
-                            if (tasks.Count == 4)
-                            {
-                                Task.WaitAll(tasks.ToArray(), cancellationToken);
-                                tasks = new List<Task>();
-                            }
+                            Task.WaitAll(tasks.ToArray(), cancellationToken);
+                            
+                            tasks = new List<Task>();
                         }
                         
                         Task.WaitAll(tasks.ToArray(), cancellationToken);
                     }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                    }
                     finally
                     {
-                        await _mediator.Send(new OperationFinish
-                        {
-                            OperationId = _operationId
-                        }, cancellationToken);
+                        await _logService.FinishOperation(_operationId, cancellationToken);
+                        
+                        await _context.SaveChangesAsync(cancellationToken);
                     }
                     
                     return Unit.Value;

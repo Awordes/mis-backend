@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Reflection;
+using Infrastructure.Factories;
 using Infrastructure.Options;
 using Infrastructure.Services;
 
@@ -23,7 +24,7 @@ namespace Infrastructure
                builder.UseNpgsql(configuration.GetConnectionString(ConnectionStrings.PostgreSqlConnectionString),
                    b =>
                    {
-                       b.MigrationsAssembly("Infrastructure");
+                       b.MigrationsAssembly(nameof(Infrastructure));
                        b.SetPostgresVersion(12, 6);
                        b.MigrationsHistoryTable(
                            $"__MisEFMigrationsHistory",
@@ -62,6 +63,8 @@ namespace Infrastructure
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IPasswordService, PasswordService>();
             services.AddScoped<ITemplateService, TemplateService>();
+            services.AddScoped<ILogService, LogService>();
+            services.AddScoped<IMisDbContextFactory, MisDbContextFactory>();
 
             services.Configure<MercuryOptions>(configuration.GetSection(nameof(MercuryOptions)));
             services.Configure<MercuryFileOptions>(configuration.GetSection(nameof(MercuryFileOptions)));

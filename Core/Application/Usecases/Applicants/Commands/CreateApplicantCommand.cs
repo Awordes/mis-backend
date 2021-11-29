@@ -61,7 +61,7 @@ namespace Core.Application.Usecases.Applicants.Commands
 
                     applicant.Status = ApplicantStatus.New;
 
-                    await _context.Applicants.AddAsync(applicant, cancellationToken);
+                    _context.Applicants.Add(applicant);
 
                     await _context.SaveChangesAsync(cancellationToken);
                     
