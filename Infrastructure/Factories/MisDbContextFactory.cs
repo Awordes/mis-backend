@@ -1,29 +1,29 @@
-﻿using Core.Application.Common;
+﻿using Infrastructure.Options;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Factories
 {
     public class MisDbContextFactory: IMisDbContextFactory
     {
-        private readonly IConfiguration _configuration;
+        private readonly MisDbOptions _misDbOptions;
 
-        public MisDbContextFactory(IConfiguration configuration)
+        public MisDbContextFactory(IOptionsMonitor<MisDbOptions> misDbOptionMonitor)
         {
-            _configuration = configuration;
+            _misDbOptions = misDbOptionMonitor.CurrentValue;
         }
 
         public MisDbContext Create()
         {
             var options = new DbContextOptionsBuilder<MisDbContext>()
-                .UseNpgsql(_configuration.GetConnectionString(ConnectionStrings.PostgreSqlConnectionString),
+                .UseNpgsql(_misDbOptions.ConnectionString,
                     b =>
                     {
                         b.MigrationsAssembly(nameof(Infrastructure));
-                        b.SetPostgresVersion(12, 6);
+                        b.SetPostgresVersion(_misDbOptions.PostgreSqlVersion.Major, _misDbOptions.PostgreSqlVersion.Minor);
                         b.MigrationsHistoryTable(
-                            $"__MisEFMigrationsHistory",
-                            "mis");
+                            _misDbOptions.EfMigrationsHistoryTableName,
+                            _misDbOptions.SchemaName);
                     }).Options;
             
             return new MisDbContext(options);

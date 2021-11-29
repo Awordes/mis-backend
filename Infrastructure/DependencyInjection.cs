@@ -20,15 +20,28 @@ namespace Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services,
             IConfiguration configuration)
         {
+            services.Configure<MercuryOptions>(configuration.GetSection(nameof(MercuryOptions)));
+            services.Configure<MercuryFileOptions>(configuration.GetSection(nameof(MercuryFileOptions)));
+
+            var misDbOptionsConfig = configuration.GetSection(MisDbOptions.SectionName);
+            services.Configure<MisDbOptions>(misDbOptionsConfig);
+            var misDbOptions = new MisDbOptions();
+            misDbOptionsConfig.Bind(misDbOptions);
+            
+            var identityOptionsConfig = configuration.GetSection(IdentityConfigurationOptions.SectionName);
+            services.Configure<IdentityConfigurationOptions>(identityOptionsConfig);
+            var identityOptions = new IdentityConfigurationOptions();
+            identityOptionsConfig.Bind(identityOptions);
+            
             services.AddDbContext<MisDbContext>(builder =>
-               builder.UseNpgsql(configuration.GetConnectionString(ConnectionStrings.PostgreSqlConnectionString),
+               builder.UseNpgsql(misDbOptions.ConnectionString,
                    b =>
                    {
                        b.MigrationsAssembly(nameof(Infrastructure));
-                       b.SetPostgresVersion(12, 6);
+                       b.SetPostgresVersion(misDbOptions.PostgreSqlVersion.Major, misDbOptions.PostgreSqlVersion.Minor);
                        b.MigrationsHistoryTable(
-                           $"__MisEFMigrationsHistory",
-                           "mis");
+                           misDbOptions.EfMigrationsHistoryTableName,
+                           misDbOptions.SchemaName);
                    }));
 
             services.AddScoped<IMisDbContext>(provider => provider.GetService<MisDbContext>());
@@ -37,21 +50,21 @@ namespace Infrastructure
 
             services.AddIdentity<User, Role>(options =>
                 {
-                    options.Password.RequiredLength = 10;
-                    options.Password.RequireLowercase = false;
-                    options.Password.RequireUppercase = false;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequireDigit = false;
+                    options.Password.RequiredLength = identityOptions.Password.RequiredLength;
+                    options.Password.RequireLowercase = identityOptions.Password.RequireLowercase;
+                    options.Password.RequireUppercase = identityOptions.Password.RequireUppercase;
+                    options.Password.RequireNonAlphanumeric = identityOptions.Password.RequireNonAlphanumeric;
+                    options.Password.RequireDigit = identityOptions.Password.RequireDigit;
                 })
                 .AddEntityFrameworkStores<MisDbContext>()
                 .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
 
             services.ConfigureApplicationCookie(options =>
             {
-                options.Cookie.HttpOnly = true;
-                options.SlidingExpiration = true;
-                options.ExpireTimeSpan = TimeSpan.FromHours(10);
-                options.Cookie.Name = "MercuryIntegrationService";
+                options.Cookie.HttpOnly = identityOptions.Cookie.HttpOnly;
+                options.SlidingExpiration = identityOptions.Cookie.SlidingExpiration;
+                options.ExpireTimeSpan = TimeSpan.FromHours(identityOptions.Cookie.ExpireTimeSpanHoursCount);
+                options.Cookie.Name = identityOptions.Cookie.Name;
             });
             
             services.Configure<SecurityStampValidatorOptions>(options =>
@@ -65,9 +78,6 @@ namespace Infrastructure
             services.AddScoped<ITemplateService, TemplateService>();
             services.AddScoped<ILogService, LogService>();
             services.AddScoped<IMisDbContextFactory, MisDbContextFactory>();
-
-            services.Configure<MercuryOptions>(configuration.GetSection(nameof(MercuryOptions)));
-            services.Configure<MercuryFileOptions>(configuration.GetSection(nameof(MercuryFileOptions)));
             
             return services;
         }
