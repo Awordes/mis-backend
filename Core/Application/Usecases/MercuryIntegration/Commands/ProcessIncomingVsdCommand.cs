@@ -59,7 +59,7 @@ namespace Core.Application.Usecases.MercuryIntegration.Commands
 
                     var enterprise = await _context.Enterprises.AsNoTracking()
                             .FirstOrDefaultAsync(x => x.Id == request.EnterpriseId, cancellationToken)
-                        ?? throw new Exception($@"Предприятие с идентификатором {request.EnterpriseId} не найден.");
+                        ?? throw new Exception($@"Предприятие с идентификатором {request.EnterpriseId} не найдено.");
 
                     try
                     {
