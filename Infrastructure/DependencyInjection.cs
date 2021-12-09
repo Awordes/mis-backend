@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Reflection;
 using Infrastructure.Factories;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Infrastructure.Options;
 using Infrastructure.Services;
 
@@ -32,21 +34,35 @@ namespace Infrastructure
             services.Configure<IdentityConfigurationOptions>(identityOptionsConfig);
             var identityOptions = new IdentityConfigurationOptions();
             identityOptionsConfig.Bind(identityOptions);
-            
-            services.AddDbContext<MisDbContext>(builder =>
-               builder.UseNpgsql(misDbOptions.ConnectionString,
-                   b =>
-                   {
-                       b.MigrationsAssembly(nameof(Infrastructure));
-                       b.SetPostgresVersion(misDbOptions.PostgreSqlVersion.Major, misDbOptions.PostgreSqlVersion.Minor);
-                       b.MigrationsHistoryTable(
-                           misDbOptions.EfMigrationsHistoryTableName,
-                           misDbOptions.SchemaName);
-                   }));
 
-            services.AddScoped<IMisDbContext>(provider => provider.GetService<MisDbContext>());
+            var hangfireOptionsConfig = configuration.GetSection(HangfireOptions.SectionName);
+            services.Configure<HangfireOptions>(hangfireOptionsConfig);
+            var hangfireOptions = new HangfireOptions();
+            hangfireOptionsConfig.Bind(hangfireOptions);
+
+            services.AddScoped<IMisDbContext, MisDbContext>();
+            services.AddScoped<IMercuryService, MercuryService>();
+            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IPasswordService, PasswordService>();
+            services.AddScoped<ITemplateService, TemplateService>();
+            services.AddScoped<ILogService, LogService>();
+            services.AddScoped<IMisDbContextFactory, MisDbContextFactory>();
+            services.AddScoped<ISchedulerService, SchedulerService>();
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
+            
+            services.AddDbContext<MisDbContext>(builder =>
+                builder.UseNpgsql(misDbOptions.ConnectionString,
+                    b =>
+                    {
+                        b.MigrationsAssembly(nameof(Infrastructure));
+                        b.SetPostgresVersion(misDbOptions.PostgreSqlVersion.Major, misDbOptions.PostgreSqlVersion.Minor);
+                        b.MigrationsHistoryTable(
+                            misDbOptions.EfMigrationsHistoryTableName,
+                            misDbOptions.SchemaName);
+                    }));
+            
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
             services.AddIdentity<User, Role>(options =>
                 {
@@ -71,13 +87,23 @@ namespace Infrastructure
             {
                 options.ValidationInterval = TimeSpan.Zero;   
             });
-
-            services.AddScoped<IMercuryService, MercuryService>();
-            services.AddScoped<IFileService, FileService>();
-            services.AddScoped<IPasswordService, PasswordService>();
-            services.AddScoped<ITemplateService, TemplateService>();
-            services.AddScoped<ILogService, LogService>();
-            services.AddScoped<IMisDbContextFactory, MisDbContextFactory>();
+            
+            services.AddHangfire(opt => opt
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UsePostgreSqlStorage(misDbOptions.ConnectionString, new PostgreSqlStorageOptions
+                {
+                    SchemaName = hangfireOptions.SchemaName
+                })
+            );
+            
+            services.AddHangfireServer(opt =>
+            {
+                opt.WorkerCount = hangfireOptions.WorkerCount;
+                opt.ServerName = hangfireOptions.MisServerName;
+                opt.HeartbeatInterval = TimeSpan.FromMinutes(hangfireOptions.HeartbeatIntervalMinutesCount);
+            });
             
             return services;
         }

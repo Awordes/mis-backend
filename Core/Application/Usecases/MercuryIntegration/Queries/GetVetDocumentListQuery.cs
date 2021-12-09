@@ -17,12 +17,12 @@ namespace Core.Application.Usecases.MercuryIntegration.Queries
         /// <summary>
         /// Номер страницы
         /// </summary>
-        public int Page { get; set; }
+        public int Page { get; set; } = 1;
 
         /// <summary>
         /// Размер страницы
         /// </summary>
-        public int PageSize { get; set; }
+        public int PageSize { get; set; } = 10;
         
         /// <summary>
         /// Статус ВСД
@@ -63,6 +63,8 @@ namespace Core.Application.Usecases.MercuryIntegration.Queries
                 try
                 {
                     var userName = _httpContextAccessor.HttpContext?.User.Identity?.Name;
+
+                    if (userName is null) throw new Exception("Невозможно определить пользователя");
 
                     var user = await _userManager.FindByNameAsync(userName)
                         ?? throw new Exception($@"Пользователь с именем {userName} не найден.");
