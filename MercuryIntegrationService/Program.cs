@@ -21,6 +21,7 @@ namespace MercuryIntegrationService
                         builder.AddDebug();
                         builder.AddSimpleConsole();
                         builder.AddConfiguration(context.Configuration.GetSection("Logging"));
+                        builder.AddFile("logs/mis-{Date}.log");
                     })
                     .ConfigureWebHostDefaults(webBuilder =>
                     {
