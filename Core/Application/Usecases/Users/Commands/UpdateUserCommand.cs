@@ -88,6 +88,11 @@ namespace Core.Application.Usecases.Users.Commands
         /// Номер телефона
         /// </summary>
         public string PhoneNumber { get; set; }
+
+        /// <summary>
+        /// Признак доступности автоматического закрытия ВСД
+        /// </summary>
+        public bool AutoVsdProcess { get; set; }
         
         private class Handler: IRequestHandler<UpdateUserCommand>
         {
