@@ -15,6 +15,7 @@ using Hangfire;
 using Hangfire.Dashboard;
 using Infrastructure.Hangfire;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.Extensions.Logging;
 
 namespace MercuryIntegrationService
 {
@@ -68,8 +69,14 @@ namespace MercuryIntegrationService
                 });
         }
 
-        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env, ISchedulerService schedulerService)
+        public static void Configure(
+            IApplicationBuilder app,
+            IWebHostEnvironment env,
+            ISchedulerService schedulerService,
+            ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddFile("logs/mis-{Date}.log");
+            
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
