@@ -74,27 +74,28 @@ namespace Infrastructure.Integrations.Mercury
 
                 var vetDocumentList = new List<VsdViewModel>();
 
-                foreach (var vetDocument in result.vetDocumentList.vetDocument)
-                {
-                    var item = (CertifiedConsignment) vetDocument.Item;
-                    
-                    var tnns = vetDocument.referencedDocument
-                        .Where(x => x.type is DocumentType.Item1 or DocumentType.Item5)
-                        .OrderByDescending(x => x.issueDate).ToList();
-
-                    var element = new VsdViewModel
+                if (result.vetDocumentList.vetDocument is not null)
+                    foreach (var vetDocument in result.vetDocumentList.vetDocument)
                     {
-                        Id = vetDocument.uuid,
-                        Name = item.batch.productItem.name,
-                        ProductGlobalId = item.batch.productItem.globalID,
-                        Volume = item.batch.volume,
-                        ProductDate = item.batch.dateOfProduction.firstDate.ToDateTime(),
-                        IssueDate = vetDocument.issueDate,
-                        ProcessDate = tnns[0]?.issueDate.AddDays(1)
-                    }; 
+                        var item = (CertifiedConsignment) vetDocument.Item;
+                        
+                        var tnns = vetDocument.referencedDocument
+                            .Where(x => x.type is DocumentType.Item1 or DocumentType.Item5)
+                            .OrderByDescending(x => x.issueDate).ToList();
 
-                    vetDocumentList.Add(element);
-                }
+                        var element = new VsdViewModel
+                        {
+                            Id = vetDocument.uuid,
+                            Name = item.batch.productItem.name,
+                            ProductGlobalId = item.batch.productItem.globalID,
+                            Volume = item.batch.volume,
+                            ProductDate = item.batch.dateOfProduction.firstDate.ToDateTime(),
+                            IssueDate = vetDocument.issueDate,
+                            ProcessDate = tnns[0]?.issueDate.AddDays(1)
+                        }; 
+
+                        vetDocumentList.Add(element);
+                    }
             
                 return new VsdListViewModel
                 {

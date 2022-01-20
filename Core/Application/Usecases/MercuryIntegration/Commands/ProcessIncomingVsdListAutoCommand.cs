@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Core.Application.Common;
 using Core.Application.Common.Services;
 using Core.Application.Usecases.MercuryIntegration.Models;
 using Core.Domain.Auth;

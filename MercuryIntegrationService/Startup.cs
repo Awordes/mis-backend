@@ -123,9 +123,11 @@ namespace MercuryIntegrationService
             
             GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 0 });
             
+            RecurringJob.RemoveIfExists("AutoProcessVsd");
+            
             RecurringJob.AddOrUpdate("AutoProcessVsd", () =>
-                schedulerService.AutoProcessVsd(new CancellationToken()),
-                "0 1 22 * * *");
+                schedulerService.AutoProcessVsd(CancellationToken.None),
+                "0 1 1 * * *", TimeZoneInfo.Local);
         }
     }
 }
