@@ -14,8 +14,10 @@ using Core.Application.Common.Services;
 using Hangfire;
 using Hangfire.Dashboard;
 using Infrastructure.Hangfire;
+using Infrastructure.Options;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace MercuryIntegrationService
 {
@@ -73,9 +75,12 @@ namespace MercuryIntegrationService
             IApplicationBuilder app,
             IWebHostEnvironment env,
             ISchedulerService schedulerService,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            IOptionsMonitor<LogFolderOptions> logFolderOptions,
+            IOptionsMonitor<HangfireOptions> hangfireOptions)
         {
-            loggerFactory.AddFile("logs/mis-{Date}.log");
+            if (logFolderOptions.CurrentValue.StoreLogs)
+                loggerFactory.AddFile(logFolderOptions.CurrentValue.Folder);
             
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
@@ -124,10 +129,10 @@ namespace MercuryIntegrationService
             GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 0 });
             
             RecurringJob.RemoveIfExists("AutoProcessVsd");
-            
+
             RecurringJob.AddOrUpdate("AutoProcessVsd", () =>
-                schedulerService.AutoProcessVsd(CancellationToken.None),
-                "0 1 1 * * *", TimeZoneInfo.Local);
+                    schedulerService.AutoProcessVsd(CancellationToken.None),
+                hangfireOptions.CurrentValue.CronExpression);
         }
     }
 }

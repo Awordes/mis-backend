@@ -40,6 +40,11 @@ namespace Infrastructure
             var hangfireOptions = new HangfireOptions();
             hangfireOptionsConfig.Bind(hangfireOptions);
 
+            var logFolderOptionsConfig = configuration.GetSection(LogFolderOptions.SectionName);
+            services.Configure<LogFolderOptions>(logFolderOptionsConfig);
+            var logFolderOptions = new LogFolderOptions();
+            hangfireOptionsConfig.Bind(logFolderOptions);
+
             services.AddScoped<IMisDbContext, MisDbContext>();
             services.AddScoped<IMercuryService, MercuryService>();
             services.AddScoped<IFileService, FileService>();

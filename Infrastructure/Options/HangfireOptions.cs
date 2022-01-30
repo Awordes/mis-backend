@@ -11,5 +11,7 @@
         public string MisServerName { get; set; }
 
         public int HeartbeatIntervalMinutesCount { get; set; }
+        
+        public string CronExpression { get; set; }
     }
 }

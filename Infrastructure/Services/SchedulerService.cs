@@ -50,7 +50,7 @@ namespace Infrastructure.Services
                     return;
                 }
                 
-                var processingTimeEnd = DateTime.Now.AddHours(4);
+                var processingTimeEnd = DateTime.Now.AddHours(5);
 
                 _logger.LogInformation("Начало процедуры автогашения");
                 _logger.LogInformation("Количество пользователей - {0}", _users.Count);
@@ -90,12 +90,14 @@ namespace Infrastructure.Services
                 foreach (var enterprise in user.Enterprises)
                 {
                     var vsdList = (await _mercuryService.GetVetDocumentList("a10003", user, enterprise, 10, 0, 3, 1)).result;
-
+                    
                     if (vsdList is null || vsdList.Count == 0)
                     {
                         user.Enterprises.Remove(enterprise);
                         continue;
                     }
+                    
+                    _logger.LogInformation("Кол-во ВСД {0}", vsdList?.Count);
                 
                     await _mediator.Send(new ProcessIncomingVsdListAutoCommand
                     {
@@ -108,7 +110,7 @@ namespace Infrastructure.Services
                 if (user.Enterprises.Count == 0)
                     _users.Remove(user);
                 
-                _logger.LogInformation("Завершеение процедуры автогашения для пользователя {0}", user.UserName);
+                _logger.LogInformation("Завершение процедуры автогашения для пользователя {0}", user.UserName);
             }
             catch (Exception e)
             {
