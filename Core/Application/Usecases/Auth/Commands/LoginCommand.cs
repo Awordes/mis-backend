@@ -6,6 +6,7 @@ using Core.Domain.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Core.Application.Usecases.Auth.Commands
@@ -22,10 +23,12 @@ namespace Core.Application.Usecases.Auth.Commands
         {
             private readonly SignInManager<User> _signInManager;
             private readonly RoleOptions _roleOptions;
+            private readonly ILogger<Handler> _logger;
 
-            public Handler(SignInManager<User> signInManager, IOptionsMonitor<RoleOptions> roleOptions)
+            public Handler(SignInManager<User> signInManager, IOptionsMonitor<RoleOptions> roleOptions, ILogger<Handler> logger)
             {
                 _signInManager = signInManager;
+                _logger = logger;
                 _roleOptions = roleOptions.CurrentValue;
             }
 
@@ -56,7 +59,7 @@ namespace Core.Application.Usecases.Auth.Commands
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                    _logger.LogError(e, e.Message);
                     throw;
                 }
             }

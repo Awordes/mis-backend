@@ -1,21 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="DocumentFormat.OpenXml" Version="2.12.3" />
-    <PackageReference Include="ExtendedXmlSerializer" Version="3.6.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.3">
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.14.0" />
+    <PackageReference Include="ExtendedXmlSerializer" Version="3.7.6" />
+    <PackageReference Include="Hangfire" Version="1.8.0-beta4" />
+    <PackageReference Include="Hangfire.PostgreSql" Version="1.9.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.2" />
-    <PackageReference Include="OpenXmlPowerTools-NetStandard" Version="4.4.21" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="6.0.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.1" />
+    <PackageReference Include="OpenXmlPowerTools-NetStandard" Version="4.6.23-alpha4" />
   </ItemGroup>
 
   <ItemGroup>

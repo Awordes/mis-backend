@@ -71,8 +71,6 @@ namespace Core.Application.Usecases.MercuryIntegration.Commands
                     finally
                     {
                         await _logService.FinishOperation(_operationId, cancellationToken);
-
-                        await _context.SaveChangesAsync(cancellationToken);
                     }
                     
                     return Unit.Value;

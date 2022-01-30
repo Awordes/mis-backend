@@ -6,6 +6,6 @@ namespace Core.Application.Usecases.MercuryIntegration.Models
     {
         public string VsdId { get; set; }
 
-        public DateTime ProcessDate { get; set; }
+        public DateTime? ProcessDate { get; set; }
     }
 }
