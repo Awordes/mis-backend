@@ -53,18 +53,20 @@ namespace Infrastructure.Services
                 var processingTimeEnd = DateTime.Now.AddHours(5);
 
                 _logger.LogInformation("Начало процедуры автогашения");
-                _logger.LogInformation("Количество пользователей - {0}", _users.Count);
 
                 do
                 {
-                    Task.WaitAll(_users.Select(user => ProcessVsd(user, cancellationToken)).ToArray());
+                    _logger.LogInformation("Количество пользователей - {0}", _users.Count);
+                    var currentUsers = _users.Select(x => x).ToList();
+                    
+                    Task.WaitAll(currentUsers.Select(user => ProcessVsd(user, cancellationToken)).ToArray());
                 } while (_users.Count > 0 && DateTime.Now < processingTimeEnd);
                 
                 _logger.LogInformation("Завершение процедуры автогашения");
             }
             catch (Exception e)
             {
-                if (e is OperationCanceledException)
+                if (e is TaskCanceledException)
                 {
                     _logger.LogInformation("Завершение процедуры автогашения");
                     return;
@@ -82,10 +84,11 @@ namespace Infrastructure.Services
                 if (user.Enterprises is null)
                 {
                     _users.Remove(user);
+                    _logger.LogInformation("Завершение процедуры автогашения для пользователя {0}", user.UserName);
                     return;
                 }
                 
-                _logger.LogInformation("Начало процедуры автогашения для пользователя {0}", user.UserName);
+                _logger.LogInformation("Автогашение для пользователя {0}", user.UserName);
             
                 foreach (var enterprise in user.Enterprises)
                 {
@@ -97,7 +100,7 @@ namespace Infrastructure.Services
                         continue;
                     }
                     
-                    _logger.LogInformation("Кол-во ВСД {0}", vsdList?.Count);
+                    _logger.LogInformation("Пользователь: {0}, Количество ВСД {1}", user.UserName, vsdList?.Count);
                 
                     await _mediator.Send(new ProcessIncomingVsdListAutoCommand
                     {
@@ -108,9 +111,10 @@ namespace Infrastructure.Services
                 }
 
                 if (user.Enterprises.Count == 0)
+                {
                     _users.Remove(user);
-                
-                _logger.LogInformation("Завершение процедуры автогашения для пользователя {0}", user.UserName);
+                    _logger.LogInformation("Завершение процедуры автогашения для пользователя {0}", user.UserName);
+                }
             }
             catch (Exception e)
             {
@@ -120,7 +124,7 @@ namespace Infrastructure.Services
                     throw;
                 }
                 
-                _logger.LogInformation("Для пользователя {0} произошла ошибка при обработке автогашения.",user.UserName);
+                _logger.LogInformation("Произошла ошибка при обработке автогашения. Пользователь: {0}", user.UserName);
                 _logger.LogError(e.Message, e);
             }
         }
