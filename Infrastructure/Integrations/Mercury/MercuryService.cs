@@ -78,11 +78,19 @@ namespace Infrastructure.Integrations.Mercury
                     foreach (var vetDocument in result.vetDocumentList.vetDocument)
                     {
                         var item = (CertifiedConsignment) vetDocument.Item;
-                        
-                        var tnns = vetDocument.referencedDocument
-                            .Where(x => x.type is DocumentType.Item1 or DocumentType.Item5)
-                            .OrderByDescending(x => x.issueDate).ToList();
 
+                        DateTime? processDate = null;
+
+                        if (vetDocument.referencedDocument is not null)
+                        {
+                            var tnns = vetDocument.referencedDocument
+                                .Where(x => x.type == DocumentType.Item1 || x.type == DocumentType.Item5)
+                                .OrderByDescending(x => x.issueDate)
+                                .ToList();
+
+                            processDate = tnns[0]?.issueDate.AddDays(1);
+                        }
+                        
                         var element = new VsdViewModel
                         {
                             Id = vetDocument.uuid,
@@ -91,7 +99,7 @@ namespace Infrastructure.Integrations.Mercury
                             Volume = item.batch.volume,
                             ProductDate = item.batch.dateOfProduction.firstDate.ToDateTime(),
                             IssueDate = vetDocument.issueDate,
-                            ProcessDate = tnns[0]?.issueDate.AddDays(1)
+                            ProcessDate = processDate
                         }; 
 
                         vetDocumentList.Add(element);
@@ -175,12 +183,17 @@ namespace Infrastructure.Integrations.Mercury
 
                     var consignment = mapper.Map<Consignment>(batch);
 
-                    var tnns = vetDocument.vetDocument.referencedDocument
-                                  .Where(x => x.type is DocumentType.Item1 or DocumentType.Item5)
-                                  .OrderByDescending(x => x.issueDate).ToList();
+                    List<ReferencedDocument> tnns = null;
+
+                    if (vetDocument.vetDocument.referencedDocument is not null)
+                    {
+                        tnns = vetDocument.vetDocument.referencedDocument
+                            .Where(x => x.type is DocumentType.Item1 or DocumentType.Item5)
+                            .OrderByDescending(x => x.issueDate).ToList();
+                    }
                     
-                    if (tnns.Count is 0)
-                        throw new Exception("Не найдены транспортные накладные ВСД");
+                    if (tnns is null || tnns.Count == 0)
+                        throw new Exception($"Не найдены транспортные накладные для ВСД {uuid}");
 
                     var tnn = tnns[0];
 
