@@ -7,7 +7,9 @@ using Core.Application.Common;
 using Core.Application.Common.Services;
 using Core.Application.Usecases.MercuryIntegration.Commands;
 using Core.Application.Usecases.MercuryIntegration.Models;
+using Core.Application.Usecases.MercuryIntegration.ViewModels;
 using Core.Domain.Auth;
+using Infrastructure.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -50,7 +52,7 @@ namespace Infrastructure.Services
                     return;
                 }
                 
-                var processingTimeEnd = DateTime.Now.AddHours(5);
+                var processingTimeEnd = DateTime.Now.AddHours(3);
 
                 _logger.LogInformation("Начало процедуры автогашения");
 
@@ -64,14 +66,20 @@ namespace Infrastructure.Services
                 
                 _logger.LogInformation("Завершение процедуры автогашения");
             }
+            catch (MercuryServiceException)
+            {
+                throw;
+            }
+            catch (TaskCanceledException)
+            {
+                _logger.LogInformation("Процедуры автогашения остановлена.");
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.LogInformation("Процедуры автогашения отменена.");
+            }
             catch (Exception e)
             {
-                if (e is TaskCanceledException)
-                {
-                    _logger.LogInformation("Завершение процедуры автогашения");
-                    return;
-                }
-                
                 _logger.LogError(e, e.Message);
                 throw;
             }
@@ -87,27 +95,43 @@ namespace Infrastructure.Services
                     _logger.LogInformation("Завершение процедуры автогашения для пользователя {0}", user.UserName);
                     return;
                 }
-                
-                _logger.LogInformation("Автогашение для пользователя {0}", user.UserName);
-            
+
                 foreach (var enterprise in user.Enterprises)
                 {
-                    var vsdList = (await _mercuryService.GetVetDocumentList("a10003", user, enterprise, 10, 0, 3, 1)).result;
-                    
+                    var vsdList = new List<VsdViewModel>();
+
+                    try
+                    {
+                        vsdList = (await _mercuryService.GetVetDocumentList("a10003", user, enterprise, 10, 0, 3, 1))
+                            .result;
+                    }
+                    catch (MercuryEnterpriseNotFoundException)
+                    {
+                        user.Enterprises.Remove(enterprise);
+                        continue;
+                    }
+
                     if (vsdList is null || vsdList.Count == 0)
                     {
                         user.Enterprises.Remove(enterprise);
                         continue;
                     }
-                    
-                    _logger.LogInformation("Пользователь: {0}, Количество ВСД {1}", user.UserName, vsdList?.Count);
-                
+
+                    _logger.LogInformation(
+                        "Начало сеанса автогашения. Пользователь: {0}, Предприятие: {1}, Количество ВСД: {2}",
+                        user.UserName, enterprise.Name, vsdList?.Count);
+
                     await _mediator.Send(new ProcessIncomingVsdListAutoCommand
                     {
                         Enterprise = enterprise,
                         User = user,
-                        Vsds = vsdList.Select(vsd => new VsdForProcessModel { VsdId = vsd.Id, ProcessDate = vsd.ProcessDate }).ToList()
+                        Vsds = vsdList.Select(vsd => new VsdForProcessModel
+                            {VsdId = vsd.Id, ProcessDate = vsd.ProcessDate}).ToList()
                     }, cancellationToken);
+
+                    _logger.LogInformation(
+                        "Сеанс автогашения успешно завершён. Пользователь: {0}, Предприятие: {1}, Количество ВСД: {2}",
+                        user.UserName, enterprise.Name, vsdList?.Count);
                 }
 
                 if (user.Enterprises.Count == 0)
@@ -116,14 +140,16 @@ namespace Infrastructure.Services
                     _logger.LogInformation("Завершение процедуры автогашения для пользователя {0}", user.UserName);
                 }
             }
+            catch (MercuryServiceException)
+            {
+                throw;
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
             catch (Exception e)
             {
-                if (e is OperationCanceledException)
-                {
-                    _logger.LogError("Operation cancelled");
-                    throw;
-                }
-                
                 _logger.LogInformation("Произошла ошибка при обработке автогашения. Пользователь: {0}", user.UserName);
                 _logger.LogError(e.Message, e);
             }
