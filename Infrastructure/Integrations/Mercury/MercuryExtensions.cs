@@ -8,6 +8,8 @@ using System.Xml.Serialization;
 using Core.Application.Usecases.MercuryIntegration.ViewModels;
 using MercuryAPI;
 using System.ComponentModel.DataAnnotations;
+using System.ServiceModel;
+using Infrastructure.Exceptions;
 
 namespace Infrastructure.Integrations.Mercury
 {
@@ -58,82 +60,104 @@ namespace Infrastructure.Integrations.Mercury
             string issuerId,
             string apiLogin,
             string apiPassword
-            ) where TResponse : ApplicationResultData 
+            ) where TResponse : ApplicationResultData
         {
-            try
+            var request = new submitApplicationRequestRequest
             {
-                var request = new submitApplicationRequestRequest
+                submitApplicationRequest = new submitApplicationRequest
                 {
-                    submitApplicationRequest = new submitApplicationRequest
+                    apiKey = apiKey,
+                    application = new Application
                     {
-                        apiKey = apiKey,
-                        application = new Application
+                        serviceId = serviceId,
+                        issuerId = issuerId,
+                        issueDate = DateTime.Now,
+                        issueDateSpecified = true,
+                        data = new ApplicationDataWrapper
                         {
-                            serviceId = serviceId,
-                            issuerId = issuerId,
-                            issueDate = DateTime.Now,
-                            issueDateSpecified = true,
-                            data = new ApplicationDataWrapper
-                            {
-                                Any = requestData.Serialize()
-                            }
+                            Any = requestData.Serialize()
                         }
                     }
-                };                
-
-                var client = new ApplicationManagementServicePortTypeClient();
-                client.ClientCredentials.UserName.UserName = apiLogin;
-                client.ClientCredentials.UserName.Password = apiPassword;
-
-                var applicationResponse = await client.submitApplicationRequestAsync(request);
-                
-                var resultRequest = new receiveApplicationResultRequest1
-                {
-                    receiveApplicationResultRequest = new receiveApplicationResultRequest
-                    {
-                        apiKey = apiKey,
-                        applicationId = applicationResponse.submitApplicationResponse.application.applicationId,
-                        issuerId = issuerId
-                    }
-                };  
-
-                receiveApplicationResultResponse1 receiveApplicationResponse;
-                ApplicationStatus status;
-
-                do
-                {
-                    Thread.Sleep(1000);
-                    receiveApplicationResponse = await client.receiveApplicationResultAsync(resultRequest);
-                    status = receiveApplicationResponse.receiveApplicationResultResponse.application.status;
-                } while(status == ApplicationStatus.IN_PROCESS);
-
-                switch (status)
-                {
-                    case ApplicationStatus.COMPLETED:
-                        return receiveApplicationResponse.receiveApplicationResultResponse.application.result
-                            .Deserialize<TResponse>();
-                    
-                    case ApplicationStatus.REJECTED:
-                    {
-                        var application = receiveApplicationResponse.receiveApplicationResultResponse.application;
-                    
-                        var errorMessage = "applicationId: '" + application.applicationId;
-                    
-                        errorMessage = application.errors.Aggregate(errorMessage,
-                            (current, error) => 
-                                current + ("', errorCode: '" + error.code + "', errorMessage: '" + error.Value));
-                    
-                        throw new Exception(errorMessage + "'");
-                    }
-                    
-                    default:
-                        return null;
                 }
-            }
-            catch (Exception e)
+            };
+
+            var client = new ApplicationManagementServicePortTypeClient();
+            client.ClientCredentials.UserName.UserName = apiLogin;
+            client.ClientCredentials.UserName.Password = apiPassword;
+
+            var retries = 0;
+            var needToRetry = false;
+
+            var applicationResponse = new submitApplicationRequestResponse();
+
+            do
             {
-                Console.WriteLine(e);
-                throw;
+                try
+                {
+                    applicationResponse = await client.submitApplicationRequestAsync(request);
+                    needToRetry = false;
+                }
+                catch (CommunicationException e)
+                {
+                    if (retries > 10)
+                    {
+                        Console.WriteLine("MIS: Too many connection retries");
+                        throw;
+                    }
+
+                    Console.WriteLine(e);
+                    Console.WriteLine($"retries: {retries}");
+                    retries++;
+                    await Task.Delay(1000);
+                    needToRetry = true;
+                }
+            } while (needToRetry);
+
+            var resultRequest = new receiveApplicationResultRequest1
+            {
+                receiveApplicationResultRequest = new receiveApplicationResultRequest
+                {
+                    apiKey = apiKey,
+                    applicationId = applicationResponse.submitApplicationResponse.application.applicationId,
+                    issuerId = issuerId
+                }
+            };
+
+            receiveApplicationResultResponse1 receiveApplicationResponse;
+            ApplicationStatus status;
+
+            do
+            {
+                await Task.Delay(1000);
+                receiveApplicationResponse = await client.receiveApplicationResultAsync(resultRequest);
+                status = receiveApplicationResponse.receiveApplicationResultResponse.application.status;
+            } while (status == ApplicationStatus.IN_PROCESS);
+
+            switch (status)
+            {
+                case ApplicationStatus.COMPLETED:
+                    return receiveApplicationResponse.receiveApplicationResultResponse.application.result
+                        .Deserialize<TResponse>();
+
+                case ApplicationStatus.REJECTED:
+                {
+                    var application = receiveApplicationResponse.receiveApplicationResultResponse.application;
+
+                    var errorMessage = "applicationId: '" + application.applicationId;
+
+                    errorMessage = application.errors.Aggregate(errorMessage,
+                        (current, error) =>
+                            current + ("', errorCode: '" + error.code + "', errorMessage: '" + error.Value));
+
+                    //Предприятие с указанным идентификатором не найдено
+                    if (application.errors.Select(x => x.code).Contains("MERC31180"))
+                        throw new MercuryEnterpriseNotFoundException(errorMessage);
+
+                    throw new MercuryServiceException(errorMessage + "'");
+                }
+
+                default:
+                    return null;
             }
         }
         
