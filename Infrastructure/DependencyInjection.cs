@@ -96,7 +96,7 @@ namespace Infrastructure
                 q.UseDefaultThreadPool(tp => { tp.MaxConcurrency = 10; });
                 q.ScheduleJob<AutoVsdProcessJob>(trigger => trigger
                     .WithIdentity("AutoVsdProcess trigger")
-                    .WithCronSchedule("0 6 0 * * ?")
+                    .WithCronSchedule("0 0 2 * * ?")
                 );
                 q.UseTimeZoneConverter();
                 services.AddTransient<AutoVsdProcessJob>();

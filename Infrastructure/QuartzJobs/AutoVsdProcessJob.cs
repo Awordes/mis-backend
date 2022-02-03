@@ -9,7 +9,6 @@ using Core.Application.Usecases.MercuryIntegration.Commands;
 using Core.Application.Usecases.MercuryIntegration.Models;
 using Core.Application.Usecases.MercuryIntegration.ViewModels;
 using Core.Domain.Auth;
-using Infrastructure.Services;
 using Infrastructure.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
