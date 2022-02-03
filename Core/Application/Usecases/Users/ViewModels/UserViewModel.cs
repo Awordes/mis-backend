@@ -102,5 +102,10 @@ namespace Core.Application.Usecases.Users.ViewModels
         /// Номер телефона
         /// </summary>
         public string PhoneNumber { get; set; }
+
+        /// <summary>
+        /// Признак доступности автоматического закрытия ВСД
+        /// </summary>
+        public bool AutoVsdProcess { get; set; }
     }
 }

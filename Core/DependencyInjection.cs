@@ -15,8 +15,6 @@ namespace Core
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
             
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
-            
             services.Configure<RoleOptions>(configuration.GetSection(nameof(RoleOptions)));
 
             return services;

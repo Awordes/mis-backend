@@ -9,7 +9,7 @@ using Core.Domain.Operations;
 
 namespace Infrastructure
 {
-    internal class MisDbContext : IdentityDbContext<User, Role, Guid>, IMisDbContext
+    public class MisDbContext : IdentityDbContext<User, Role, Guid>, IMisDbContext
     {
         public MisDbContext(DbContextOptions options) : base(options)
         { }

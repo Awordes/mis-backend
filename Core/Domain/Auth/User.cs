@@ -75,5 +75,10 @@ namespace Core.Domain.Auth
         /// Заявление шлюза Ветис.API
         /// </summary>
         public MercuryFileInfo VetisStatement { get; set; }
+
+        /// <summary>
+        /// Признак доступности автоматического закрытия ВСД
+        /// </summary>
+        public bool AutoVsdProcess { get; set; }
     }
 }

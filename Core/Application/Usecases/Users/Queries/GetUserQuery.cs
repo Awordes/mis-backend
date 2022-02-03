@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Core.Application.Usecases.Users.ViewModels;
 using Core.Domain.Auth;
-using IdentityServer4.Extensions;
+using Duende.IdentityServer.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

@@ -43,7 +43,7 @@ namespace Core.Application.Usecases.Templates.Commands
                     entity.FileName = request.FormFile.FileName;
                     entity.ContentType = request.FormFile.ContentType;
 
-                    await _context.Templates.AddAsync(entity, cancellationToken);
+                    _context.Templates.Add(entity);
 
                     await _context.SaveChangesAsync(cancellationToken);
                     

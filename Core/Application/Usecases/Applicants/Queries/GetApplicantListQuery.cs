@@ -10,6 +10,7 @@ using Core.Application.Usecases.Applicants.ViewModels;
 using Core.Domain.Applicants;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Core.Application.Usecases.Applicants.Queries
 {
@@ -29,11 +30,13 @@ namespace Core.Application.Usecases.Applicants.Queries
         {
             private readonly IMisDbContext _context;
             private readonly IMapper _mapper;
+            private readonly ILogger<Handler> _logger;
 
-            public Handler(IMisDbContext context, IMapper mapper)
+            public Handler(IMisDbContext context, IMapper mapper, ILogger<Handler> logger)
             {
                 _context = context;
                 _mapper = mapper;
+                _logger = logger;
             }
 
             public async Task<PagedResult<ApplicantViewModel>> Handle
@@ -48,7 +51,7 @@ namespace Core.Application.Usecases.Applicants.Queries
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                    _logger.LogError(e, e.Message);
                     throw;
                 }
             }

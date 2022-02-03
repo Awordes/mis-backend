@@ -7,6 +7,7 @@ using Core.Application.Common.Mapping;
 using Core.Domain.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Application.Usecases.Enterprises.Commands
 {
@@ -37,14 +38,14 @@ namespace Core.Application.Usecases.Enterprises.Commands
             {
                 try
                 {
-                    var user = await _userManager.FindByIdAsync(request.UserId.ToString())
+                    var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken)
                         ?? throw new Exception($@"Пользователь с идентификатором {request.UserId} не найден.");
 
                     var entity = _mapper.Map<Enterprise>(request);
 
                     entity.User = user;
 
-                    await _context.Enterprises.AddAsync(entity, cancellationToken);
+                    _context.Enterprises.Add(entity);
 
                     await _context.SaveChangesAsync(cancellationToken);
                     
