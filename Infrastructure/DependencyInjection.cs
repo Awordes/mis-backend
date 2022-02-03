@@ -10,10 +10,10 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Reflection;
 using Infrastructure.Factories;
-using Hangfire;
-using Hangfire.PostgreSql;
 using Infrastructure.Options;
+using Infrastructure.QuartzJobs;
 using Infrastructure.Services;
+using Quartz;
 
 namespace Infrastructure
 {
@@ -35,15 +35,10 @@ namespace Infrastructure
             var identityOptions = new IdentityConfigurationOptions();
             identityOptionsConfig.Bind(identityOptions);
 
-            var hangfireOptionsConfig = configuration.GetSection(HangfireOptions.SectionName);
-            services.Configure<HangfireOptions>(hangfireOptionsConfig);
-            var hangfireOptions = new HangfireOptions();
-            hangfireOptionsConfig.Bind(hangfireOptions);
-
             var logFolderOptionsConfig = configuration.GetSection(LogFolderOptions.SectionName);
             services.Configure<LogFolderOptions>(logFolderOptionsConfig);
             var logFolderOptions = new LogFolderOptions();
-            hangfireOptionsConfig.Bind(logFolderOptions);
+            logFolderOptionsConfig.Bind(logFolderOptions);
 
             services.AddScoped<IMisDbContext, MisDbContext>();
             services.AddScoped<IMercuryService, MercuryService>();
@@ -52,7 +47,6 @@ namespace Infrastructure
             services.AddScoped<ITemplateService, TemplateService>();
             services.AddScoped<ILogService, LogService>();
             services.AddScoped<IMisDbContextFactory, MisDbContextFactory>();
-            services.AddScoped<ISchedulerService, SchedulerService>();
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
             
@@ -92,22 +86,25 @@ namespace Infrastructure
             {
                 options.ValidationInterval = TimeSpan.Zero;   
             });
-            
-            services.AddHangfire(opt => opt
-                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-                .UseSimpleAssemblyNameTypeSerializer()
-                .UseRecommendedSerializerSettings()
-                .UsePostgreSqlStorage(misDbOptions.ConnectionString, new PostgreSqlStorageOptions
-                {
-                    SchemaName = hangfireOptions.SchemaName
-                })
-            );
-            
-            services.AddHangfireServer(opt =>
+
+            services.AddQuartz(q =>
             {
-                opt.WorkerCount = hangfireOptions.WorkerCount;
-                opt.ServerName = hangfireOptions.MisServerName;
-                opt.HeartbeatInterval = TimeSpan.FromMinutes(hangfireOptions.HeartbeatIntervalMinutesCount);
+                q.SchedulerId = "AutoVsdProcessing";
+                q.UseMicrosoftDependencyInjectionJobFactory();
+                q.UseSimpleTypeLoader();
+                q.UseInMemoryStore();
+                q.UseDefaultThreadPool(tp => { tp.MaxConcurrency = 10; });
+                q.ScheduleJob<AutoVsdProcessJob>(trigger => trigger
+                    .WithIdentity("AutoVsdProcess trigger")
+                    .WithCronSchedule("0 6 0 * * ?")
+                );
+                q.UseTimeZoneConverter();
+                services.AddTransient<AutoVsdProcessJob>();
+            });
+
+            services.AddQuartzHostedService(options =>
+            {
+                options.WaitForJobsToComplete = true;
             });
             
             return services;
