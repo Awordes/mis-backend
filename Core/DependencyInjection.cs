@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using Core.Application.Common.Behaviors;
 using Core.Application.Common.Options;
 
 namespace Core

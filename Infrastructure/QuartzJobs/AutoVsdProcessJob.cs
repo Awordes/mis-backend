@@ -13,22 +13,23 @@ using Infrastructure.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Quartz;
 
-namespace Infrastructure.Services
+namespace Infrastructure.QuartzJobs
 {
-    public class SchedulerService: ISchedulerService
+    public class AutoVsdProcessJob: IJob
     {
         private readonly IMisDbContext _context;
         private readonly IMediator _mediator;
-        private readonly ILogger<SchedulerService> _logger;
+        private readonly ILogger<AutoVsdProcessJob> _logger;
         private readonly IMercuryService _mercuryService;
 
         private List<User> _users;
-
-        public SchedulerService(
+        
+        public AutoVsdProcessJob(
             IMisDbContext context,
             IMediator mediator,
-            ILogger<SchedulerService> logger,
+            ILogger<AutoVsdProcessJob> logger,
             IMercuryService mercuryService)
         {
             _context = context;
@@ -36,13 +37,14 @@ namespace Infrastructure.Services
             _logger = logger;
             _mercuryService = mercuryService;
         }
-
-        public async Task AutoProcessVsd(CancellationToken cancellationToken)
+        
+        public async Task Execute(IJobExecutionContext context)
         {
+            var cancellationToken = context.CancellationToken;
             try
             {
                 _users = await _context.Users.AsNoTracking()
-                        .Include(x => x.Enterprises)
+                    .Include(x => x.Enterprises)
                     .Where(x => x.AutoVsdProcess && !x.Deleted)
                     .ToListAsync(cancellationToken);
 
@@ -84,6 +86,7 @@ namespace Infrastructure.Services
                 throw;
             }
         }
+        
 
         private async Task ProcessVsd(User user, CancellationToken cancellationToken)
         {
