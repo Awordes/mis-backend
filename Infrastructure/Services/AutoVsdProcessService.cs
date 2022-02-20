@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Core.Application.Common;
 using Core.Application.Common.Services;
 using Core.Application.Usecases.MercuryIntegration.Commands;
 using Core.Application.Usecases.MercuryIntegration.Models;
@@ -11,60 +10,44 @@ using Core.Application.Usecases.MercuryIntegration.ViewModels;
 using Core.Domain.Auth;
 using Infrastructure.Exceptions;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Quartz;
 
-namespace Infrastructure.QuartzJobs
+namespace Infrastructure.Services
 {
-    public class AutoVsdProcessJob: IJob
+    public class AutoVsdProcessService: IAutoVsdProcessService
     {
-        private readonly IMisDbContext _context;
         private readonly IMediator _mediator;
-        private readonly ILogger<AutoVsdProcessJob> _logger;
+        private readonly ILogger<AutoVsdProcessService> _logger;
         private readonly IMercuryService _mercuryService;
+        private readonly IAutoVsdProcessDataService _autoVsdProcessDataService;
 
-        private List<User> _users;
-        
-        public AutoVsdProcessJob(
-            IMisDbContext context,
-            IMediator mediator,
-            ILogger<AutoVsdProcessJob> logger,
-            IMercuryService mercuryService)
+        public AutoVsdProcessService(IMediator mediator,
+            ILogger<AutoVsdProcessService> logger,
+            IMercuryService mercuryService,
+            IAutoVsdProcessDataService autoVsdProcessDataService)
         {
-            _context = context;
             _mediator = mediator;
             _logger = logger;
             _mercuryService = mercuryService;
+            _autoVsdProcessDataService = autoVsdProcessDataService;
         }
-        
-        public async Task Execute(IJobExecutionContext context)
+
+        public Task ProcessVsd(CancellationToken cancellationToken)
         {
-            var cancellationToken = context.CancellationToken;
             try
             {
-                _users = await _context.Users.AsNoTracking()
-                    .Include(x => x.Enterprises)
-                    .Where(x => x.AutoVsdProcess && !x.Deleted)
-                    .ToListAsync(cancellationToken);
-
-                if (_users.Count == 0)
-                {
-                    _logger.LogInformation("Не найдены пользователи для автогашения.");
-                    return;
-                }
-                
-                var processingTimeEnd = DateTime.Now.AddHours(3);
-
                 _logger.LogInformation("Начало процедуры автогашения");
 
-                do
+                List<User> currentUsers;
+
+                lock (_autoVsdProcessDataService.Locker)
                 {
-                    _logger.LogInformation("Количество пользователей - {0}", _users.Count);
-                    var currentUsers = _users.Select(x => x).ToList();
-                    
-                    Task.WaitAll(currentUsers.Select(user => ProcessVsd(user, cancellationToken)).ToArray());
-                } while (_users.Count > 0 && DateTime.Now < processingTimeEnd);
+                    currentUsers = _autoVsdProcessDataService.Users.ToList();
+                }
+                
+                _logger.LogInformation("Количество пользователей - {0}", currentUsers.Count);
+                
+                Task.WaitAll(currentUsers.Select(user => ProcessVsd(user, cancellationToken)).ToArray());
                 
                 _logger.LogInformation("Завершение процедуры автогашения");
             }
@@ -85,6 +68,8 @@ namespace Infrastructure.QuartzJobs
                 _logger.LogError(e, e.Message);
                 throw;
             }
+            
+            return Task.CompletedTask;
         }
         
 
@@ -94,14 +79,17 @@ namespace Infrastructure.QuartzJobs
             {
                 if (user.Enterprises is null)
                 {
-                    _users.Remove(user);
+                    lock (_autoVsdProcessDataService.Locker)
+                    {
+                        _autoVsdProcessDataService.Users.Remove(user);
+                    }
                     _logger.LogInformation("Завершение процедуры автогашения для пользователя {0}", user.UserName);
                     return;
                 }
 
                 foreach (var enterprise in user.Enterprises)
                 {
-                    var vsdList = new List<VsdViewModel>();
+                    List<VsdViewModel> vsdList;
 
                     try
                     {
@@ -122,7 +110,7 @@ namespace Infrastructure.QuartzJobs
 
                     _logger.LogInformation(
                         "Начало сеанса автогашения. Пользователь: {0}, Предприятие: {1}, Количество ВСД: {2}",
-                        user.UserName, enterprise.Name, vsdList?.Count);
+                        user.UserName, enterprise.Name, vsdList.Count);
 
                     await _mediator.Send(new ProcessIncomingVsdListAutoCommand
                     {
@@ -134,12 +122,15 @@ namespace Infrastructure.QuartzJobs
 
                     _logger.LogInformation(
                         "Сеанс автогашения успешно завершён. Пользователь: {0}, Предприятие: {1}, Количество ВСД: {2}",
-                        user.UserName, enterprise.Name, vsdList?.Count);
+                        user.UserName, enterprise.Name, vsdList.Count);
                 }
 
                 if (user.Enterprises.Count == 0)
                 {
-                    _users.Remove(user);
+                    lock (_autoVsdProcessDataService.Locker)
+                    {
+                        _autoVsdProcessDataService.Users.Remove(user);
+                    }
                     _logger.LogInformation("Завершение процедуры автогашения для пользователя {0}", user.UserName);
                 }
             }
