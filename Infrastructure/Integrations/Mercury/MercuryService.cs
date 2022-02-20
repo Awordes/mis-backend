@@ -8,7 +8,6 @@ using System.ServiceModel;
 using AutoMapper;
 using Core.Application.Usecases.MercuryIntegration.ViewModels;
 using Infrastructure.Options;
-using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -17,15 +16,15 @@ namespace Infrastructure.Integrations.Mercury
     public class MercuryService : IMercuryService
     {
         private readonly MercuryOptions _mercuryOptions;
-        private readonly IMediator _mediator;
         private readonly ILogService _logService;
         private readonly ILogger<MercuryService> _logger;
 
-        public MercuryService(IOptionsMonitor<MercuryOptions> mercuryOptions,
-            IMediator mediator, ILogService logService, ILogger<MercuryService> logger)
+        public MercuryService(
+            IOptionsMonitor<MercuryOptions> mercuryOptions,
+            ILogService logService,
+            ILogger<MercuryService> logger)
         {
             _mercuryOptions = mercuryOptions.CurrentValue;
-            _mediator = mediator;
             _logService = logService;
             _logger = logger;
         }
