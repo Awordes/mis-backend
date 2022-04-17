@@ -3,6 +3,7 @@ using Core.Application.Common.Pagination;
 using Core.Application.Usecases.Applicants.Commands;
 using Core.Application.Usecases.Applicants.Queries;
 using Core.Application.Usecases.Applicants.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,6 +26,7 @@ namespace MercuryIntegrationService.Controllers
         /// <summary>
         /// Получить список заявителей
         /// </summary>
+        [Authorize(Roles = "admin")]
         [HttpGet("/[controller]/List")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
