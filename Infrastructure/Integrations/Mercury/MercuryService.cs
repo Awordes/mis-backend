@@ -7,6 +7,7 @@ using System.Linq;
 using System.ServiceModel;
 using AutoMapper;
 using Core.Application.Usecases.MercuryIntegration.ViewModels;
+using Infrastructure.Exceptions;
 using Infrastructure.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -192,7 +193,7 @@ namespace Infrastructure.Integrations.Mercury
                     }
                     
                     if (tnns is null || tnns.Count == 0)
-                        throw new Exception($"Не найдены транспортные накладные для ВСД {uuid}");
+                        throw new MercuryServiceException($"Не найдены транспортные накладные для ВСД {uuid}", uuid);
 
                     var tnn = tnns[0];
 
@@ -280,6 +281,7 @@ namespace Infrastructure.Integrations.Mercury
                 {
                     error = e.Message;
                     _logger.LogError(e, e.Message);
+                    throw;
                 }
                 finally
                 {

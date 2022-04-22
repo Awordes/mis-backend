@@ -47,7 +47,7 @@ namespace Infrastructure
             services.AddScoped<ITemplateService, TemplateService>();
             services.AddScoped<ILogService, LogService>();
             services.AddScoped<IMisDbContextFactory, MisDbContextFactory>();
-            services.AddTransient<IAutoVsdProcessService, AutoVsdProcessService>();
+            services.AddScoped<IAutoVsdProcessService, AutoVsdProcessService>();
             services.AddSingleton<IAutoVsdProcessDataService, AutoVsdProcessDataService>();
             services.AddScoped<IAutoVsdProcessingStartService, AutoVsdProcessingStartService>();
 
@@ -104,7 +104,7 @@ namespace Infrastructure
                 );
                 q.UseTimeZoneConverter();
                 services.AddTransient<StartProcessingJob>();
-                services.AddTransient<ReprocessingJob>();
+                services.AddScoped<ReprocessingJob>();
             });
 
             services.AddQuartzHostedService(options =>

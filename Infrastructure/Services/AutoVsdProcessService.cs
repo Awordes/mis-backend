@@ -32,7 +32,7 @@ namespace Infrastructure.Services
             _autoVsdProcessDataService = autoVsdProcessDataService;
         }
 
-        public Task ProcessVsd(CancellationToken cancellationToken)
+        public async Task ProcessVsd(CancellationToken cancellationToken)
         {
             try
             {
@@ -46,12 +46,12 @@ namespace Infrastructure.Services
                 }
                 
                 _logger.LogInformation("Количество пользователей - {0}", currentUsers.Count);
-                
-                Task.WaitAll(currentUsers.Select(user => ProcessVsd(user, cancellationToken)).ToArray());
+
+                await Task.WhenAll(currentUsers.Select(user => ProcessVsd(user, cancellationToken)).ToList());
                 
                 _logger.LogInformation("Завершение процедуры автогашения");
             }
-            catch (MercuryServiceException)
+            catch (MercuryRequestRejectedException)
             {
                 throw;
             }
@@ -68,8 +68,6 @@ namespace Infrastructure.Services
                 _logger.LogError(e, e.Message);
                 throw;
             }
-            
-            return Task.CompletedTask;
         }
         
 
@@ -83,6 +81,7 @@ namespace Infrastructure.Services
                     {
                         _autoVsdProcessDataService.Users.Remove(user);
                     }
+
                     _logger.LogInformation("Завершение процедуры автогашения для пользователя {0}", user.UserName);
                     return;
                 }
@@ -93,10 +92,21 @@ namespace Infrastructure.Services
 
                     try
                     {
-                        vsdList = (await _mercuryService.GetVetDocumentList("a10003", user, enterprise, 10, 0, 3, 1))
+                        var offset = 0;
+                        lock (_autoVsdProcessDataService.Locker)
+                        {
+                            offset = _autoVsdProcessDataService.VsdBlackList.Count;
+                        }
+                        
+                        vsdList = (await _mercuryService.GetVetDocumentList("a10003", user, enterprise, 10, offset, 3, 1))
                             .result;
                     }
                     catch (MercuryEnterpriseNotFoundException)
+                    {
+                        user.Enterprises.Remove(enterprise);
+                        continue;
+                    }
+                    catch (MercuryOffsetException)
                     {
                         user.Enterprises.Remove(enterprise);
                         continue;
@@ -131,16 +141,32 @@ namespace Infrastructure.Services
                     {
                         _autoVsdProcessDataService.Users.Remove(user);
                     }
+
                     _logger.LogInformation("Завершение процедуры автогашения для пользователя {0}", user.UserName);
                 }
             }
-            catch (MercuryServiceException)
+            catch (MercuryRequestRejectedException)
             {
                 throw;
             }
             catch (OperationCanceledException)
             {
                 throw;
+            }
+            catch (AggregateException e)
+            {
+                foreach (var innerException in e.InnerExceptions)
+                {
+                    if (innerException is MercuryServiceException mercuryServiceException)
+                    {
+                        lock (_autoVsdProcessDataService.Locker)
+                        {
+                            _autoVsdProcessDataService.VsdBlackList.Add(mercuryServiceException.VsdId);
+                            _logger.LogInformation("Произошла ошибка при обработке автогашения. Пользователь: {0}", user.UserName);
+                            _logger.LogError(mercuryServiceException.Message, mercuryServiceException);
+                        }
+                    }
+                }
             }
             catch (Exception e)
             {

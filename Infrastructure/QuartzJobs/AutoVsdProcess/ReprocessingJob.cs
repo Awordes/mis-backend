@@ -26,23 +26,22 @@ namespace Infrastructure.QuartzJobs.AutoVsdProcess
         public async Task Execute(IJobExecutionContext context)
         {
             await _autoVsdProcessService.ProcessVsd(context.CancellationToken);
-            
-            GC.Collect();
 
-            if (DateTime.Now < _autoVsdProcessDataService.AutoProcessEnd)
+            if (DateTime.Now < _autoVsdProcessDataService.AutoProcessEnd
+                && _autoVsdProcessDataService.Users.Count > 0)
             {
                 var scheduler = await _schedulerFactory.GetScheduler();
 
                 var job = JobBuilder.Create<ReprocessingJob>().Build();
 
                 var trigger = TriggerBuilder.Create().StartNow().Build();
-
-                await scheduler.ScheduleJob(job, trigger);
                 
                 _logger.LogInformation("Перезапуск процедуры автогашения.");
+
+                await scheduler.ScheduleJob(job, trigger);
             }
             else
-                _logger.LogInformation("Завершение процедуры автогашения");
+                _logger.LogInformation("Завершение перезапуска процедуры автогашения.");
         }
     }
 }

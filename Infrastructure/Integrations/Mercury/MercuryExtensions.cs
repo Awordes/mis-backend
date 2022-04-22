@@ -29,7 +29,12 @@ namespace Infrastructure.Integrations.Mercury
 
             using (var writer = result.CreateNavigator()?.AppendChild())
             {
-                if (writer is not null) new XmlSerializer(requestType, rootElement).Serialize(writer, requestData);
+                if (writer is not null)
+                {
+                    var serializer = new XmlSerializer(requestType, rootElement);
+                    serializer.Serialize(writer, requestData);
+                    writer.Close();
+                }
             }
 
             return result.DocumentElement;
@@ -43,9 +48,18 @@ namespace Infrastructure.Integrations.Mercury
             {  
                 ElementName = responseType.ToCamelCase(),  
                 Namespace = responseType.GetCustomAttribute<XmlTypeAttribute>()?.Namespace  
-            };  
-            var serializer = new XmlSerializer(responseType, rootAttribute);  
-            return (TResponse) serializer.Deserialize(new XmlNodeReader(wrapper.Any));  
+            };
+
+            object result;
+
+            using (var reader = new XmlNodeReader(wrapper.Any))
+            {
+                var serializer = new XmlSerializer(responseType, rootAttribute);
+                result = serializer.Deserialize(reader);
+                reader.Close();
+            }
+            
+            return (TResponse) result;
         } 
 
         private static string ToCamelCase(this MemberInfo requestType)  
@@ -81,37 +95,38 @@ namespace Infrastructure.Integrations.Mercury
                 }
             };
 
-            var client = new ApplicationManagementServicePortTypeClient();
-            client.ClientCredentials.UserName.UserName = apiLogin;
-            client.ClientCredentials.UserName.Password = apiPassword;
-
-            var retries = 0;
-            var needToRetry = false;
-
             var applicationResponse = new submitApplicationRequestResponse();
 
-            do
+            using (var client = new ApplicationManagementServicePortTypeClient())
             {
-                try
+                client.ClientCredentials.UserName.UserName = apiLogin;
+                client.ClientCredentials.UserName.Password = apiPassword;
+                bool needToRetry;
+                var retries = 0;
+                do
                 {
-                    applicationResponse = await client.submitApplicationRequestAsync(request);
-                    needToRetry = false;
-                }
-                catch (CommunicationException e)
-                {
-                    if (retries > 10)
+                    try
                     {
-                        Console.WriteLine("MIS: Too many connection retries");
-                        throw;
+                        applicationResponse = await client.submitApplicationRequestAsync(request);
+                        needToRetry = false;
                     }
+                    catch (CommunicationException e)
+                    {
+                        if (retries > 10)
+                        {
+                            Console.WriteLine("MIS: Too many connection retries");
+                            throw;
+                        }
 
-                    Console.WriteLine(e);
-                    Console.WriteLine($"retries: {retries}");
-                    retries++;
-                    await Task.Delay(1000);
-                    needToRetry = true;
-                }
-            } while (needToRetry);
+                        Console.WriteLine(e);
+                        Console.WriteLine($"retries: {retries}");
+                        retries++;
+                        await Task.Delay(1000);
+                        needToRetry = true;
+                    }
+                } while (needToRetry);
+            }
+            
 
             var resultRequest = new receiveApplicationResultRequest1
             {
@@ -124,16 +139,21 @@ namespace Infrastructure.Integrations.Mercury
             };
 
             receiveApplicationResultResponse1 receiveApplicationResponse;
-            ApplicationStatus status;
 
-            do
+            using (var client = new ApplicationManagementServicePortTypeClient())
             {
-                await Task.Delay(1000);
-                receiveApplicationResponse = await client.receiveApplicationResultAsync(resultRequest);
-                status = receiveApplicationResponse.receiveApplicationResultResponse.application.status;
-            } while (status == ApplicationStatus.IN_PROCESS);
+                client.ClientCredentials.UserName.UserName = apiLogin;
+                client.ClientCredentials.UserName.Password = apiPassword;
 
-            switch (status)
+                do
+                {
+                    await Task.Delay(1000);
+                    receiveApplicationResponse = await client.receiveApplicationResultAsync(resultRequest);
+                } while (receiveApplicationResponse.receiveApplicationResultResponse.application.status
+                         == ApplicationStatus.IN_PROCESS);
+            }
+            
+            switch (receiveApplicationResponse.receiveApplicationResultResponse.application.status)
             {
                 case ApplicationStatus.COMPLETED:
                     return receiveApplicationResponse.receiveApplicationResultResponse.application.result
@@ -152,8 +172,11 @@ namespace Infrastructure.Integrations.Mercury
                     //Предприятие с указанным идентификатором не найдено
                     if (application.errors.Select(x => x.code).Contains("MERC31180"))
                         throw new MercuryEnterpriseNotFoundException(errorMessage);
+                    //Отступ превышает количество записей
+                    else if (application.errors.Select(x => x.code).Contains("MERC31304"))
+                        throw new MercuryOffsetException(errorMessage);
 
-                    throw new MercuryServiceException(errorMessage + "'");
+                    throw new MercuryRequestRejectedException(errorMessage + "'");
                 }
 
                 default:

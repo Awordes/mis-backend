@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Application.Common;
@@ -42,6 +43,8 @@ namespace Infrastructure.QuartzJobs.AutoVsdProcess
                 .Include(x => x.Enterprises)
                 .Where(x => x.AutoVsdProcess && !x.Deleted)
                 .ToListAsync(context.CancellationToken);
+
+            _autoVsdProcessDataService.VsdBlackList = new List<string>();
 
             await scheduler.ScheduleJob(job, trigger, context.CancellationToken);
             

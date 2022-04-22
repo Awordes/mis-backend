@@ -12,5 +12,7 @@ namespace Infrastructure.Services
         public object Locker { get; set; } = new();
 
         public ICollection<User> Users { get; set; }
+        
+        public ICollection<string> VsdBlackList { get; set; }
     }
 }
