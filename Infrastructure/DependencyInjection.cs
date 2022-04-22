@@ -11,7 +11,7 @@ using System;
 using System.Reflection;
 using Infrastructure.Factories;
 using Infrastructure.Options;
-using Infrastructure.QuartzJobs;
+using Infrastructure.QuartzJobs.AutoVsdProcess;
 using Infrastructure.Services;
 using Quartz;
 
@@ -47,6 +47,9 @@ namespace Infrastructure
             services.AddScoped<ITemplateService, TemplateService>();
             services.AddScoped<ILogService, LogService>();
             services.AddScoped<IMisDbContextFactory, MisDbContextFactory>();
+            services.AddScoped<IAutoVsdProcessService, AutoVsdProcessService>();
+            services.AddSingleton<IAutoVsdProcessDataService, AutoVsdProcessDataService>();
+            services.AddScoped<IAutoVsdProcessingStartService, AutoVsdProcessingStartService>();
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
             
@@ -87,6 +90,7 @@ namespace Infrastructure
                 options.ValidationInterval = TimeSpan.Zero;   
             });
 
+            //todo вынести в опции
             services.AddQuartz(q =>
             {
                 q.SchedulerId = "AutoVsdProcessing";
@@ -94,12 +98,13 @@ namespace Infrastructure
                 q.UseSimpleTypeLoader();
                 q.UseInMemoryStore();
                 q.UseDefaultThreadPool(tp => { tp.MaxConcurrency = 10; });
-                q.ScheduleJob<AutoVsdProcessJob>(trigger => trigger
-                    .WithIdentity("AutoVsdProcess trigger")
+                q.ScheduleJob<StartProcessingJob>(trigger => trigger
+                    .WithIdentity("Everyday AutoVsdProcess trigger")
                     .WithCronSchedule("0 0 2 * * ?")
                 );
                 q.UseTimeZoneConverter();
-                services.AddTransient<AutoVsdProcessJob>();
+                services.AddTransient<StartProcessingJob>();
+                services.AddScoped<ReprocessingJob>();
             });
 
             services.AddQuartzHostedService(options =>
