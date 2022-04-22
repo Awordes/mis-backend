@@ -2,9 +2,13 @@
 
 namespace Infrastructure.Exceptions
 {
-    public class MercuryServiceException : Exception
+    public class MercuryServiceException: Exception
     {
-        public MercuryServiceException(string message) :base(message)
-        { }
+        public string VsdId { get; }
+
+        public MercuryServiceException(string message, string vsdId) : base(message)
+        {
+            VsdId = vsdId;
+        }
     }
 }

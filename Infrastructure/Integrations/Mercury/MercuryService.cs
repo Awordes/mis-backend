@@ -7,8 +7,8 @@ using System.Linq;
 using System.ServiceModel;
 using AutoMapper;
 using Core.Application.Usecases.MercuryIntegration.ViewModels;
+using Infrastructure.Exceptions;
 using Infrastructure.Options;
-using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -17,15 +17,15 @@ namespace Infrastructure.Integrations.Mercury
     public class MercuryService : IMercuryService
     {
         private readonly MercuryOptions _mercuryOptions;
-        private readonly IMediator _mediator;
         private readonly ILogService _logService;
         private readonly ILogger<MercuryService> _logger;
 
-        public MercuryService(IOptionsMonitor<MercuryOptions> mercuryOptions,
-            IMediator mediator, ILogService logService, ILogger<MercuryService> logger)
+        public MercuryService(
+            IOptionsMonitor<MercuryOptions> mercuryOptions,
+            ILogService logService,
+            ILogger<MercuryService> logger)
         {
             _mercuryOptions = mercuryOptions.CurrentValue;
-            _mediator = mediator;
             _logService = logService;
             _logger = logger;
         }
@@ -193,7 +193,7 @@ namespace Infrastructure.Integrations.Mercury
                     }
                     
                     if (tnns is null || tnns.Count == 0)
-                        throw new Exception($"Не найдены транспортные накладные для ВСД {uuid}");
+                        throw new MercuryServiceException($"Не найдены транспортные накладные для ВСД {uuid}", uuid);
 
                     var tnn = tnns[0];
 
@@ -281,6 +281,7 @@ namespace Infrastructure.Integrations.Mercury
                 {
                     error = e.Message;
                     _logger.LogError(e, e.Message);
+                    throw;
                 }
                 finally
                 {
