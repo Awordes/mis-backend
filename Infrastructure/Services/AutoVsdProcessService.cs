@@ -4,35 +4,34 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Application.Common.Services;
-using Core.Application.Usecases.MercuryIntegration.Commands;
 using Core.Application.Usecases.MercuryIntegration.Models;
 using Core.Application.Usecases.MercuryIntegration.ViewModels;
 using Core.Domain.Auth;
+using Core.Domain.Operations;
 using Infrastructure.Exceptions;
-using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Services
 {
     public class AutoVsdProcessService: IAutoVsdProcessService
     {
-        private readonly IMediator _mediator;
         private readonly ILogger<AutoVsdProcessService> _logger;
         private readonly IMercuryService _mercuryService;
         private readonly IAutoVsdProcessDataService _autoVsdProcessDataService;
+        private readonly ILogService _logService;
 
-        public AutoVsdProcessService(IMediator mediator,
-            ILogger<AutoVsdProcessService> logger,
+        public AutoVsdProcessService(ILogger<AutoVsdProcessService> logger,
             IMercuryService mercuryService,
-            IAutoVsdProcessDataService autoVsdProcessDataService)
+            IAutoVsdProcessDataService autoVsdProcessDataService,
+            ILogService logService)
         {
-            _mediator = mediator;
             _logger = logger;
             _mercuryService = mercuryService;
             _autoVsdProcessDataService = autoVsdProcessDataService;
+            _logService = logService;
         }
 
-        public async Task ProcessVsd(CancellationToken cancellationToken)
+        public async Task StartProcessing(CancellationToken cancellationToken)
         {
             try
             {
@@ -45,15 +44,11 @@ namespace Infrastructure.Services
                     currentUsers = _autoVsdProcessDataService.Users.ToList();
                 }
                 
-                _logger.LogInformation("Количество пользователей - {0}", currentUsers.Count);
+                _logger.LogInformation($"Количество пользователей - {currentUsers.Count}");
 
-                await Task.WhenAll(currentUsers.Select(user => ProcessVsd(user, cancellationToken)).ToList());
+                await Task.WhenAll(currentUsers.Select(user => ProcessUserVsds(user, cancellationToken)).ToList());
                 
                 _logger.LogInformation("Завершение процедуры автогашения");
-            }
-            catch (MercuryRequestRejectedException)
-            {
-                throw;
             }
             catch (TaskCanceledException)
             {
@@ -70,8 +65,7 @@ namespace Infrastructure.Services
             }
         }
         
-
-        private async Task ProcessVsd(User user, CancellationToken cancellationToken)
+        private async Task ProcessUserVsds(User user, CancellationToken cancellationToken)
         {
             try
             {
@@ -82,7 +76,7 @@ namespace Infrastructure.Services
                         _autoVsdProcessDataService.Users.Remove(user);
                     }
 
-                    _logger.LogInformation("Завершение процедуры автогашения для пользователя {0}", user.UserName);
+                    _logger.LogInformation($"Завершение процедуры автогашения для пользователя {user.UserName}");
                     return;
                 }
 
@@ -95,7 +89,10 @@ namespace Infrastructure.Services
                         var offset = 0;
                         lock (_autoVsdProcessDataService.Locker)
                         {
-                            offset = _autoVsdProcessDataService.VsdBlackList.Count;
+                            _autoVsdProcessDataService.VsdBlackList.TryGetValue(enterprise.Id, out var blacklist);
+                            
+                            if (blacklist is not null)
+                                offset = blacklist.Count;
                         }
                         
                         vsdList = (await _mercuryService.GetVetDocumentList("a10003", user, enterprise, 10, offset, 3, 1))
@@ -118,21 +115,25 @@ namespace Infrastructure.Services
                         continue;
                     }
 
-                    _logger.LogInformation(
-                        "Начало сеанса автогашения. Пользователь: {0}, Предприятие: {1}, Количество ВСД: {2}",
-                        user.UserName, enterprise.Name, vsdList.Count);
+                    _logger.LogInformation($"Начало сеанса автогашения. " +
+                                           $"Пользователь: {user.UserName}, " +
+                                           $"Предприятие: {enterprise.Name}, " +
+                                           $"Количество ВСД: {vsdList.Count}");
 
-                    await _mediator.Send(new ProcessIncomingVsdListAutoCommand
-                    {
-                        Enterprise = enterprise,
-                        User = user,
-                        Vsds = vsdList.Select(vsd => new VsdForProcessModel
-                            {VsdId = vsd.Id, ProcessDate = vsd.ProcessDate}).ToList()
-                    }, cancellationToken);
+                    await ProcessVsd(
+                        user,
+                        enterprise,
+                        vsdList.Select(vsd => new VsdForProcessModel
+                            {
+                                VsdId = vsd.Id, ProcessDate = vsd.ProcessDate
+                            }
+                        ).ToList(),
+                        cancellationToken);
 
-                    _logger.LogInformation(
-                        "Сеанс автогашения успешно завершён. Пользователь: {0}, Предприятие: {1}, Количество ВСД: {2}",
-                        user.UserName, enterprise.Name, vsdList.Count);
+                    _logger.LogInformation($"Сеанс автогашения успешно завершён. " +
+                                           $"Пользователь: {user.UserName}, " +
+                                           $"Предприятие: {enterprise.Name}, " +
+                                           $"Количество ВСД: {vsdList.Count}");
                 }
 
                 if (user.Enterprises.Count == 0)
@@ -142,36 +143,78 @@ namespace Infrastructure.Services
                         _autoVsdProcessDataService.Users.Remove(user);
                     }
 
-                    _logger.LogInformation("Завершение процедуры автогашения для пользователя {0}", user.UserName);
+                    _logger.LogInformation($"Завершение процедуры автогашения для пользователя {user.UserName}");
                 }
-            }
-            catch (MercuryRequestRejectedException)
-            {
-                throw;
             }
             catch (OperationCanceledException)
             {
                 throw;
             }
-            catch (AggregateException e)
+            catch (Exception e)
             {
-                foreach (var innerException in e.InnerExceptions)
+                _logger.LogError($"Произошла ошибка при обработке автогашения. Пользователь: {user.UserName}", e);
+            }
+        }
+
+        private async Task ProcessVsdMiddleware(
+            string localTransactionId, User user, Enterprise enterprise, string uuid, DateTime? processDate,
+            Guid operationId)
+        {
+            try
+            {
+                await _mercuryService.ProcessIncomingConsignment(localTransactionId, user, enterprise, uuid,
+                    processDate, operationId);
+            }
+            catch (MercuryServiceException e)
+            {
+                lock (_autoVsdProcessDataService.Locker)
                 {
-                    if (innerException is MercuryServiceException mercuryServiceException)
-                    {
-                        lock (_autoVsdProcessDataService.Locker)
-                        {
-                            _autoVsdProcessDataService.VsdBlackList.Add(mercuryServiceException.VsdId);
-                            _logger.LogInformation("Произошла ошибка при обработке автогашения. Пользователь: {0}", user.UserName);
-                            _logger.LogError(mercuryServiceException.Message, mercuryServiceException);
-                        }
-                    }
+                    _autoVsdProcessDataService.VsdBlackList.TryGetValue(e.EnterpriseId,
+                        out var blacklist);
+                            
+                    if (blacklist is null)
+                        _autoVsdProcessDataService.VsdBlackList.Add(e.EnterpriseId, new List<string> { e.VsdId });
+                    else
+                        blacklist.Add(e.VsdId);
+                    
+                    _logger.LogError(e, $"Произошла ошибка при обработке автогашения. Пользователь: {user.UserName}");
                 }
+                
             }
             catch (Exception e)
             {
-                _logger.LogInformation("Произошла ошибка при обработке автогашения. Пользователь: {0}", user.UserName);
-                _logger.LogError(e.Message, e);
+                _logger.LogError($"Произошла ошибка при обработке автогашения. Пользователь: {user.UserName}", e);
+            }
+        }
+
+        private async Task ProcessVsd(
+            User user, Enterprise enterprise, IEnumerable<VsdForProcessModel> vsds, CancellationToken cancellationToken)
+        {
+            var operationId = Guid.Empty;
+            
+            try
+            {
+                operationId = await _logService.StartOperation(user.Id, OperationType.VsdProcess, cancellationToken);
+                    
+                var tasks = new List<Task>();
+
+                foreach (var vsd in vsds)
+                {
+                    tasks.Add(ProcessVsdMiddleware(operationId.ToString(), user, enterprise, vsd.VsdId, vsd.ProcessDate, operationId));
+
+                    if (tasks.Count < 4) continue;
+
+                    await Task.WhenAll(tasks);
+
+                    tasks = new List<Task>();
+                }
+
+                await Task.WhenAll(tasks);
+            }
+            finally
+            {
+                if (operationId != Guid.Empty)
+                    await _logService.FinishOperation(operationId, cancellationToken);
             }
         }
     }

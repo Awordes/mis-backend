@@ -5,6 +5,6 @@ namespace Core.Application.Common.Services
 {
     public interface IAutoVsdProcessService
     {
-        Task ProcessVsd(CancellationToken cancellationToken);
+        Task StartProcessing (CancellationToken cancellationToken);
     }
 }

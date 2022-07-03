@@ -25,7 +25,7 @@ namespace Infrastructure.QuartzJobs.AutoVsdProcess
 
         public async Task Execute(IJobExecutionContext context)
         {
-            await _autoVsdProcessService.ProcessVsd(context.CancellationToken);
+            await _autoVsdProcessService.StartProcessing(context.CancellationToken);
 
             if (DateTime.Now < _autoVsdProcessDataService.AutoProcessEnd
                 && _autoVsdProcessDataService.Users.Count > 0)
@@ -41,7 +41,11 @@ namespace Infrastructure.QuartzJobs.AutoVsdProcess
                 await scheduler.ScheduleJob(job, trigger);
             }
             else
+            {
+                _autoVsdProcessDataService.VsdBlackList.Clear();
+                _autoVsdProcessDataService.Users.Clear();
                 _logger.LogInformation("Завершение перезапуска процедуры автогашения.");
+            }
         }
     }
 }

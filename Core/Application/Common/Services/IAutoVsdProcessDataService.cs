@@ -11,7 +11,7 @@ namespace Core.Application.Common.Services
         public object Locker { get; set; }
 
         public ICollection<User> Users { get; set; }
-
-        public ICollection<string> VsdBlackList { get; set; }
+        
+        public Dictionary<Guid, ICollection<string>> VsdBlackList { get; set; }
     }
 }

@@ -9,6 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Core.Application.Usecases.MercuryIntegration.Commands
 {
@@ -31,6 +32,7 @@ namespace Core.Application.Usecases.MercuryIntegration.Commands
             private readonly UserManager<User> _userManager;
             private readonly IMisDbContext _context;
             private readonly ILogService _logService;
+            private readonly ILogger<Handler> _logger;
 
             private Guid _operationId;
 
@@ -39,13 +41,15 @@ namespace Core.Application.Usecases.MercuryIntegration.Commands
                 IHttpContextAccessor httpContextAccessor,
                 UserManager<User> userManager,
                 IMisDbContext context,
-                ILogService logService)
+                ILogService logService,
+                ILogger<Handler> logger)
             {
                 _mercuryService = mercuryService;
                 _httpContextAccessor = httpContextAccessor;
                 _userManager = userManager;
                 _context = context;
                 _logService = logService;
+                _logger = logger;
             }
             
             public async Task<Unit> Handle(ProcessIncomingVsdCommand request, CancellationToken cancellationToken)
@@ -77,7 +81,7 @@ namespace Core.Application.Usecases.MercuryIntegration.Commands
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                    _logger.LogError(e, e.Message);
                     throw;
                 }
             }
