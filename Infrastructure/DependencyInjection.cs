@@ -40,6 +40,11 @@ namespace Infrastructure
             var logFolderOptions = new LogFolderOptions();
             logFolderOptionsConfig.Bind(logFolderOptions);
 
+            var autoVsdProcessingOptionsConfig = configuration.GetSection(AutoVsdProcessingOptions.SectionName);
+            services.Configure<AutoVsdProcessingOptions>(autoVsdProcessingOptionsConfig);
+            var autoVsdProcessingOptions = new AutoVsdProcessingOptions();
+            autoVsdProcessingOptionsConfig.Bind(autoVsdProcessingOptions);
+
             services.AddScoped<IMisDbContext, MisDbContext>();
             services.AddScoped<IMercuryService, MercuryService>();
             services.AddScoped<IFileService, FileService>();
@@ -90,17 +95,20 @@ namespace Infrastructure
                 options.ValidationInterval = TimeSpan.Zero;   
             });
 
-            //todo вынести в опции
             services.AddQuartz(q =>
             {
-                q.SchedulerId = "AutoVsdProcessing";
+                q.SchedulerId = autoVsdProcessingOptions.QuartzOptions.SchedulerId;
                 q.UseMicrosoftDependencyInjectionJobFactory();
                 q.UseSimpleTypeLoader();
                 q.UseInMemoryStore();
-                q.UseDefaultThreadPool(tp => { tp.MaxConcurrency = 10; });
+                q.UseDefaultThreadPool(tp =>
+                    {
+                        tp.MaxConcurrency = autoVsdProcessingOptions.QuartzOptions.ThreadPoolMaxConcurrency;
+                    }
+                );
                 q.ScheduleJob<StartProcessingJob>(trigger => trigger
-                    .WithIdentity("Everyday AutoVsdProcess trigger")
-                    .WithCronSchedule("0 0 2 * * ?")
+                    .WithIdentity(autoVsdProcessingOptions.QuartzOptions.JobTriggerIdentity)
+                    .WithCronSchedule(autoVsdProcessingOptions.QuartzOptions.CronSchedule)
                 );
                 q.UseTimeZoneConverter();
                 services.AddTransient<StartProcessingJob>();
