@@ -73,7 +73,7 @@ namespace Core.Application.Usecases.MercuryIntegration.Commands
                             tasks.Add(_mercuryService.ProcessIncomingConsignment(
                                 _operationId.ToString(), user, enterprise, vsd.VsdId, vsd.ProcessDate, _operationId));
 
-                            if (tasks.Count != 4) continue;
+                            if (tasks.Count < 4) continue;
                             
                             Task.WaitAll(tasks.ToArray(), cancellationToken);
                             
